@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "eafc1eb8-a560-414a-a193-68aa2dcf17b2",
+		"name": "Bot Trade",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/api/signin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ced4f35e-5546-4ff9-9de8-38f2ea380898",
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(pm.response.text());",
+							"pm.environment.set(\"Authorization\", jsonData.accessToken);"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"thiagocavalcantireis@gmail.com\",\n  \"password\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/ticks/ticks",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/api/ticks/ticks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"ticks",
+						"ticks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/ticks/ticker",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/api/ticks/ticker/ETH-BTC",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"ticks",
+						"ticker",
+						"ETH-BTC"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/ticks/msg",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/api/ticks/msg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"ticks",
+						"msg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/orders/greeting",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/api/orders/greeting",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders",
+						"greeting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/signout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/api/signout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"signout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

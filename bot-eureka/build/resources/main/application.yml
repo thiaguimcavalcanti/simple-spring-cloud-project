@@ -1,0 +1,8 @@
+server:
+  port: 7777
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

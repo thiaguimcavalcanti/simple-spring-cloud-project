@@ -1,0 +1,9 @@
+rootProject.name = 'bot-parent'
+
+include "bot-config"
+include "bot-eureka"
+include "bot-exchanges"
+include "bot-gateway"
+include "bot-orders"
+include "bot-schedule"
+include "bot-ticks"
