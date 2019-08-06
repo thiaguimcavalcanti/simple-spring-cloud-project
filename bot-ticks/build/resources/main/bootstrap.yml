@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: bot-ticks
-  profiles:
-    active: dev
-  cloud:
-    config:
-      uri: http://localhost:8888
