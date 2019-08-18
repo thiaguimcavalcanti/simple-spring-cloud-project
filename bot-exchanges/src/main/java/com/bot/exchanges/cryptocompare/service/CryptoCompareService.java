@@ -2,6 +2,6 @@ package com.bot.exchanges.cryptocompare.service;
 
 public interface CryptoCompareService {
 
-    void refreshCoinList();
+    void refreshProductList();
 
 }

@@ -19,7 +19,7 @@ public class CryptoCompareServiceImpl implements CryptoCompareService {
     private ProductRepository productRepository;
 
     @Override
-    public void refreshCoinList() {
+    public void refreshProductList() {
         List<Product> products = cryptoComparePublicClient.getCoinList().getData();
         productRepository.saveAll(products);
     }

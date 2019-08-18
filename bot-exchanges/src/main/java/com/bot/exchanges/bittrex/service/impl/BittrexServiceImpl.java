@@ -71,7 +71,7 @@ public class BittrexServiceImpl implements BittrexService {
     }
 
     @Override
-    public void refreshProductList() {
+    public void refreshExchangeProductList() {
         List<BittrexProductDTO> markets = bittrexPublicClient.getMarkets().getResult();
 
         long exchangeId = ExchangeEnum.BITTREX.getId();

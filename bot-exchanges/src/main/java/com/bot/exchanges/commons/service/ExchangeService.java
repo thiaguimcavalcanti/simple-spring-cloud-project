@@ -20,5 +20,5 @@ public interface ExchangeService {
 
     List<? extends BinanceCandlestickDTO> getCandlesticks(String market, String interval);
 
-    void refreshProductList();
+    void refreshExchangeProductList();
 }

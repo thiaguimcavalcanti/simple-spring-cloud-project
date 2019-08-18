@@ -64,7 +64,7 @@ public class BinanceServiceImpl implements BinanceService {
     }
 
     @Override
-    public void refreshProductList() {
+    public void refreshExchangeProductList() {
         List<BinanceProductDTO> symbols = binancePublicClient.getExchangeInfo().getSymbols();
 
         long exchangeId = ExchangeEnum.BINANCE.getId();
