@@ -12,6 +12,7 @@ public class BittrexContants {
 
     // Public APIs
     public static final String PUBLIC_API_TICKER = "/public/getticker?market={" + MARKET + "}";
+    public static final String PUBLIC_API_GET_MARKETS = "/public/getmarkets";
 
     // Market APIs
     public static final String MARKET_API_GET_OPEN_ORDERS = "/market/getopenorders?market={" + MARKET + "}";

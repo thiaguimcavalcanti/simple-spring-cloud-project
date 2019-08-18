@@ -45,4 +45,7 @@ public class ExchangeProduct extends AbstractLongIDEntity {
 
     @Column(name = "Base_Product_ID", insertable = false, updatable = false)
     private String baseProductId;
+
+    @Column(name = "Active")
+    private boolean active;
 }

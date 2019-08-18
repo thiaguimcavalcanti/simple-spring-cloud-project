@@ -49,6 +49,8 @@ public class ExchangesApiFacade {
 
     public void refreshProductList() {
         cryptoCompareService.refreshCoinList();
+        binanceService.refreshProductList();
+        bittrexService.refreshProductList();
     }
 
     private ExchangeService getExchangeServiceByType(ExchangeEnum exchangeEnum) {

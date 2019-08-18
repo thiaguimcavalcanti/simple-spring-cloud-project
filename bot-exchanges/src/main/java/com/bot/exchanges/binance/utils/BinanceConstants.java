@@ -17,5 +17,6 @@ public class BinanceConstants {
     // Public APIs
     public static final String PUBLIC_API_KLINES = "/api/v1/klines?symbol={" + SYMBOL + "}&interval={" + INTERVAL +
             "}&startTime={" + START_TIME + "}&endTime={" + END_TIME + "}&limit={" + LIMIT + "}";
+    public static final String PUBLIC_API_EXCHANGE_INFO = "/api/v1/exchangeInfo";
 
 }

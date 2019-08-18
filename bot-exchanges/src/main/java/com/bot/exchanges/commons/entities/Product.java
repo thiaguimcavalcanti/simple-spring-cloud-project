@@ -2,6 +2,7 @@ package com.bot.exchanges.commons.entities;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "Product")
@@ -32,4 +34,8 @@ public class Product extends AbstractStringIDEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private Set<ExchangeProduct> exchangeProducts;
+
+    public Product(String id) {
+        setId(id);
+    }
 }

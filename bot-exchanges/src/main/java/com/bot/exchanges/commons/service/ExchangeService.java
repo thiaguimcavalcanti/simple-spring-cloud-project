@@ -19,4 +19,6 @@ public interface ExchangeService {
     List<? extends OrderHistoryDTO> getOrderHistory(String userId, String market);
 
     List<? extends BinanceCandlestickDTO> getCandlesticks(String market, String interval);
+
+    void refreshProductList();
 }
