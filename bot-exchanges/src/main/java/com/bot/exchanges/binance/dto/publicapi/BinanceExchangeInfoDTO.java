@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class BinanceExchangeInfoDTO {
-    private List<BinanceProductDTO> symbols;
+    private List<BinanceExchangeProductDTO> symbols;
 }

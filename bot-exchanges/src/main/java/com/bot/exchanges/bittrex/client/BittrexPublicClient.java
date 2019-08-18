@@ -6,7 +6,7 @@ import static com.bot.exchanges.bittrex.utils.BittrexContants.PUBLIC_API_GET_MAR
 import static com.bot.exchanges.bittrex.utils.BittrexContants.PUBLIC_API_TICKER;
 
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
-import com.bot.exchanges.bittrex.dto.publicapi.BittrexProductDTO;
+import com.bot.exchanges.bittrex.dto.publicapi.BittrexExchangeProductDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexTickerDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,5 +21,5 @@ public interface BittrexPublicClient {
     AbstractBittrexDTO<BittrexTickerDTO> ticker(@PathVariable(MARKET) String market);
 
     @GetMapping(value = PUBLIC_API_GET_MARKETS)
-    AbstractBittrexDTO<List<BittrexProductDTO>> getMarkets();
+    AbstractBittrexDTO<List<BittrexExchangeProductDTO>> getMarkets();
 }

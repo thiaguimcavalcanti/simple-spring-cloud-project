@@ -2,6 +2,7 @@ package com.bot.exchanges.commons.service;
 
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.commons.dto.BalanceDTO;
+import com.bot.exchanges.commons.dto.ExchangeProductDTO;
 import com.bot.exchanges.commons.dto.OpenOrderDTO;
 import com.bot.exchanges.commons.dto.OrderHistoryDTO;
 import com.bot.exchanges.commons.dto.TickerDTO;
@@ -21,4 +22,6 @@ public interface ExchangeService {
     List<? extends BinanceCandlestickDTO> getCandlesticks(String market, String interval);
 
     void refreshExchangeProductList();
+
+    List<? extends ExchangeProductDTO> getExchangeProductList();
 }
