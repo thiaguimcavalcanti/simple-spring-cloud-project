@@ -9,12 +9,13 @@ import java.security.NoSuchAlgorithmException;
 
 public class EncryptionUtils {
 
-    private static final String ALGORITHM = "HmacSHA512";
+    public static final String HMAC_SHA_256 = "HmacSHA256";
+    public static final String HMAC_SHA_512 = "HmacSHA512";
 
-    public static String calculateHash(String secret, String data) {
+    public static String calculateHash(String secret, String data, String algorithm) {
         try {
-            Mac shaMac = Mac.getInstance(ALGORITHM);
-            shaMac.init(new SecretKeySpec(secret.getBytes(), ALGORITHM));
+            Mac shaMac = Mac.getInstance(algorithm);
+            shaMac.init(new SecretKeySpec(secret.getBytes(), algorithm));
             return new String(Hex.encode(shaMac.doFinal(data.getBytes())));
         } catch (InvalidKeyException | NoSuchAlgorithmException e) {
             e.printStackTrace();

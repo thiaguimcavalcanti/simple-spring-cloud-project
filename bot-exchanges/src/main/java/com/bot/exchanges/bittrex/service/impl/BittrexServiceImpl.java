@@ -1,5 +1,6 @@
 package com.bot.exchanges.bittrex.service.impl;
 
+import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.bittrex.client.BittrexAccountClient;
 import com.bot.exchanges.bittrex.client.BittrexMarketClient;
 import com.bot.exchanges.bittrex.client.BittrexPublicClient;
@@ -43,5 +44,10 @@ public class BittrexServiceImpl implements BittrexService {
     @Override
     public List<BittrexOrderHistoryDTO> getOrderHistory(String userId, String market) {
         return bittrexAccountClient.getOrderHistory(userId, market).getResult();
+    }
+
+    @Override
+    public List<? extends BinanceCandlestickDTO> getCandlesticks(String market, String interval) {
+        return null;
     }
 }
