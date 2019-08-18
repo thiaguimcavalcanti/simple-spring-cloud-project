@@ -22,5 +22,6 @@ public class CryptoCompareServiceImpl implements CryptoCompareService {
     public void refreshProductList() {
         List<Product> products = cryptoComparePublicClient.getCoinList().getData();
         productRepository.saveAll(products);
+        productRepository.flush();
     }
 }

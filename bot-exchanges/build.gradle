@@ -10,6 +10,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'com.h2database:h2'
 
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 }
