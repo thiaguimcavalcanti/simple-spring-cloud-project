@@ -28,7 +28,7 @@ public class ExchangeProduct extends AbstractLongIDEntity {
     @Column(name = "Exchange_ID", insertable = false, updatable = false)
     private Long exchangeId;
 
-    /** Coin */
+    /** Product */
     @ToString.Exclude
     @JoinColumn(name = "Product_ID", nullable = false, referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,4 +36,13 @@ public class ExchangeProduct extends AbstractLongIDEntity {
 
     @Column(name = "Product_ID", insertable = false, updatable = false)
     private String productId;
+
+    /** Base Product */
+    @ToString.Exclude
+    @JoinColumn(name = "Base_Product_ID", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product baseProduct;
+
+    @Column(name = "Base_Product_ID", insertable = false, updatable = false)
+    private String baseProductId;
 }

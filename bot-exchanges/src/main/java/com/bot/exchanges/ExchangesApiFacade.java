@@ -9,6 +9,7 @@ import com.bot.exchanges.commons.dto.OrderHistoryDTO;
 import com.bot.exchanges.commons.dto.TickerDTO;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
 import com.bot.exchanges.commons.service.ExchangeService;
+import com.bot.exchanges.cryptocompare.service.CryptoCompareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,9 @@ public class ExchangesApiFacade {
 
     @Autowired
     private BinanceService binanceService;
+
+    @Autowired
+    private CryptoCompareService cryptoCompareService;
 
     public TickerDTO getTicker(ExchangeEnum exchangeEnum, String market) {
         return getExchangeServiceByType(exchangeEnum).getTicker(market);
@@ -41,6 +45,10 @@ public class ExchangesApiFacade {
 
     public List<? extends CandlestickDTO> getCandlesticks(ExchangeEnum exchangeEnum, String market, String interval) {
         return getExchangeServiceByType(exchangeEnum).getCandlesticks(market, interval);
+    }
+
+    public void refreshProductList() {
+        cryptoCompareService.refreshCoinList();
     }
 
     private ExchangeService getExchangeServiceByType(ExchangeEnum exchangeEnum) {
