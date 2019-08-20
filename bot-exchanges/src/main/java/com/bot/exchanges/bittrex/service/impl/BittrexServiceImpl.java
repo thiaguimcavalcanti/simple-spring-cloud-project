@@ -1,16 +1,19 @@
 package com.bot.exchanges.bittrex.service.impl;
 
-import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.bittrex.client.BittrexAccountClient;
 import com.bot.exchanges.bittrex.client.BittrexMarketClient;
+import com.bot.exchanges.bittrex.client.BittrexPublic2Client;
 import com.bot.exchanges.bittrex.client.BittrexPublicClient;
 import com.bot.exchanges.bittrex.dto.account.BittrexBalanceDTO;
 import com.bot.exchanges.bittrex.dto.account.BittrexOrderHistoryDTO;
 import com.bot.exchanges.bittrex.dto.market.BittrexOpenOrderDTO;
+import com.bot.exchanges.bittrex.dto.publicapi.BittrexCandlestickDTO;
+import com.bot.exchanges.bittrex.dto.publicapi.BittrexExchangeProductDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexTickerDTO;
 import com.bot.exchanges.bittrex.service.BittrexService;
-import com.bot.exchanges.commons.dto.ExchangeProductDTO;
+import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
+import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,9 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
 
     @Autowired
     private BittrexMarketClient bittrexMarketClient;
+
+    @Autowired
+    private BittrexPublic2Client bittrexPublic2Client;
 
     public BittrexServiceImpl()  {
         super.exchangeEnum = ExchangeEnum.BITTREX;
@@ -54,12 +60,13 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     }
 
     @Override
-    public List<? extends BinanceCandlestickDTO> getCandlesticks(String market, String interval) {
-        return null;
+    public List<BittrexCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        String symbol = exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
+        return bittrexPublic2Client.getTicks(symbol, "fiveMin").getResult();
     }
 
     @Override
-    public List<? extends ExchangeProductDTO> getExchangeProductList() {
+    public List<BittrexExchangeProductDTO> getExchangeProductList() {
         return bittrexPublicClient.getMarkets().getResult();
     }
 }

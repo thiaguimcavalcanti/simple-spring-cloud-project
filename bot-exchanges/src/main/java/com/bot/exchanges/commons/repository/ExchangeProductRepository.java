@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ExchangeProductRepository extends JpaRepository<ExchangeProduct, String> {
+public interface ExchangeProductRepository extends JpaRepository<ExchangeProduct, Long> {
 
     List<ExchangeProduct> findByExchangeId(Long exchangeId);
 

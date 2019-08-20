@@ -15,7 +15,7 @@ public class GeneralSchedule {
     private ExchangesApiFacade exchangesApiFacade;
 
     @Async
-    @Scheduled(cron = "* */1 * * * ?")
+    @Scheduled(cron = "* * */1 * * ?")
     public void refreshProductList() {
         exchangesApiFacade.refreshProductList();
     }

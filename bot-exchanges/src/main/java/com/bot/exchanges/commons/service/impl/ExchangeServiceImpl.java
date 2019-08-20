@@ -1,16 +1,22 @@
 package com.bot.exchanges.commons.service.impl;
 
+import com.bot.exchanges.commons.dto.CandlestickDTO;
+import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.Exchange;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.Product;
+import com.bot.exchanges.commons.entities.types.CustomBigDecimal;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
+import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.repository.ExchangeRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
+import com.bot.exchanges.repository.CandlestickRepository;
 import com.bot.exchanges.repository.ProductRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,37 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
     @Autowired
     protected ProductRepository productRepository;
+
+    @Autowired
+    protected CandlestickRepository candlestickRepository;
+
+    @Override
+    public List<Candlestick> refreshCandlesTicks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        List<? extends CandlestickDTO> candlesticksDTO = getCandlesticks(exchangeProduct, periodEnum);
+        List<Candlestick> candlesticks = new ArrayList<>();
+
+        if (CollectionUtils.isNotEmpty(candlesticksDTO)) {
+            candlesticks = candlesticksDTO.stream().map(candlestickDTO -> {
+                Candlestick candlestick = new Candlestick();
+                candlestick.setOpenPrice(CustomBigDecimal.valueOf(candlestickDTO.getOpen()));
+                candlestick.setClosePrice(CustomBigDecimal.valueOf(candlestickDTO.getClose()));
+                candlestick.setVolume(CustomBigDecimal.valueOf(candlestickDTO.getVolume()));
+                candlestick.setMaxPrice(CustomBigDecimal.valueOf(candlestickDTO.getHigh()));
+                candlestick.setMinPrice(CustomBigDecimal.valueOf(candlestickDTO.getLow()));
+                candlestick.setEndTime(exchangeEnum.getParseDateFunction().apply(candlestickDTO.getCloseTime(), periodEnum.getDuration()));
+                candlestick.setBeginTime(candlestick.getEndTime().minus(periodEnum.getDuration()));
+                candlestick.setExchangeProduct(exchangeProduct);
+                candlestick.setPeriodEnum(periodEnum);
+                candlestick.setId(candlestick.toString());
+                return candlestick;
+            }).collect(Collectors.toList());
+
+            candlesticks = candlestickRepository.saveAll(candlesticks);
+            candlestickRepository.flush();
+        }
+
+        return candlesticks;
+    }
 
     @Override
     public void refreshExchangeProductList() {

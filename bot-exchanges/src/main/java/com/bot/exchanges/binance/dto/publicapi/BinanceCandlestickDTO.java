@@ -10,12 +10,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({"openTime", "open", "high", "low", "close", "volume", "closeTime","quoteAssetVolume",
   "numberOfTrades", "takerBuyBaseAssetVolume", "takerBuyQuoteAssetVolume"})
 public class BinanceCandlestickDTO extends CandlestickDTO {
-
   private String quoteAssetVolume;
-
   private Long numberOfTrades;
-
   private String takerBuyBaseAssetVolume;
-
   private String takerBuyQuoteAssetVolume;
 }

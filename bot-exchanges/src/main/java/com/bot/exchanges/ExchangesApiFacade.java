@@ -7,7 +7,10 @@ import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.dto.OpenOrderDTO;
 import com.bot.exchanges.commons.dto.OrderHistoryDTO;
 import com.bot.exchanges.commons.dto.TickerDTO;
+import com.bot.exchanges.commons.entities.Candlestick;
+import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
+import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.service.ExchangeService;
 import com.bot.exchanges.cryptocompare.service.CryptoCompareService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +46,20 @@ public class ExchangesApiFacade {
         return getExchangeServiceByType(exchangeEnum).getOrderHistory(userId, market);
     }
 
-    public List<? extends CandlestickDTO> getCandlesticks(ExchangeEnum exchangeEnum, String market, String interval) {
-        return getExchangeServiceByType(exchangeEnum).getCandlesticks(market, interval);
+    public List<? extends CandlestickDTO> getCandlesticks(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct,
+                                                          PeriodEnum periodEnum) {
+        return getExchangeServiceByType(exchangeEnum).getCandlesticks(exchangeProduct, periodEnum);
     }
 
     public void refreshProductList() {
         cryptoCompareService.refreshProductList();
         binanceService.refreshExchangeProductList();
         bittrexService.refreshExchangeProductList();
+    }
+
+    public List<Candlestick> refreshCandlesTicks(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct,
+                                                 PeriodEnum periodEnum) {
+        return getExchangeServiceByType(exchangeEnum).refreshCandlesTicks(exchangeProduct, periodEnum);
     }
 
     private ExchangeService getExchangeServiceByType(ExchangeEnum exchangeEnum) {
