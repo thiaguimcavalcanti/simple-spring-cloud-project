@@ -17,6 +17,6 @@ import java.util.List;
 public interface BittrexPublic2Client {
 
     @GetMapping(value = PUBLIC_API_GET_TICKS)
-    AbstractBittrexDTO<List<BittrexCandlestickDTO>> getTicks( @PathVariable(MARKET_NAME) String marketName,
-                                                              @PathVariable(TICK_INTERVAL) String ticketInterval);
+    AbstractBittrexDTO<List<BittrexCandlestickDTO>> getCandlesticks(@PathVariable(MARKET_NAME) String marketName,
+                                                                    @PathVariable(TICK_INTERVAL) String ticketInterval);
 }

@@ -105,6 +105,6 @@ public class Candlestick extends AbstractStringIDEntity implements Bar {
 		return sb.append(exchangeProduct.getId()).append("-")
 				.append(periodEnum.getDuration().toString()).append("-")
 				.append(beginTime.toEpochSecond()).append("-")
-				.append(endTime.toEpochSecond()).toString().toLowerCase();
+				.append(endTime.toEpochSecond()).toString().toUpperCase();
 	}
 }

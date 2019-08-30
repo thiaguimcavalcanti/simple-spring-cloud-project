@@ -26,7 +26,7 @@ public interface BinancePublicClient {
                                                 @PathVariable(INTERVAL) String interval,
                                                 @PathVariable(START_TIME) String startTime,
                                                 @PathVariable(END_TIME) String endTime,
-                                                @PathVariable(LIMIT) String limit);
+                                                @PathVariable(LIMIT) Integer limit);
 
     @GetMapping(value = PUBLIC_API_EXCHANGE_INFO)
     BinanceExchangeInfoDTO getExchangeInfo();

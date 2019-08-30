@@ -57,9 +57,14 @@ public class ExchangesApiFacade {
         bittrexService.refreshExchangeProductList();
     }
 
-    public List<Candlestick> refreshCandlesTicks(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct,
+    public List<Candlestick> refreshCandlestick(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct,
+                                                PeriodEnum periodEnum) {
+        return getExchangeServiceByType(exchangeEnum).refreshCandlestick(exchangeProduct, periodEnum);
+    }
+
+    public Candlestick refreshLatestCandlestick(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct,
                                                  PeriodEnum periodEnum) {
-        return getExchangeServiceByType(exchangeEnum).refreshCandlesTicks(exchangeProduct, periodEnum);
+        return getExchangeServiceByType(exchangeEnum).refreshLatestCandlestick(exchangeProduct, periodEnum);
     }
 
     private ExchangeService getExchangeServiceByType(ExchangeEnum exchangeEnum) {

@@ -8,14 +8,15 @@ import com.bot.exchanges.commons.entities.Product;
 import com.bot.exchanges.commons.entities.types.CustomBigDecimal;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
 import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.exchanges.commons.repository.CandlestickRepository;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.repository.ExchangeRepository;
+import com.bot.exchanges.commons.repository.ProductRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
-import com.bot.exchanges.repository.CandlestickRepository;
-import com.bot.exchanges.repository.ProductRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,25 +41,44 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
     protected CandlestickRepository candlestickRepository;
 
     @Override
-    public List<Candlestick> refreshCandlesTicks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+    public Candlestick refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        // Latest candlestick
+        CandlestickDTO latestCandlestickDTO = getLatestCandlestick(exchangeProduct, periodEnum);
+        Candlestick latestCandlestick = convertCandlestickDTOToEntity(exchangeProduct, periodEnum, latestCandlestickDTO);
+
+        // Previous candlestick
+        Candlestick previousCandlestick = candlestickRepository
+                .findTopByExchangeProductIdAndPeriodEnumOrderByBeginTimeDesc(exchangeProduct.getId(), periodEnum);
+        ZonedDateTime previousEndTime = getPreviousEndTime(periodEnum, previousCandlestick);
+
+        if (previousEndTime.compareTo(latestCandlestick.getBeginTime()) < 0) {
+            refreshCandlestick(exchangeProduct, periodEnum);
+        }
+
+        return candlestickRepository.save(latestCandlestick);
+    }
+
+    private ZonedDateTime getPreviousEndTime(PeriodEnum periodEnum, Candlestick previousCandlestick) {
+        if (previousCandlestick == null) {
+            ZonedDateTime previousEndTime = ZonedDateTime.now().withSecond(0).withNano(0);
+            return previousEndTime.minusMinutes(previousEndTime.getMinute() % periodEnum.getInMinutes())
+                    .minusMinutes(periodEnum.getInMinutes());
+        }
+        return previousCandlestick.getEndTime();
+    }
+
+    @Override
+    public List<Candlestick> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         List<? extends CandlestickDTO> candlesticksDTO = getCandlesticks(exchangeProduct, periodEnum);
         List<Candlestick> candlesticks = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(candlesticksDTO)) {
-            candlesticks = candlesticksDTO.stream().map(candlestickDTO -> {
-                Candlestick candlestick = new Candlestick();
-                candlestick.setOpenPrice(CustomBigDecimal.valueOf(candlestickDTO.getOpen()));
-                candlestick.setClosePrice(CustomBigDecimal.valueOf(candlestickDTO.getClose()));
-                candlestick.setVolume(CustomBigDecimal.valueOf(candlestickDTO.getVolume()));
-                candlestick.setMaxPrice(CustomBigDecimal.valueOf(candlestickDTO.getHigh()));
-                candlestick.setMinPrice(CustomBigDecimal.valueOf(candlestickDTO.getLow()));
-                candlestick.setEndTime(exchangeEnum.getParseDateFunction().apply(candlestickDTO.getCloseTime(), periodEnum.getDuration()));
-                candlestick.setBeginTime(candlestick.getEndTime().minus(periodEnum.getDuration()));
-                candlestick.setExchangeProduct(exchangeProduct);
-                candlestick.setPeriodEnum(periodEnum);
-                candlestick.setId(candlestick.toString());
-                return candlestick;
-            }).collect(Collectors.toList());
+            candlesticks = candlesticksDTO.stream().map(candlestickDTO ->
+                    convertCandlestickDTOToEntity(exchangeProduct, periodEnum, candlestickDTO))
+                    .collect(Collectors.toList());
+
+            // Ignore the last one, because this candlestick is still opened
+            candlesticks.remove(candlesticks.size() - 1);
 
             candlesticks = candlestickRepository.saveAll(candlesticks);
             candlestickRepository.flush();
@@ -100,7 +120,7 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
     }
 
     private Map<String, Product> getProducts(Set<String> productsToSearch) {
-        List<Product> products = null;
+        List<Product> products;
         if (CollectionUtils.isNotEmpty(productsToSearch)) {
             products = productRepository.findAllById(productsToSearch);
         } else {
@@ -117,5 +137,22 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
             products.put(symbol, product);
         }
         return product;
+    }
+
+    private Candlestick convertCandlestickDTOToEntity(ExchangeProduct exchangeProduct, PeriodEnum periodEnum, CandlestickDTO candlestickDTO) {
+        if (candlestickDTO == null) { return null; }
+
+        Candlestick candlestick = new Candlestick();
+        candlestick.setOpenPrice(CustomBigDecimal.valueOf(candlestickDTO.getOpen()));
+        candlestick.setClosePrice(CustomBigDecimal.valueOf(candlestickDTO.getClose()));
+        candlestick.setVolume(CustomBigDecimal.valueOf(candlestickDTO.getVolume()));
+        candlestick.setMaxPrice(CustomBigDecimal.valueOf(candlestickDTO.getHigh()));
+        candlestick.setMinPrice(CustomBigDecimal.valueOf(candlestickDTO.getLow()));
+        candlestick.setEndTime(exchangeEnum.getParseDateFunction().apply(candlestickDTO.getCloseTime(), periodEnum.getDuration()));
+        candlestick.setBeginTime(candlestick.getEndTime().minus(periodEnum.getDuration()));
+        candlestick.setExchangeProduct(exchangeProduct);
+        candlestick.setPeriodEnum(periodEnum);
+        candlestick.setId(candlestick.toString());
+        return candlestick;
     }
 }

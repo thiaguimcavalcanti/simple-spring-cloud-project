@@ -15,6 +15,7 @@ import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
 import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,17 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     @Override
     public List<BittrexCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         String symbol = exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
-        return bittrexPublic2Client.getTicks(symbol, "fiveMin").getResult();
+        return bittrexPublic2Client.getCandlesticks(symbol, "fiveMin").getResult();
+    }
+
+    @Override
+    public BittrexCandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        String symbol = exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
+        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks(symbol, "fiveMin").getResult();
+        if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
+            return candlesticks.get(candlesticks.size() - 2);
+        }
+        return null;
     }
 
     @Override

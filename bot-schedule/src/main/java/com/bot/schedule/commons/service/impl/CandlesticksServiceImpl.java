@@ -22,15 +22,10 @@ public class CandlesticksServiceImpl implements CandlestickService {
     private ExchangeProductRepository exchangeProductRepository;
 
     @Override
-    public void refreshLatestTicks(ExchangeEnum exchangeEnum, PeriodEnum periodEnum) {
-
-    }
-
-    @Override
-    public void refreshCandlesticks(ExchangeEnum exchangeEnum, PeriodEnum periodEnum) {
+    public void refreshLatestCandlesticks(ExchangeEnum exchangeEnum, PeriodEnum periodEnum) {
         List<ExchangeProduct> exchangeProducts = exchangeProductRepository.findByExchangeId((long) exchangeEnum.getId());
         if (CollectionUtils.isNotEmpty(exchangeProducts)) {
-            exchangesApiFacade.refreshCandlesTicks(exchangeEnum, exchangeProducts.get(0), periodEnum);
+            exchangesApiFacade.refreshLatestCandlestick(exchangeEnum, exchangeProducts.get(0), periodEnum);
         }
     }
 }

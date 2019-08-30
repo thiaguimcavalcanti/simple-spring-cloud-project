@@ -5,6 +5,7 @@ import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
 import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.commons.dto.BalanceDTO;
+import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.dto.OpenOrderDTO;
 import com.bot.exchanges.commons.dto.OrderHistoryDTO;
 import com.bot.exchanges.commons.dto.TickerDTO;
@@ -12,6 +13,7 @@ import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.enums.ExchangeEnum;
 import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +53,13 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
     public List<BinanceCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         String symbol = exchangeProduct.getBaseProductId() + exchangeProduct.getProductId();
         return binancePublicClient.getCandlesticks(symbol, "5m", null, null, null);
+    }
+
+    @Override
+    public CandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        String symbol = exchangeProduct.getBaseProductId() + exchangeProduct.getProductId();
+        List<BinanceCandlestickDTO> candlesticks = binancePublicClient.getCandlesticks(symbol, "5m", null, null, 2);
+        return CollectionUtils.isNotEmpty(candlesticks) ? candlesticks.get(0) : null;
     }
 
     @Override

@@ -7,24 +7,33 @@ spring:
     sampler:
       probability: 1.0
 
+  #  datasource:
+  #    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  #    username: sa
+  #    password:
+  #    driver-class-name: org.h2.Driver
+  #    platform: h2
+  #    h2:
+  #      console:
+  #        enabled: true
+  #        path: /h2
+
   datasource:
-    username: sa
-    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    password:
-    driver-class-name: org.h2.Driver
-    platform: h2
+    url: jdbc:mysql://localhost:3306/bot_exchanges?autoReconnect=true&useUnicode=true&serverTimezone=UTC&useLegacyDatetimeCode=false&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: adminadmin
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
-    h2:
-      console:
-        enabled: true
-        path: /h2
-
-    jpa:
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.H2Dialect
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: update
-        naming:
-          implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        globally_quoted_identifiers: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    #        dialect: org.hibernate.dialect.H2Dialect
+        jdbc:
+          time_zone: UTC
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
