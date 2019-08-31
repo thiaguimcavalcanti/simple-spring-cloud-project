@@ -15,11 +15,16 @@ import java.util.List;
 @Service
 public class CandlesticksServiceImpl implements CandlestickService {
 
-    @Autowired
-    private ExchangesApiFacade exchangesApiFacade;
+    private final ExchangesApiFacade exchangesApiFacade;
+
+    private final ExchangeProductRepository exchangeProductRepository;
 
     @Autowired
-    private ExchangeProductRepository exchangeProductRepository;
+    public CandlesticksServiceImpl(ExchangesApiFacade exchangesApiFacade,
+                                   ExchangeProductRepository exchangeProductRepository) {
+        this.exchangesApiFacade = exchangesApiFacade;
+        this.exchangeProductRepository = exchangeProductRepository;
+    }
 
     @Override
     public void refreshLatestCandlesticks(ExchangeEnum exchangeEnum, PeriodEnum periodEnum) {

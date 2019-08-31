@@ -277,10 +277,10 @@ public class CustomBigDecimal implements Num {
 				e.printStackTrace();
 			}
 		}
-		BigDecimal delta = null;
-		BigDecimal test = null;
-		BigDecimal sum = null;
-		BigDecimal newEstimate = null;
+		BigDecimal delta;
+		BigDecimal test;
+		BigDecimal sum;
+		BigDecimal newEstimate;
 		BigDecimal two = new BigDecimal(2);
 		do {
 			test = delegate.divide(estimate, precisionContext);
@@ -374,10 +374,7 @@ public class CustomBigDecimal implements Num {
 	public boolean matches(Num other, int precision) {
 		Num otherNum = CustomBigDecimal.valueOf(other.toString(), precision);
 		Num thisNum = CustomBigDecimal.valueOf(this.toString(), precision);
-		if (thisNum.toString().equals(otherNum.toString())) {
-			return true;
-		}
-		return false;
+		return thisNum.toString().equals(otherNum.toString());
 	}
 
 	/**
@@ -390,10 +387,7 @@ public class CustomBigDecimal implements Num {
 	 */
 	public boolean matches(Num other, Num delta) {
 		Num result = this.minus(other);
-		if (!result.isGreaterThan(delta)) {
-			return true;
-		}
-		return false;
+		return !result.isGreaterThan(delta);
 	}
 
 	/**

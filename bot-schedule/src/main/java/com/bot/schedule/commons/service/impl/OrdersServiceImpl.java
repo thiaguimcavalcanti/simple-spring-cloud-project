@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrdersServiceImpl implements OrderService {
 
+    private final ExchangesApiFacade exchangesApiFacade;
+
     @Autowired
-    private ExchangesApiFacade exchangesApiFacade;
+    public OrdersServiceImpl(ExchangesApiFacade exchangesApiFacade) {
+        this.exchangesApiFacade = exchangesApiFacade;
+    }
 
     @Override
     public void monitoringOpenOrders(ExchangeEnum exchangeEnum) {

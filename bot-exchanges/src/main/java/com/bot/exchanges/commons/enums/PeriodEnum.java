@@ -16,7 +16,7 @@ public enum PeriodEnum {
 
 	private TemporalAmount duration;
 
-	private PeriodEnum(TemporalAmount duration) {
+	PeriodEnum(TemporalAmount duration) {
 		this.duration = duration;
 	}
 

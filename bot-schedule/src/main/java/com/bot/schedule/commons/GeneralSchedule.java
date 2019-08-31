@@ -11,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class GeneralSchedule {
 
+    private final ExchangesApiFacade exchangesApiFacade;
+
     @Autowired
-    private ExchangesApiFacade exchangesApiFacade;
+    public GeneralSchedule(ExchangesApiFacade exchangesApiFacade) {
+        this.exchangesApiFacade = exchangesApiFacade;
+    }
 
     @Async
     @Scheduled(cron = "* * */1 * * ?")

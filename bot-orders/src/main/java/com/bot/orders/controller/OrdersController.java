@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OrdersController {
 
-    @Lazy
-    @Autowired
-    private EurekaClient eurekaClient;
+    private final EurekaClient eurekaClient;
 
     private static final Logger LOG = LogManager.getLogger(OrdersController.class.getName());
 
     @Value("${spring.application.name}")
     private String appName;
+
+    @Autowired
+    public OrdersController(@Lazy EurekaClient eurekaClient) {
+        this.eurekaClient = eurekaClient;
+    }
 
     @GetMapping("/greeting")
     public String greeting() {

@@ -21,14 +21,18 @@ import java.util.List;
 @Component
 public class ExchangesApiFacade {
 
-    @Autowired
-    private BittrexService bittrexService;
+    private final BittrexService bittrexService;
+    private final BinanceService binanceService;
+    private final CryptoCompareService cryptoCompareService;
 
     @Autowired
-    private BinanceService binanceService;
-
-    @Autowired
-    private CryptoCompareService cryptoCompareService;
+    public ExchangesApiFacade(BittrexService bittrexService,
+                              BinanceService binanceService,
+                              CryptoCompareService cryptoCompareService) {
+        this.bittrexService = bittrexService;
+        this.binanceService = binanceService;
+        this.cryptoCompareService = cryptoCompareService;
+    }
 
     public TickerDTO getTicker(ExchangeEnum exchangeEnum, String market) {
         return getExchangeServiceByType(exchangeEnum).getTicker(market);

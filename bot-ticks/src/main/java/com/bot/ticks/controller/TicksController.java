@@ -21,8 +21,12 @@ public class TicksController {
     @Value("${foo:Nothing}")
     private String foo;
 
+    private final TicksService ticksService;
+
     @Autowired
-    private TicksService ticksService;
+    public TicksController(TicksService ticksService) {
+        this.ticksService = ticksService;
+    }
 
     @GetMapping("/ticks")
     public String ticks() {

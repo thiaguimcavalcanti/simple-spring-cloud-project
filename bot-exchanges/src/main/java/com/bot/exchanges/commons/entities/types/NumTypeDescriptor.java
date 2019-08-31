@@ -9,9 +9,9 @@ import java.math.BigInteger;
 
 public class NumTypeDescriptor extends AbstractTypeDescriptor<Num> {
 
-	public static final NumTypeDescriptor INSTANCE = new NumTypeDescriptor();
+	static final NumTypeDescriptor INSTANCE = new NumTypeDescriptor();
 
-	public NumTypeDescriptor() {
+    private NumTypeDescriptor() {
 		super(Num.class);
 	}
 
@@ -48,16 +48,16 @@ public class NumTypeDescriptor extends AbstractTypeDescriptor<Num> {
 		if (value == null) {
 			return null;
 		}
-		if (BigDecimal.class.isInstance(value)) {
+		if (value instanceof BigDecimal) {
 			return CustomBigDecimal.valueOf((BigDecimal) value);
 		}
-		if (BigInteger.class.isInstance(value)) {
+		if (value instanceof BigInteger) {
 			return CustomBigDecimal.valueOf((BigInteger) value);
 		}
-		if (Number.class.isInstance(value)) {
-			return CustomBigDecimal.valueOf((BigInteger) value);
+		if (value instanceof Number) {
+			return CustomBigDecimal.valueOf((Number) value);
 		}
-		if (String.class.isInstance(value)) {
+		if (value instanceof String) {
 			return CustomBigDecimal.valueOf((String) value);
 		}
 		throw unknownWrap(value.getClass());

@@ -12,11 +12,16 @@ import java.util.List;
 @Service
 public class CryptoCompareServiceImpl implements CryptoCompareService {
 
-    @Autowired
-    private CryptoComparePublicClient cryptoComparePublicClient;
+    private final CryptoComparePublicClient cryptoComparePublicClient;
+
+    private final ProductRepository productRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    public CryptoCompareServiceImpl(CryptoComparePublicClient cryptoComparePublicClient,
+                                    ProductRepository productRepository) {
+        this.cryptoComparePublicClient = cryptoComparePublicClient;
+        this.productRepository = productRepository;
+    }
 
     @Override
     public void refreshProductList() {

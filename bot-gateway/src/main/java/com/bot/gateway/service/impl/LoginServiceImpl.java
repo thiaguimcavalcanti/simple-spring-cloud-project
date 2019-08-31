@@ -21,20 +21,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class LoginServiceImpl implements LoginService {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final UserRepository userRepository;
+    private final JwtTokenRepository jwtTokenRepository;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtTokenRepository jwtTokenRepository;
+    public LoginServiceImpl(PasswordEncoder passwordEncoder,
+                            JwtTokenProvider jwtTokenProvider,
+                            AuthenticationManager authenticationManager,
+                            UserRepository userRepository,
+                            JwtTokenRepository jwtTokenRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.jwtTokenRepository = jwtTokenRepository;
+    }
 
     @Override
     public String login(String username, String password) {

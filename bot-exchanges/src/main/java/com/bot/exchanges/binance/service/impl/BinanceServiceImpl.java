@@ -22,11 +22,12 @@ import java.util.List;
 @Service
 public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceService {
 
-    @Autowired
-    private BinancePublicClient binancePublicClient;
+    private final BinancePublicClient binancePublicClient;
 
-    public BinanceServiceImpl()  {
+    @Autowired
+    public BinanceServiceImpl(BinancePublicClient binancePublicClient)  {
         super.exchangeEnum = ExchangeEnum.BINANCE;
+        this.binancePublicClient = binancePublicClient;
     }
 
     @Override

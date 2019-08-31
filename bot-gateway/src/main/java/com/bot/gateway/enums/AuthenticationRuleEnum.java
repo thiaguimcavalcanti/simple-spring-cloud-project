@@ -2,7 +2,8 @@ package com.bot.gateway.enums;
 
 public enum AuthenticationRuleEnum {
 
-	ROLE_ADMIN("ROLE_ADMIN", "authenticationRule.administrator");
+	ROLE_ADMIN("ROLE_ADMIN", "authenticationRule.administrator"),
+	ROLE_USER("ROLE_USER", "authenticationRule.user");
 
 	private String ruleType;
 	private String description;

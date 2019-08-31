@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.Base64;
@@ -31,16 +30,16 @@ public class JwtTokenProvider {
 
     private String secretKey = "secret-key";
 
-    @Autowired
-    private JwtTokenRepository jwtTokenRepository;
+    private final JwtTokenRepository jwtTokenRepository;
 
-    @Qualifier("CustomUserDetailsService")
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    @PostConstruct
-    protected void init() {
+    @Autowired
+    public JwtTokenProvider(JwtTokenRepository jwtTokenRepository,
+                            @Qualifier("CustomUserDetailsService") UserDetailsService userDetailsService) {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        this.jwtTokenRepository = jwtTokenRepository;
+        this.userDetailsService = userDetailsService;
     }
 
     public String createToken(String username, List<String> roles) {

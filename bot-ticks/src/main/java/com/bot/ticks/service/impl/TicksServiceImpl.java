@@ -15,11 +15,16 @@ import java.util.List;
 @Service
 public class TicksServiceImpl implements TicksService {
 
-    @Autowired
-    private OrdersClient ordersClient;
+    private final OrdersClient ordersClient;
+
+    private final ExchangesApiFacade exchangesApiFacade;
 
     @Autowired
-    private ExchangesApiFacade exchangesApiFacade;
+    public TicksServiceImpl(OrdersClient ordersClient,
+                            ExchangesApiFacade exchangesApiFacade) {
+        this.ordersClient = ordersClient;
+        this.exchangesApiFacade = exchangesApiFacade;
+    }
 
     @Override
     public TickerDTO getTicker(String market) {

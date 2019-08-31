@@ -24,20 +24,21 @@ import java.util.List;
 @Service
 public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexService {
 
-    @Autowired
-    private BittrexAccountClient bittrexAccountClient;
+    private final BittrexAccountClient bittrexAccountClient;
+    private final BittrexPublicClient bittrexPublicClient;
+    private final BittrexMarketClient bittrexMarketClient;
+    private final BittrexPublic2Client bittrexPublic2Client;
 
     @Autowired
-    private BittrexPublicClient bittrexPublicClient;
-
-    @Autowired
-    private BittrexMarketClient bittrexMarketClient;
-
-    @Autowired
-    private BittrexPublic2Client bittrexPublic2Client;
-
-    public BittrexServiceImpl()  {
+    public BittrexServiceImpl(BittrexAccountClient bittrexAccountClient,
+                              BittrexPublicClient bittrexPublicClient,
+                              BittrexMarketClient bittrexMarketClient,
+                              BittrexPublic2Client bittrexPublic2Client)  {
         super.exchangeEnum = ExchangeEnum.BITTREX;
+        this.bittrexAccountClient = bittrexAccountClient;
+        this.bittrexPublicClient = bittrexPublicClient;
+        this.bittrexMarketClient = bittrexMarketClient;
+        this.bittrexPublic2Client = bittrexPublic2Client;
     }
 
     @Override
