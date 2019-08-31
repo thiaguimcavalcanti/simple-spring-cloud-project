@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
-public class CandlestickSchedule {
+public abstract class CandlestickSchedule {
 
     protected ExchangeEnum exchangeEnum;
 

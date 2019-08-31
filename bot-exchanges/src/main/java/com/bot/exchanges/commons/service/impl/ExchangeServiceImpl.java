@@ -89,10 +89,10 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
     @Override
     public void refreshExchangeProductList() {
-        Exchange exchange = exchangeRepository.findById((long) exchangeEnum.getId()).orElse(null);
+        Exchange exchange = exchangeRepository.findById(exchangeEnum.getId()).orElse(null);
 
         Set<String> productsToSearch = new HashSet<>();
-        List<ExchangeProduct> exchangeProducts = exchangeProductRepository.findByExchangeId((long) exchangeEnum.getId());
+        List<ExchangeProduct> exchangeProducts = exchangeProductRepository.findByExchangeId(exchangeEnum.getId());
         Map<String, ExchangeProduct> exchangeProductsByProduct = exchangeProducts.stream()
                 .collect(Collectors.toMap(ep -> {
                     productsToSearch.add(ep.getBaseProductId());

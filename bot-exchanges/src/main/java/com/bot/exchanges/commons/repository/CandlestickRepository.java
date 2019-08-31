@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CandlestickRepository extends JpaRepository<Candlestick, String> {
+public interface CandlestickRepository extends JpaRepository<Candlestick, String>, CustomCandlestickRepository {
 
     Candlestick findTopByExchangeProductIdAndPeriodEnumOrderByBeginTimeDesc(Long exchangeProductId,
                                                                             PeriodEnum periodEnum);
-
 }

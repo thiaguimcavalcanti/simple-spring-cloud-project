@@ -12,16 +12,16 @@ import java.util.function.BiFunction;
 @Getter
 public enum ExchangeEnum {
 
-    POLONIEX(1, "Poloniex", null),
-    BITTREX(2, "Bittrex", PARSE_BITTREX_DATE),
-    BLEUTRADE(3, "Bleutrade", null),
-    BINANCE(4, "Binance", PARSE_BINANCE_DATE);
+    POLONIEX((long) 1, "Poloniex", null),
+    BITTREX((long) 2, "Bittrex", PARSE_BITTREX_DATE),
+    BLEUTRADE((long) 3, "Bleutrade", null),
+    BINANCE((long) 4, "Binance", PARSE_BINANCE_DATE);
 
-    private int id;
+    private Long id;
     private String name;
     private BiFunction<String, TemporalAmount, ZonedDateTime> parseDateFunction;
 
-    ExchangeEnum(int id, String name, BiFunction<String, TemporalAmount, ZonedDateTime> parseDateFunction) {
+    ExchangeEnum(Long id, String name, BiFunction<String, TemporalAmount, ZonedDateTime> parseDateFunction) {
         this.id = id;
         this.name = name;
         this.parseDateFunction = parseDateFunction;

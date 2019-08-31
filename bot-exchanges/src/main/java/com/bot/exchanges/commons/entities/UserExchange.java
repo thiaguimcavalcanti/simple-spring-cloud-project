@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "Authentication")
-public class Authentication extends AbstractStringIDEntity {
+@Table(name = "UserExchange")
+public class UserExchange extends AbstractLongIDEntity {
 
     @Column(name = "UserId")
     private String userId;
