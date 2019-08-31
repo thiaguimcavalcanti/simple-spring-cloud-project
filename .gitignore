@@ -3,3 +3,13 @@
 ### Gradle ###
 .gradle
 */build/
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/AbstractLongIDEntity_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/AbstractStringIDEntity_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/Candlestick_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/Exchange_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/ExchangeProduct_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/OrderHistory_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/Product_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/Strategy_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/StrategyRule_.java
+/bot-exchanges/src/main/java/com/bot/exchanges/commons/entities/UserExchange_.java
