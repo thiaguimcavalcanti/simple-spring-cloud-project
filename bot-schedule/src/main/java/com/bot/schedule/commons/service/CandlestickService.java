@@ -5,5 +5,5 @@ import com.bot.exchanges.commons.enums.PeriodEnum;
 
 public interface CandlestickService {
 
-    void refreshLatestCandlesticks(ExchangeEnum exchangeEnum, PeriodEnum periodEnum);
+    void refreshLatestCandlestick(ExchangeEnum exchangeEnum, PeriodEnum periodEnum);
 }

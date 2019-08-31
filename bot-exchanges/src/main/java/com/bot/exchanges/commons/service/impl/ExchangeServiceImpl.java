@@ -51,11 +51,11 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
                 .findTopByExchangeProductIdAndPeriodEnumOrderByBeginTimeDesc(exchangeProduct.getId(), periodEnum);
         ZonedDateTime previousEndTime = getPreviousEndTime(periodEnum, previousCandlestick);
 
-        if (previousEndTime.compareTo(latestCandlestick.getBeginTime()) < 0) {
+        if (latestCandlestick == null || previousEndTime.compareTo(latestCandlestick.getBeginTime()) < 0) {
             refreshCandlestick(exchangeProduct, periodEnum);
         }
 
-        return candlestickRepository.save(latestCandlestick);
+        return latestCandlestick != null ? candlestickRepository.save(latestCandlestick) : null;
     }
 
     private ZonedDateTime getPreviousEndTime(PeriodEnum periodEnum, Candlestick previousCandlestick) {

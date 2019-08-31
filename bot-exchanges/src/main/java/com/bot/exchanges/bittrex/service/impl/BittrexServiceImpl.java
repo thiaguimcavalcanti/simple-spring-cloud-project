@@ -70,7 +70,7 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     @Override
     public BittrexCandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         String symbol = exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
-        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks(symbol, "fiveMin").getResult();
+        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks("fiveMin", symbol).getResult();
         if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
             return candlesticks.get(candlesticks.size() - 2);
         }

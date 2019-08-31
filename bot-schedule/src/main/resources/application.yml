@@ -1,8 +1,6 @@
 spring:
   application:
     name: bot-schedule
-  zipkin:
-    base-url: http://localhost:8084/
   sleuth:
     sampler:
       probability: 1.0
