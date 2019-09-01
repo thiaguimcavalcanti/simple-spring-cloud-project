@@ -29,4 +29,14 @@ public class DateUtils {
         LocalDateTime datetime = LocalDateTime.parse(time, DATETIME_WITH_T_FORMAT_DESERIALIZE);
         return datetime.atZone(DEFAULT_ZONE_OFFSET).plus(tickDuration);
     };
+
+
+    public static String convertCryptoCompareDateToBittrexDate(String time, TemporalAmount tickDuration) {
+        Instant instant = Instant.ofEpochSecond(Long.parseLong(time));
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, DEFAULT_ZONE_OFFSET).plus(tickDuration);
+        zonedDateTime  = zonedDateTime.minusMinutes(zonedDateTime.getMinute() % (tickDuration.get(ChronoUnit.SECONDS) / 60))
+                .withSecond(0)
+                .withNano(0);
+        return zonedDateTime.format(DATETIME_WITH_T_FORMAT_DESERIALIZE);
+    }
 }

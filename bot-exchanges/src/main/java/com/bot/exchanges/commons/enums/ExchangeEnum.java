@@ -18,25 +18,12 @@ public enum ExchangeEnum {
     BINANCE((long) 4, "Binance", PARSE_BINANCE_DATE);
 
     private Long id;
-    private String name;
+    private String cryptoCompareName;
     private BiFunction<String, TemporalAmount, ZonedDateTime> parseDateFunction;
 
-    ExchangeEnum(Long id, String name, BiFunction<String, TemporalAmount, ZonedDateTime> parseDateFunction) {
+    ExchangeEnum(Long id, String cryptoCompareName, BiFunction<String, TemporalAmount, ZonedDateTime> parseDateFunction) {
         this.id = id;
-        this.name = name;
+        this.cryptoCompareName = cryptoCompareName;
         this.parseDateFunction = parseDateFunction;
-    }
-
-    public static ExchangeEnum getByName(String name) {
-        for (ExchangeEnum enumValue : values()) {
-            if (enumValue.getName().equals(name)) {
-                return enumValue;
-            }
-        }
-        return null;
-    }
-
-    public BiFunction<String, TemporalAmount, ZonedDateTime> getParseDateFunction() {
-        return parseDateFunction;
     }
 }
