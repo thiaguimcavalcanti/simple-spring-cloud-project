@@ -46,7 +46,7 @@ public class GeneralSchedule {
     }
 
     @Async
-    @Scheduled(cron = "* * */1 * * ?")
+    @Scheduled(cron = "0 0 * ? * *")
     public void refreshProductList() {
         exchangesApiFacade.refreshProductList();
     }

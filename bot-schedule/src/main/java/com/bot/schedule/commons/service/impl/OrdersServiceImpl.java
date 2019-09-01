@@ -18,6 +18,6 @@ public class OrdersServiceImpl implements OrderService {
 
     @Override
     public void monitoringOpenOrders(ExchangeEnum exchangeEnum) {
-        System.out.println(exchangeEnum.name());
+
     }
 }

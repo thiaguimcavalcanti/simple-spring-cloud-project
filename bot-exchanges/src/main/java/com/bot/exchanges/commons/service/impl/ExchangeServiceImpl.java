@@ -14,6 +14,8 @@ import com.bot.exchanges.commons.repository.ExchangeRepository;
 import com.bot.exchanges.commons.repository.ProductRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
@@ -25,6 +27,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class ExchangeServiceImpl implements ExchangeService {
+
+    private static final Logger LOG = LogManager.getLogger(ExchangeServiceImpl.class.getName());
 
     protected ExchangeEnum exchangeEnum;
 
@@ -42,6 +46,8 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
     @Override
     public Candlestick refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        LOG.warn("refreshLatestCandlestick - " + exchangeEnum + " - " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
+
         // Latest candlestick
         CandlestickDTO latestCandlestickDTO = getLatestCandlestick(exchangeProduct, periodEnum);
         Candlestick latestCandlestick = convertCandlestickDTOToEntity(exchangeProduct, periodEnum, latestCandlestickDTO);
@@ -69,6 +75,8 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
     @Override
     public List<Candlestick> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        LOG.warn("refreshCandlestick - "+ exchangeEnum + " - " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
+
         List<? extends CandlestickDTO> candlesticksDTO = getCandlesticks(exchangeProduct, periodEnum);
         List<Candlestick> candlesticks = new ArrayList<>();
 
@@ -89,6 +97,8 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
     @Override
     public void refreshExchangeProductList() {
+        LOG.warn("refreshExchangeProductList - "+ exchangeEnum);
+
         Exchange exchange = exchangeRepository.findById(exchangeEnum.getId()).orElse(null);
 
         Set<String> productsToSearch = new HashSet<>();

@@ -26,7 +26,7 @@ public abstract class StrategyAnalysisSchedule {
     }
 
     @Async
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "* * * ? * *")
     public void analyzeStrategyRulesTask() {
         ExchangeSessionHelper exchangeSessionHelper = ExchangeSessionHelper.getInstance(servletContext);
         Pair<PeriodEnum, ExchangeProduct> dataToAnalyze = exchangeSessionHelper.getFirstExchangeProductToStrategyAnalysis(exchangeEnum);
@@ -38,7 +38,7 @@ public abstract class StrategyAnalysisSchedule {
     }
 
     @Async
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "* * * ? * *")
     public void monitoringStrategiesSuccessTask() {
         strategyAnalysisService.monitoringStrategiesSuccess(exchangeEnum);
     }

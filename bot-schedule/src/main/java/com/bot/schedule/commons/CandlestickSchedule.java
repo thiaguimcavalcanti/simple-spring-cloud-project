@@ -17,19 +17,19 @@ public abstract class CandlestickSchedule {
     }
 
     @Async
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "* * * ? * *")
     public void refreshLatestCandlesticksFiveMinsTask() {
         candlestickService.refreshLatestCandlestick(exchangeEnum, PeriodEnum.FIVE_MIN);
     }
 
     @Async
-    @Scheduled(cron = "*/2 * * * * ?")
+    @Scheduled(cron = "*/2 * * ? * *")
     public void refreshLatestCandlesticksFifteenMinsTask() {
         candlestickService.refreshLatestCandlestick(exchangeEnum, PeriodEnum.FIFTEEN_MIN);
     }
 
     @Async
-    @Scheduled(cron = "*/3 * * * * ?")
+    @Scheduled(cron = "*/3 * * ? * *")
     public void refreshLatestCandlesticksOneHourTask() {
         candlestickService.refreshLatestCandlestick(exchangeEnum, PeriodEnum.ONE_HOUR);
     }

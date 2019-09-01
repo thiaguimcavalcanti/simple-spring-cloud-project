@@ -16,19 +16,19 @@ public abstract class OrdersSchedule {
     }
 
     @Async
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "* * * ? * *")
     public void monitoringOpenOrders() {
         orderService.monitoringOpenOrders(exchangeEnum);
     }
 
     @Async
-    @Scheduled(cron = "*/20 * * * * ?")
+    @Scheduled(cron = "*/20 * * ? * *")
     public void executeBuyOrSellOrdersTask() {
 
     }
 
     @Async
-    @Scheduled(cron = "* */1 * * * ?")
+    @Scheduled(cron = "0 * * ? * *")
     public void executeSellAnalysisTask() {
 
     }
