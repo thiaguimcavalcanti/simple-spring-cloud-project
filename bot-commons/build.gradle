@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'com.bot'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
+    compile group: 'org.ta4j', name: 'ta4j-core', version: '0.12'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
