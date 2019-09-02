@@ -1,6 +1,7 @@
 package com.bot.exchanges;
 
 import com.bot.commons.dto.BalanceDTO;
+import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
@@ -8,8 +9,6 @@ import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.bittrex.service.BittrexService;
-import com.bot.exchanges.commons.dto.CandlestickDTO;
-import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
@@ -65,28 +64,27 @@ public class ExchangesApiFacade {
         return getExchangeServiceByType(exchangeEnum).getCandlesticks(exchangeProduct, periodEnum);
     }
 
-    public void refreshProductList() {
-        cryptoCompareService.refreshProductList();
-        binanceService.refreshExchangeProductList();
-        bittrexService.refreshExchangeProductList();
-    }
-
-    public List<Candlestick> refreshCandlestick(ExchangeEnum exchangeEnum, String baseProductId, String productId,
-                                                PeriodEnum periodEnum) {
+    public List<? extends CandlestickDTO> refreshCandlestick(ExchangeEnum exchangeEnum, String baseProductId, String productId,
+                                                             PeriodEnum periodEnum) {
         ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
         return getExchangeServiceByType(exchangeEnum).refreshCandlestick(exchangeProduct, periodEnum);
     }
 
-    public com.bot.commons.dto.CandlestickDTO refreshLatestCandlestick(ExchangeEnum exchangeEnum, String baseProductId,
+    public CandlestickDTO refreshLatestCandlestick(ExchangeEnum exchangeEnum, String baseProductId,
                                                                        String productId, PeriodEnum periodEnum) {
         ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
-        Candlestick candlestick = getExchangeServiceByType(exchangeEnum).refreshLatestCandlestick(exchangeProduct, periodEnum);
-        return mapper.map(candlestick, com.bot.commons.dto.CandlestickDTO.class);
+        return getExchangeServiceByType(exchangeEnum).refreshLatestCandlestick(exchangeProduct, periodEnum);
     }
 
     private ExchangeProduct getExchangeProduct(ExchangeEnum exchangeEnum, String baseProductId, String productId) {
         return exchangeProductRepository.findByExchangeIdAndBaseProductIdAndProductId(exchangeEnum.getId(),
                 baseProductId, productId);
+    }
+
+    public void refreshProductList() {
+        cryptoCompareService.refreshProductList();
+        binanceService.refreshExchangeProductList();
+        bittrexService.refreshExchangeProductList();
     }
 
     private ExchangeService getExchangeServiceByType(ExchangeEnum exchangeEnum) {

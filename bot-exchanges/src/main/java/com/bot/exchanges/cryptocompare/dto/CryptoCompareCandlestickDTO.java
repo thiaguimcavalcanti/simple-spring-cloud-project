@@ -1,43 +1,28 @@
 package com.bot.exchanges.cryptocompare.dto;
 
-import com.bot.exchanges.commons.dto.CandlestickDTO;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.bot.commons.dto.CandlestickDTO;
+import com.bot.commons.types.CustomBigDecimal;
+import com.bot.commons.utils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CryptoCompareCandlestickDTO extends CandlestickDTO {
 
-  @Override
-  @JsonSetter("open")
-  public void setOpenPrice(String openPrice) {
-    super.setOpenPrice(openPrice);
-  }
-
-  @Override
-  @JsonSetter("high")
-  public void setMaxPrice(String maxPrice) {
-    super.setMaxPrice(maxPrice);
-  }
-
-  @Override
-  @JsonSetter("low")
-  public void setMinPrice(String minPrice) {
-    super.setMinPrice(minPrice);
-  }
-
-  @Override
-  @JsonSetter("close")
-  public void setClosePrice(String closePrice) {
-    super.setClosePrice(closePrice);
-  }
-
-  @Override
-  @JsonSetter("volumeto")
-  public void setVolume(String volume) {
-    super.setVolume(volume);
-  }
-
-  @Override
-  @JsonSetter("time")
-  public void setEndTime(String endTime) {
-    super.setEndTime(endTime);
+  @JsonCreator
+  public CryptoCompareCandlestickDTO(@JsonProperty("open") String open, @JsonProperty("high") String high,
+                               @JsonProperty("low") String low, @JsonProperty("close") String close,
+                               @JsonProperty("volumeto") String volume, @JsonProperty("time") String closeTime) {
+    setOpenPrice(CustomBigDecimal.valueOf(open));
+    setClosePrice(CustomBigDecimal.valueOf(close));
+    setVolume(CustomBigDecimal.valueOf(volume));
+    setMaxPrice(CustomBigDecimal.valueOf(high));
+    setMinPrice(CustomBigDecimal.valueOf(low));
+    setEndTime(DateUtils.convertEpochSecondToZonedDateTime(closeTime));
   }
 }

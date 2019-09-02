@@ -1,9 +1,10 @@
 package com.bot.exchanges.cryptocompare.service.impl;
 
+import static com.bot.commons.utils.DateUtils.roundZonedDateTime;
+
+import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
-import com.bot.commons.utils.DateUtils;
-import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.Product;
 import com.bot.exchanges.commons.repository.ProductRepository;
@@ -41,16 +42,23 @@ public class CryptoCompareServiceImpl implements CryptoCompareService {
     public CandlestickDTO getLatestCandlestick(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         List<CryptoCompareCandlestickDTO> candlesticks = cryptoComparePublicClient.historicalMinute(exchangeProduct.getProductId(),
                 exchangeProduct.getBaseProductId(), 2, exchangeEnum.getCryptoCompareName(), periodEnum.getInMinutes(), false).getData();
-        if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
-            CryptoCompareCandlestickDTO compareCandlestickDTO = candlesticks.get(candlesticks.size() - 2);
 
-            if (compareCandlestickDTO != null && ExchangeEnum.BITTREX.equals(exchangeEnum)) {
-                compareCandlestickDTO.setEndTime(DateUtils.convertCryptoCompareDateToBittrexDate(compareCandlestickDTO.getEndTime(),
-                        periodEnum.getDuration()));
+        if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
+            CryptoCompareCandlestickDTO candlestickDTO = candlesticks.get(candlesticks.size() - 2);
+
+            if (candlestickDTO != null) {
+                if (ExchangeEnum.BITTREX.equals(exchangeEnum)) {
+                    candlestickDTO.setBeginTime(candlestickDTO.getEndTime());
+                    candlestickDTO.setEndTime(candlestickDTO.getEndTime().plus(periodEnum.getDuration()));
+                } else if (ExchangeEnum.BINANCE.equals(exchangeEnum)) {
+                    candlestickDTO.setBeginTime(roundZonedDateTime(candlestickDTO.getBeginTime(), periodEnum.getDuration()));
+                    candlestickDTO.setEndTime(roundZonedDateTime(candlestickDTO.getEndTime(), periodEnum.getDuration()));
+                }
             }
 
-            return compareCandlestickDTO;
+            return candlestickDTO;
         }
+
         return null;
     }
 }

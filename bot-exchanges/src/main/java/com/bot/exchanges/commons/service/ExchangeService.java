@@ -1,13 +1,12 @@
 package com.bot.exchanges.commons.service;
 
 import com.bot.commons.dto.BalanceDTO;
+import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.PeriodEnum;
-import com.bot.exchanges.commons.dto.CandlestickDTO;
-import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 
 import java.util.List;
@@ -26,9 +25,9 @@ public interface ExchangeService {
 
     CandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 
-    List<Candlestick> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
+    List<? extends CandlestickDTO> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 
-    Candlestick refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
+    CandlestickDTO refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 
     void refreshExchangeProductList();
 

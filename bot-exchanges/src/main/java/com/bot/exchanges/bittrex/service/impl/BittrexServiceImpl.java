@@ -63,22 +63,36 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
 
     @Override
     public List<BittrexCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
-        String symbol = exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
-        return bittrexPublic2Client.getCandlesticks(symbol, "fiveMin").getResult();
+        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks("fiveMin", getSymbol(exchangeProduct)).getResult();
+
+        candlesticks.forEach(candlestickDTO -> {
+            candlestickDTO.setBeginTime(candlestickDTO.getEndTime());
+            candlestickDTO.setEndTime(candlestickDTO.getEndTime().plus(periodEnum.getDuration()));
+        });
+
+        return candlesticks;
     }
 
     @Override
     public BittrexCandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
-        String symbol = exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
-        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks("fiveMin", symbol).getResult();
+        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks("fiveMin", getSymbol(exchangeProduct)).getResult();
+
         if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
-            return candlesticks.get(candlesticks.size() - 2);
+            BittrexCandlestickDTO candlestickDTO = candlesticks.get(candlesticks.size() - 2);
+            candlestickDTO.setBeginTime(candlestickDTO.getEndTime());
+            candlestickDTO.setEndTime(candlestickDTO.getEndTime().plus(periodEnum.getDuration()));
+            return candlestickDTO;
         }
+
         return null;
     }
 
     @Override
     public List<BittrexExchangeProductDTO> getExchangeProductList() {
         return bittrexPublicClient.getMarkets().getResult();
+    }
+
+    private String getSymbol(ExchangeProduct exchangeProduct) {
+        return exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
     }
 }

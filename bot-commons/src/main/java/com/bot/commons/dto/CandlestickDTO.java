@@ -1,6 +1,5 @@
 package com.bot.commons.dto;
 
-import com.bot.commons.enums.PeriodEnum;
 import com.bot.commons.utils.NumDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -12,8 +11,6 @@ import java.time.ZonedDateTime;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CandlestickDTO {
-  private String id;
-  private PeriodEnum periodEnum;
   private ZonedDateTime beginTime;
   private ZonedDateTime endTime;
   @JsonDeserialize(using = NumDeserializer.class)
@@ -24,8 +21,6 @@ public class CandlestickDTO {
   private Num maxPrice;
   @JsonDeserialize(using = NumDeserializer.class)
   private Num minPrice;
-  @JsonDeserialize(using = NumDeserializer.class)
-  private Num amount;
   @JsonDeserialize(using = NumDeserializer.class)
   private Num volume;
 }

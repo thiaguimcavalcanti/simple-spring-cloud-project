@@ -1,10 +1,8 @@
 package com.bot.exchanges.commons.service.impl;
 
-import static com.bot.exchanges.commons.utils.CandlestickTransformer.convertCandlestickDTOToEntity;
-
+import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
-import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.Exchange;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
@@ -17,6 +15,7 @@ import com.bot.exchanges.commons.service.ExchangeService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
@@ -45,13 +44,17 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
     @Autowired
     protected CandlestickRepository candlestickRepository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
-    public Candlestick refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+    public CandlestickDTO refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         LOG.warn("refreshLatestCandlestick - " + exchangeEnum + " - " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
 
         // Latest candlestick
         CandlestickDTO latestCandlestickDTO = getLatestCandlestick(exchangeProduct, periodEnum);
-        Candlestick latestCandlestick = convertCandlestickDTOToEntity(exchangeEnum, exchangeProduct, periodEnum, latestCandlestickDTO);
+        Candlestick latestCandlestick = mapper.map(latestCandlestickDTO, Candlestick.class);
+        fillAdditionalCandlestickInfo(exchangeProduct, periodEnum, latestCandlestick);
 
         // Previous candlestick
         Candlestick previousCandlestick = candlestickRepository
@@ -62,38 +65,35 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
             refreshCandlestick(exchangeProduct, periodEnum);
         }
 
-        return latestCandlestick != null ? candlestickRepository.save(latestCandlestick) : null;
-    }
-
-    private ZonedDateTime getPreviousEndTime(PeriodEnum periodEnum, Candlestick previousCandlestick) {
-        if (previousCandlestick == null) {
-            ZonedDateTime previousEndTime = ZonedDateTime.now().withSecond(0).withNano(0);
-            return previousEndTime.minusMinutes(previousEndTime.getMinute() % periodEnum.getInMinutes())
-                    .minusMinutes(periodEnum.getInMinutes());
+        if (latestCandlestick != null) {
+            candlestickRepository.save(latestCandlestick);
         }
-        return previousCandlestick.getEndTime();
+
+        return latestCandlestickDTO;
     }
 
     @Override
-    public List<Candlestick> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+    public List<? extends CandlestickDTO> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         LOG.warn("refreshCandlestick - "+ exchangeEnum + " - " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
 
         List<? extends CandlestickDTO> candlesticksDTO = getCandlesticks(exchangeProduct, periodEnum);
         List<Candlestick> candlesticks = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(candlesticksDTO)) {
-            candlesticks = candlesticksDTO.stream().map(candlestickDTO ->
-                    convertCandlestickDTOToEntity(exchangeEnum, exchangeProduct, periodEnum, candlestickDTO))
-                    .collect(Collectors.toList());
-
             // Ignore the last one, because this candlestick is still opened
-            candlesticks.remove(candlesticks.size() - 1);
+            candlesticksDTO.remove(candlesticksDTO.size() - 1);
 
-            candlesticks = candlestickRepository.saveAll(candlesticks);
+            candlesticks = candlesticksDTO.stream().map(candlestickDTO -> {
+                Candlestick candlestick = mapper.map(candlestickDTO, Candlestick.class);
+                fillAdditionalCandlestickInfo(exchangeProduct, periodEnum, candlestick);
+                return candlestick;
+            }).collect(Collectors.toList());
+
+            candlestickRepository.saveAll(candlesticks);
             candlestickRepository.flush();
         }
 
-        return candlesticks;
+        return candlesticksDTO;
     }
 
     @Override
@@ -130,6 +130,15 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
         exchangeProductRepository.saveAll(exchangeProducts);
     }
 
+    private ZonedDateTime getPreviousEndTime(PeriodEnum periodEnum, Candlestick previousCandlestick) {
+        if (previousCandlestick == null) {
+            ZonedDateTime previousEndTime = ZonedDateTime.now().withSecond(0).withNano(0);
+            return previousEndTime.minusMinutes(previousEndTime.getMinute() % periodEnum.getInMinutes())
+                    .minusMinutes(periodEnum.getInMinutes());
+        }
+        return previousCandlestick.getEndTime();
+    }
+
     private Map<String, Product> getProducts(Set<String> productsToSearch) {
         List<Product> products;
         if (CollectionUtils.isNotEmpty(productsToSearch)) {
@@ -148,5 +157,14 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
             products.put(symbol, product);
         }
         return product;
+    }
+
+    private void fillAdditionalCandlestickInfo(ExchangeProduct exchangeProduct, PeriodEnum periodEnum,
+                                               Candlestick latestCandlestick) {
+        if (latestCandlestick != null) {
+            latestCandlestick.setExchangeProduct(exchangeProduct);
+            latestCandlestick.setPeriodEnum(periodEnum);
+            latestCandlestick.setId(latestCandlestick.toString());
+        }
     }
 }
