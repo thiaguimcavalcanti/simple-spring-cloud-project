@@ -7,9 +7,8 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-    compile group: 'mysql', name: 'mysql-connector-java'
-    compile project(':bot-exchanges')
+
+    compile project(':bot-commons')
 }

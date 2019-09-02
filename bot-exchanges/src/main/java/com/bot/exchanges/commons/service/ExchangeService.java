@@ -1,14 +1,14 @@
 package com.bot.exchanges.commons.service;
 
-import com.bot.exchanges.commons.dto.BalanceDTO;
+import com.bot.commons.dto.BalanceDTO;
+import com.bot.commons.dto.ExchangeProductDTO;
+import com.bot.commons.dto.OpenOrderDTO;
+import com.bot.commons.dto.OrderHistoryDTO;
+import com.bot.commons.dto.TickerDTO;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.dto.CandlestickDTO;
-import com.bot.exchanges.commons.dto.ExchangeProductDTO;
-import com.bot.exchanges.commons.dto.OpenOrderDTO;
-import com.bot.exchanges.commons.dto.OrderHistoryDTO;
-import com.bot.exchanges.commons.dto.TickerDTO;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 
 import java.util.List;
 

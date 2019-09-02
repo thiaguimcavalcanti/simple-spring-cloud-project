@@ -1,9 +1,9 @@
 package com.bot.schedule.commons;
 
-import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
-import com.bot.exchanges.trade.service.StrategyAnalysisService;
+import com.bot.commons.dto.ExchangeProductDTO;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
+import com.bot.schedule.commons.client.StrategyClient;
 import com.bot.schedule.commons.session.helpers.ExchangeSessionHelper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.scheduling.annotation.Async;
@@ -17,11 +17,11 @@ public abstract class StrategyAnalysisSchedule {
 
     private ServletContext servletContext;
 
-    private final StrategyAnalysisService strategyAnalysisService;
+    private final StrategyClient strategiesClient;
 
-    public StrategyAnalysisSchedule(StrategyAnalysisService strategyAnalysisService,
+    public StrategyAnalysisSchedule(StrategyClient strategiesClient,
                                     ServletContext servletContext) {
-        this.strategyAnalysisService = strategyAnalysisService;
+        this.strategiesClient = strategiesClient;
         this.servletContext = servletContext;
     }
 
@@ -29,10 +29,12 @@ public abstract class StrategyAnalysisSchedule {
     @Scheduled(cron = "* * * ? * *")
     public void analyzeStrategyRulesTask() {
         ExchangeSessionHelper exchangeSessionHelper = ExchangeSessionHelper.getInstance(servletContext);
-        Pair<PeriodEnum, ExchangeProduct> dataToAnalyze = exchangeSessionHelper.getFirstExchangeProductToStrategyAnalysis(exchangeEnum);
+        Pair<PeriodEnum, ExchangeProductDTO> dataToAnalyze = exchangeSessionHelper.getFirstExchangeProductToStrategyAnalysis(exchangeEnum);
 
         if (dataToAnalyze != null) {
-            strategyAnalysisService.analyzeStrategies(dataToAnalyze.getLeft(), dataToAnalyze.getRight());
+            ExchangeProductDTO exchangeProduct = dataToAnalyze.getRight();
+            strategiesClient.analyzeStrategies(exchangeEnum, exchangeProduct.getBaseProductId(),
+                    exchangeProduct.getProductId(), dataToAnalyze.getLeft());
             exchangeSessionHelper.removeExchangeProductToStrategyAnalysis(exchangeEnum, dataToAnalyze);
         }
     }
@@ -40,6 +42,6 @@ public abstract class StrategyAnalysisSchedule {
     @Async
     @Scheduled(cron = "* * * ? * *")
     public void monitoringStrategiesSuccessTask() {
-        strategyAnalysisService.monitoringStrategiesSuccess(exchangeEnum);
+        strategiesClient.monitoringStrategies(exchangeEnum);
     }
 }

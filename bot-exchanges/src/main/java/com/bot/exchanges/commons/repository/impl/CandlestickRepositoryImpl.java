@@ -1,10 +1,10 @@
 package com.bot.exchanges.commons.repository.impl;
 
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.Candlestick_;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.ExchangeProduct_;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.repository.CustomCandlestickRepository;
 
 import javax.persistence.EntityManager;

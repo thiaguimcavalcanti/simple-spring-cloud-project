@@ -7,3 +7,5 @@ include "bot-gateway"
 include "bot-orders"
 include "bot-schedule"
 include "bot-ticks"
+include 'bot-commons'
+

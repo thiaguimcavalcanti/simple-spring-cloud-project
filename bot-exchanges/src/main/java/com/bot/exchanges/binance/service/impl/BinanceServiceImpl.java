@@ -1,17 +1,17 @@
 package com.bot.exchanges.binance.service.impl;
 
+import com.bot.commons.dto.BalanceDTO;
+import com.bot.commons.dto.OpenOrderDTO;
+import com.bot.commons.dto.OrderHistoryDTO;
+import com.bot.commons.dto.TickerDTO;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
 import com.bot.exchanges.binance.service.BinanceService;
-import com.bot.exchanges.commons.dto.BalanceDTO;
 import com.bot.exchanges.commons.dto.CandlestickDTO;
-import com.bot.exchanges.commons.dto.OpenOrderDTO;
-import com.bot.exchanges.commons.dto.OrderHistoryDTO;
-import com.bot.exchanges.commons.dto.TickerDTO;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

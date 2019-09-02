@@ -1,7 +1,7 @@
 package com.bot.schedule.commons.service;
 
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 
 public interface CandlestickService {
 

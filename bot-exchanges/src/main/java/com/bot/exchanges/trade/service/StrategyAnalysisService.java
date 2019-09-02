@@ -1,12 +1,11 @@
 package com.bot.exchanges.trade.service;
 
-import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 
 public interface StrategyAnalysisService {
 
-    void monitoringStrategiesSuccess(ExchangeEnum exchangeEnum);
+    void monitoringStrategies(ExchangeEnum exchangeEnum);
 
-    void analyzeStrategies(PeriodEnum periodEnum, ExchangeProduct exchangeProduct);
+    void analyzeStrategies(ExchangeEnum exchangeEnum, String baseProductId, String productId, PeriodEnum periodEnum);
 }

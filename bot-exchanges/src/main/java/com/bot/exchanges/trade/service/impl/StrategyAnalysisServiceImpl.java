@@ -1,15 +1,16 @@
 package com.bot.exchanges.trade.service.impl;
 
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.OrderStatusEnum;
+import com.bot.commons.enums.OrderTypeEnum;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.OrderHistory;
 import com.bot.exchanges.commons.entities.Strategy;
 import com.bot.exchanges.commons.entities.StrategyRule;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.OrderStatusEnum;
-import com.bot.exchanges.commons.enums.OrderTypeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.repository.CandlestickRepository;
+import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.repository.StrategyRepository;
 import com.bot.exchanges.commons.repository.StrategyRuleRepository;
 import com.bot.exchanges.commons.service.OrderHistoryService;
@@ -40,21 +41,25 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
     private StrategyRepository strategyRepository;
     private StrategyRuleRepository strategyRuleRepository;
     private CandlestickRepository candlestickRepository;
+    private ExchangeProductRepository exchangeProductRepository;
+
     private OrderHistoryService orderHistoryService;
 
     @Autowired
     public StrategyAnalysisServiceImpl(StrategyRepository strategyRepository,
                                        StrategyRuleRepository strategyRuleRepository,
                                        CandlestickRepository candlestickRepository,
-                                       OrderHistoryService orderHistoryService) {
+                                       OrderHistoryService orderHistoryService,
+                                       ExchangeProductRepository exchangeProductRepository) {
         this.strategyRepository = strategyRepository;
         this.strategyRuleRepository = strategyRuleRepository;
         this.candlestickRepository = candlestickRepository;
         this.orderHistoryService = orderHistoryService;
+        this.exchangeProductRepository = exchangeProductRepository;
     }
 
     @Override
-    public void monitoringStrategiesSuccess(ExchangeEnum exchangeEnum) {
+    public void monitoringStrategies(ExchangeEnum exchangeEnum) {
         List<Strategy> strategies = strategyRepository.findByActiveIsTrueAndExchangeId(exchangeEnum.getId()); // change to find by exchange enum
 
         for (Strategy strategy : strategies) {
@@ -96,7 +101,8 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
     }
 
     @Override
-    public void analyzeStrategies(PeriodEnum periodEnum, ExchangeProduct exchangeProduct) {
+    public void analyzeStrategies(ExchangeEnum exchangeEnum, String baseProductId, String productId, PeriodEnum periodEnum) {
+        ExchangeProduct exchangeProduct = exchangeProductRepository.findByExchangeIdAndBaseProductIdAndProductId(exchangeEnum.getId(), baseProductId, productId);
         BaseTimeSeries series = createTimeSeries(periodEnum, exchangeProduct);
 
         List<StrategyRule> strategyRules = strategyRuleRepository.findByExchangeProductAndPeriodEnum(exchangeProduct, periodEnum);

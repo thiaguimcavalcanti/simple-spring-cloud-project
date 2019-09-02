@@ -1,6 +1,6 @@
 package com.bot.schedule.commons.session;
 
-import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.commons.enums.PeriodEnum;
 
 import java.util.Collections;
 import java.util.EnumMap;

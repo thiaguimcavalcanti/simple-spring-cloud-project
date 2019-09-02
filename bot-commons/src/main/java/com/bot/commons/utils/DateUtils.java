@@ -1,4 +1,4 @@
-package com.bot.exchanges.commons.utils;
+package com.bot.commons.utils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

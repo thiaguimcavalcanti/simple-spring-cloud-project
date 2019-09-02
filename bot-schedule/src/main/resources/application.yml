@@ -5,42 +5,30 @@ spring:
     sampler:
       probability: 1.0
 
-  #  datasource:
-  #    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-  #    username: sa
-  #    password:
-  #    driver-class-name: org.h2.Driver
-  #    platform: h2
-  #    h2:
-  #      console:
-  #        enabled: true
-  #        path: /h2
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/bot_exchanges?autoReconnect=true&useUnicode=true&serverTimezone=UTC&useLegacyDatetimeCode=false&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
-    username: root
-    password: adminadmin
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    properties:
-      hibernate:
-        globally_quoted_identifiers: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
-    #        dialect: org.hibernate.dialect.H2Dialect
-        jdbc:
-          time_zone: UTC
-    hibernate:
-      ddl-auto: update
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+eureka:
+  client:
+    enabled: false
 
 logging:
   level:
     root: WARN
 
 exchanges:
+  baseUrl: http://localhost:8085
+  apis:
+    candlestick:
+      basePath: /candlestick
+      refreshLatestCandlestick: /refreshLatestCandlestick?exchangeEnum={exchangeEnum}&baseProductId={baseProductId}&productId={productId}&periodEnum={periodEnum}
+    strategy:
+      basePath: /strategy
+      analyze: /analyze?exchangeEnum={exchangeEnum}&baseProductId={baseProductId}&productId={productId}&periodEnum={periodEnum}
+      monitoring: /monitoring?exchangeEnum={exchangeEnum}
+    exchangeProduct:
+      basePath: /exchangeProduct
+      findByExchangeId: /findByExchangeId?exchangeEnum={exchangeEnum}
+    product:
+      basePath: /product
+      refreshProductList: /refreshProductList
   binance:
     schedules:
       active: true

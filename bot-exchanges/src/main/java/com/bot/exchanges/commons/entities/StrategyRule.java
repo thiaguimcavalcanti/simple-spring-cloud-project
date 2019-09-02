@@ -1,6 +1,6 @@
 package com.bot.exchanges.commons.entities;
 
-import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.commons.enums.PeriodEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;

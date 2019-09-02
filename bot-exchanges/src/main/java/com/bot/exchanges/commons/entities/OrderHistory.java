@@ -1,8 +1,8 @@
 package com.bot.exchanges.commons.entities;
 
-import com.bot.exchanges.commons.entities.types.CustomBigDecimal;
-import com.bot.exchanges.commons.enums.OrderStatusEnum;
-import com.bot.exchanges.commons.enums.OrderTypeEnum;
+import com.bot.commons.enums.OrderStatusEnum;
+import com.bot.commons.enums.OrderTypeEnum;
+import com.bot.commons.types.CustomBigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;

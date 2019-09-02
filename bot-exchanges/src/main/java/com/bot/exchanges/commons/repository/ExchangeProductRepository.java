@@ -11,4 +11,6 @@ public interface ExchangeProductRepository extends JpaRepository<ExchangeProduct
 
     List<ExchangeProduct> findByExchangeId(Long exchangeId);
 
+    ExchangeProduct findByExchangeIdAndBaseProductIdAndProductId(Long exchangeId, String baseProductId, String productId);
+
 }

@@ -1,11 +1,11 @@
 package com.bot.exchanges.commons.repository.impl;
 
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.Strategy;
 import com.bot.exchanges.commons.entities.StrategyRule;
 import com.bot.exchanges.commons.entities.StrategyRule_;
 import com.bot.exchanges.commons.entities.Strategy_;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.repository.CustomStrategyRuleRepository;
 
 import javax.persistence.EntityManager;

@@ -1,6 +1,6 @@
 package com.bot.schedule.commons;
 
-import com.bot.exchanges.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.ExchangeEnum;
 import com.bot.schedule.commons.service.OrderService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;

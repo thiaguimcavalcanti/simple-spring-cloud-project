@@ -1,6 +1,6 @@
 package com.bot.exchanges.bittrex.dto.account;
 
-import com.bot.exchanges.commons.dto.BalanceDTO;
+import com.bot.commons.dto.BalanceDTO;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class BittrexBalanceDTO extends BalanceDTO {

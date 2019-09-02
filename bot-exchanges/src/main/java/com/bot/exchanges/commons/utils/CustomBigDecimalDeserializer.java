@@ -1,6 +1,6 @@
 package com.bot.exchanges.commons.utils;
 
-import com.bot.exchanges.commons.entities.types.CustomBigDecimal;
+import com.bot.commons.types.CustomBigDecimal;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;

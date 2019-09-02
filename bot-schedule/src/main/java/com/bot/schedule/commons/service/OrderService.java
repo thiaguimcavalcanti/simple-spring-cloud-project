@@ -1,6 +1,7 @@
 package com.bot.schedule.commons.service;
 
-import com.bot.exchanges.commons.enums.ExchangeEnum;
+
+import com.bot.commons.enums.ExchangeEnum;
 
 public interface OrderService {
 

@@ -1,8 +1,8 @@
 package com.bot.schedule.commons.session.helpers;
 
-import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.commons.dto.ExchangeProductDTO;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.schedule.commons.session.ExchangeSession;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -56,12 +56,12 @@ public class ExchangeSessionHelper implements Serializable {
 		servletContext.setAttribute(getSessionKey(exchangeEnum), exchangeSession);
 	}
 
-	public void initializeExchangeSession(ExchangeEnum exchangeEnum, List<ExchangeProduct> exchangeProducts) {
+	public void initializeExchangeSession(ExchangeEnum exchangeEnum, List<ExchangeProductDTO> exchangeProducts) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.initialize(exchangeProducts);
 	}
 
-	public synchronized ExchangeProduct getFirstExchangeProductToRefreshLatestCandlestick(ExchangeEnum exchangeEnum,
+	public synchronized ExchangeProductDTO getFirstExchangeProductToRefreshLatestCandlestick(ExchangeEnum exchangeEnum,
 																						  PeriodEnum periodEnum) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		return exchangeSession.getExchangeProductsToRefreshLatestCandlestick().getFirstItem(periodEnum, true);
@@ -69,32 +69,32 @@ public class ExchangeSessionHelper implements Serializable {
 
 	public synchronized void addExchangeProductsToRefreshLatestCandlestick(ExchangeEnum exchangeEnum,
 																		   PeriodEnum periodEnum,
-																		   List<ExchangeProduct> exchangeProducts) {
+																		   List<ExchangeProductDTO> exchangeProducts) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.getExchangeProductsToRefreshLatestCandlestick().putAll(periodEnum, exchangeProducts);
 	}
 
-	public synchronized <T extends ExchangeProduct> void addExchangeProductToRefreshLatestCandlestick(ExchangeEnum exchangeEnum,
+	public synchronized <T extends ExchangeProductDTO> void addExchangeProductToRefreshLatestCandlestick(ExchangeEnum exchangeEnum,
 																									  PeriodEnum periodEnum,
-																									  ExchangeProduct exchangeProduct) {
+																									  ExchangeProductDTO exchangeProduct) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.getExchangeProductsToRefreshLatestCandlestick().put(periodEnum, exchangeProduct);
 	}
 
 	public synchronized void addExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum,
 																  PeriodEnum periodEnum,
-																  ExchangeProduct exchangeProducts) {
+																  ExchangeProductDTO exchangeProducts) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.getExchangeProductsToStrategyAnalysis().add(Pair.of(periodEnum, exchangeProducts));
 	}
 
-	public synchronized Pair<PeriodEnum, ExchangeProduct> getFirstExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum) {
+	public synchronized Pair<PeriodEnum, ExchangeProductDTO> getFirstExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		return exchangeSession.getExchangeProductsToStrategyAnalysis().getFirstItem(true);
 	}
 
 	public synchronized void removeExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum,
-																	 Pair<PeriodEnum, ExchangeProduct> pair) {
+																	 Pair<PeriodEnum, ExchangeProductDTO> pair) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.getExchangeProductsToStrategyAnalysis().remove(pair);
 	}

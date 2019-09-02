@@ -7,26 +7,26 @@ public class CryptoCompareCandlestickDTO extends CandlestickDTO {
 
   @Override
   @JsonSetter("open")
-  public void setOpen(String open) {
-    super.setOpen(open);
+  public void setOpenPrice(String openPrice) {
+    super.setOpenPrice(openPrice);
   }
 
   @Override
   @JsonSetter("high")
-  public void setHigh(String high) {
-    super.setHigh(high);
+  public void setMaxPrice(String maxPrice) {
+    super.setMaxPrice(maxPrice);
   }
 
   @Override
   @JsonSetter("low")
-  public void setLow(String low) {
-    super.setLow(low);
+  public void setMinPrice(String minPrice) {
+    super.setMinPrice(minPrice);
   }
 
   @Override
   @JsonSetter("close")
-  public void setClose(String close) {
-    super.setClose(close);
+  public void setClosePrice(String closePrice) {
+    super.setClosePrice(closePrice);
   }
 
   @Override
@@ -37,7 +37,7 @@ public class CryptoCompareCandlestickDTO extends CandlestickDTO {
 
   @Override
   @JsonSetter("time")
-  public void setCloseTime(String closeTime) {
-    super.setCloseTime(closeTime);
+  public void setEndTime(String endTime) {
+    super.setEndTime(endTime);
   }
 }

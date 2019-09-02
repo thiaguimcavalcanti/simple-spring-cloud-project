@@ -1,4 +1,4 @@
-package com.bot.exchanges.commons.enums;
+package com.bot.commons.enums;
 
 public enum OrderTypeEnum {
 

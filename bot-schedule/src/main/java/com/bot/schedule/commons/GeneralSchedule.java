@@ -1,36 +1,33 @@
 package com.bot.schedule.commons;
 
-import com.bot.exchanges.ExchangesApiFacade;
-import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.repository.ExchangeProductRepository;
+import com.bot.commons.dto.ExchangeProductDTO;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.schedule.commons.client.ExchangeProductClient;
+import com.bot.schedule.commons.client.ProductClient;
 import com.bot.schedule.commons.session.helpers.ExchangeSessionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import java.util.List;
 
 @Component
-@Transactional
 public class GeneralSchedule {
 
     private ServletContext servletContext;
 
-    private final ExchangesApiFacade exchangesApiFacade;
-
-    private final ExchangeProductRepository exchangeProductRepository;
+    private final ExchangeProductClient exchangeProductClient;
+    private final ProductClient productClient;
 
     @Autowired
-    public GeneralSchedule(ExchangesApiFacade exchangesApiFacade,
-                           ExchangeProductRepository exchangeProductRepository,
+    public GeneralSchedule(ProductClient productClient,
+                           ExchangeProductClient exchangeProductClient,
                            ServletContext servletContext) {
-        this.exchangesApiFacade = exchangesApiFacade;
-        this.exchangeProductRepository = exchangeProductRepository;
+        this.productClient = productClient;
+        this.exchangeProductClient = exchangeProductClient;
         this.servletContext = servletContext;
     }
 
@@ -38,17 +35,17 @@ public class GeneralSchedule {
     public void initialize() {
         ExchangeSessionHelper sessionHelper = ExchangeSessionHelper.getInstance(servletContext);
 
-        List<ExchangeProduct> exchangeProducts = exchangeProductRepository.findByExchangeId(ExchangeEnum.BITTREX.getId());
+        List<ExchangeProductDTO> exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BITTREX);
         sessionHelper.initializeExchangeSession(ExchangeEnum.BITTREX, exchangeProducts);
 
-        exchangeProducts = exchangeProductRepository.findByExchangeId(ExchangeEnum.BINANCE.getId());
+        exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BINANCE);
         sessionHelper.initializeExchangeSession(ExchangeEnum.BINANCE, exchangeProducts);
     }
 
     @Async
     @Scheduled(cron = "0 0 * ? * *")
     public void refreshProductList() {
-        exchangesApiFacade.refreshProductList();
+        productClient.refreshProductList();
     }
 
 }

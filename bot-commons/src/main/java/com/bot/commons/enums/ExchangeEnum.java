@@ -1,7 +1,7 @@
-package com.bot.exchanges.commons.enums;
+package com.bot.commons.enums;
 
-import static com.bot.exchanges.commons.utils.DateUtils.PARSE_BINANCE_DATE;
-import static com.bot.exchanges.commons.utils.DateUtils.PARSE_BITTREX_DATE;
+import static com.bot.commons.utils.DateUtils.PARSE_BINANCE_DATE;
+import static com.bot.commons.utils.DateUtils.PARSE_BITTREX_DATE;
 
 import lombok.Getter;
 

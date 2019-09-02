@@ -1,7 +1,7 @@
 package com.bot.exchanges.commons.entities;
 
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.types.NumType;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -52,22 +52,22 @@ public class Candlestick extends AbstractStringIDEntity implements Bar {
 	/** Open price of the period */
 	@Column(name = "OpenPrice", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num openPrice = null;
+	private Num openPrice;
 
 	/** Close price of the period */
 	@Column(name = "ClosePrice", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num closePrice = null;
+	private Num closePrice;
 
 	/** Max price of the period */
 	@Column(name = "MaxPrice", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num maxPrice = null;
+	private Num maxPrice;
 
 	/** Min price of the period */
 	@Column(name = "MinPrice", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num minPrice = null;
+	private Num minPrice;
 
 	/** Traded amount during the period */
 	@Column(name = "Amount", precision = 20, scale = 8)

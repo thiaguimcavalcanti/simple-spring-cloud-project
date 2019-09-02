@@ -1,5 +1,6 @@
 package com.bot.exchanges.commons.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 public class ExchangeProduct extends AbstractLongIDEntity {
 
     /** Exchange */
+    @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "Exchange_ID", nullable = false, referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,6 +31,7 @@ public class ExchangeProduct extends AbstractLongIDEntity {
     private Long exchangeId;
 
     /** Product */
+    @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "Product_ID", nullable = false, referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,6 +41,7 @@ public class ExchangeProduct extends AbstractLongIDEntity {
     private String productId;
 
     /** Base Product */
+    @JsonIgnore
     @ToString.Exclude
     @JoinColumn(name = "Base_Product_ID", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)

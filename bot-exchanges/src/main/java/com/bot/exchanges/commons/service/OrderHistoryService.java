@@ -1,9 +1,9 @@
 package com.bot.exchanges.commons.service;
 
+import com.bot.commons.enums.OrderTypeEnum;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.OrderHistory;
 import com.bot.exchanges.commons.entities.UserExchange;
-import com.bot.exchanges.commons.enums.OrderTypeEnum;
 
 public interface OrderHistoryService {
 

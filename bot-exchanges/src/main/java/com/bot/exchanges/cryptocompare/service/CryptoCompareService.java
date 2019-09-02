@@ -1,9 +1,9 @@
 package com.bot.exchanges.cryptocompare.service;
 
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 
 public interface CryptoCompareService {
 

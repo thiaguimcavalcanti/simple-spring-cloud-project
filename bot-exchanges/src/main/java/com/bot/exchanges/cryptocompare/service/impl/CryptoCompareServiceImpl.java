@@ -1,12 +1,12 @@
 package com.bot.exchanges.cryptocompare.service.impl;
 
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
+import com.bot.commons.utils.DateUtils;
 import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.Product;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.repository.ProductRepository;
-import com.bot.exchanges.commons.utils.DateUtils;
 import com.bot.exchanges.cryptocompare.client.CryptoComparePublicClient;
 import com.bot.exchanges.cryptocompare.dto.CryptoCompareCandlestickDTO;
 import com.bot.exchanges.cryptocompare.service.CryptoCompareService;
@@ -45,7 +45,7 @@ public class CryptoCompareServiceImpl implements CryptoCompareService {
             CryptoCompareCandlestickDTO compareCandlestickDTO = candlesticks.get(candlesticks.size() - 2);
 
             if (compareCandlestickDTO != null && ExchangeEnum.BITTREX.equals(exchangeEnum)) {
-                compareCandlestickDTO.setCloseTime(DateUtils.convertCryptoCompareDateToBittrexDate(compareCandlestickDTO.getCloseTime(),
+                compareCandlestickDTO.setEndTime(DateUtils.convertCryptoCompareDateToBittrexDate(compareCandlestickDTO.getEndTime(),
                         periodEnum.getDuration()));
             }
 

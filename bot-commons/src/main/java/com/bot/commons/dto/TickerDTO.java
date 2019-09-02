@@ -1,4 +1,4 @@
-package com.bot.exchanges.commons.dto;
+package com.bot.commons.dto;
 
 import lombok.Data;
 

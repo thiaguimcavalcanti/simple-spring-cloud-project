@@ -1,6 +1,6 @@
 package com.bot.exchanges.bittrex.dto.market;
 
-import com.bot.exchanges.commons.dto.OpenOrderDTO;
+import com.bot.commons.dto.OpenOrderDTO;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.math.BigDecimal;

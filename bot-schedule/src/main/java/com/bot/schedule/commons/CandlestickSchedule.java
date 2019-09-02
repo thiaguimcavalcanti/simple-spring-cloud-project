@@ -1,7 +1,7 @@
 package com.bot.schedule.commons;
 
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.schedule.commons.service.CandlestickService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,6 +31,6 @@ public abstract class CandlestickSchedule {
     @Async
     @Scheduled(cron = "*/3 * * ? * *")
     public void refreshLatestCandlesticksOneHourTask() {
-        candlestickService.refreshLatestCandlestick(exchangeEnum, PeriodEnum.ONE_HOUR);
+       candlestickService.refreshLatestCandlestick(exchangeEnum, PeriodEnum.ONE_HOUR);
     }
 }

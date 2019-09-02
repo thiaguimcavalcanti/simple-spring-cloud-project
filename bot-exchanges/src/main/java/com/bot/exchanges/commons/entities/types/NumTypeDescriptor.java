@@ -1,5 +1,6 @@
 package com.bot.exchanges.commons.entities.types;
 
+import com.bot.commons.types.CustomBigDecimal;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;
 import org.ta4j.core.num.Num;

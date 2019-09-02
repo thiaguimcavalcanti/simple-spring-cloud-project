@@ -1,11 +1,11 @@
 package com.bot.exchanges.commons.service.impl;
 
+import com.bot.commons.enums.OrderStatusEnum;
+import com.bot.commons.enums.OrderTypeEnum;
+import com.bot.commons.types.CustomBigDecimal;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.OrderHistory;
 import com.bot.exchanges.commons.entities.UserExchange;
-import com.bot.exchanges.commons.entities.types.CustomBigDecimal;
-import com.bot.exchanges.commons.enums.OrderStatusEnum;
-import com.bot.exchanges.commons.enums.OrderTypeEnum;
 import com.bot.exchanges.commons.repository.OrderHistoryRepository;
 import com.bot.exchanges.commons.service.OrderHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;

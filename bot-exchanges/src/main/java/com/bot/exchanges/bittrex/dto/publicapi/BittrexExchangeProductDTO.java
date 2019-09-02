@@ -1,6 +1,6 @@
 package com.bot.exchanges.bittrex.dto.publicapi;
 
-import com.bot.exchanges.commons.dto.ExchangeProductDTO;
+import com.bot.commons.dto.ExchangeProductDTO;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class BittrexExchangeProductDTO extends ExchangeProductDTO {

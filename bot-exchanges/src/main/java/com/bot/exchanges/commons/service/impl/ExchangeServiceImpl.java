@@ -1,13 +1,14 @@
 package com.bot.exchanges.commons.service.impl;
 
+import static com.bot.exchanges.commons.utils.CandlestickTransformer.convertCandlestickDTOToEntity;
+
+import com.bot.commons.enums.ExchangeEnum;
+import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.dto.CandlestickDTO;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.Exchange;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.Product;
-import com.bot.exchanges.commons.entities.types.CustomBigDecimal;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
-import com.bot.exchanges.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.repository.CandlestickRepository;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.repository.ExchangeRepository;
@@ -50,7 +51,7 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
         // Latest candlestick
         CandlestickDTO latestCandlestickDTO = getLatestCandlestick(exchangeProduct, periodEnum);
-        Candlestick latestCandlestick = convertCandlestickDTOToEntity(exchangeProduct, periodEnum, latestCandlestickDTO);
+        Candlestick latestCandlestick = convertCandlestickDTOToEntity(exchangeEnum, exchangeProduct, periodEnum, latestCandlestickDTO);
 
         // Previous candlestick
         Candlestick previousCandlestick = candlestickRepository
@@ -82,7 +83,7 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
         if (CollectionUtils.isNotEmpty(candlesticksDTO)) {
             candlesticks = candlesticksDTO.stream().map(candlestickDTO ->
-                    convertCandlestickDTOToEntity(exchangeProduct, periodEnum, candlestickDTO))
+                    convertCandlestickDTOToEntity(exchangeEnum, exchangeProduct, periodEnum, candlestickDTO))
                     .collect(Collectors.toList());
 
             // Ignore the last one, because this candlestick is still opened
@@ -147,22 +148,5 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
             products.put(symbol, product);
         }
         return product;
-    }
-
-    private Candlestick convertCandlestickDTOToEntity(ExchangeProduct exchangeProduct, PeriodEnum periodEnum, CandlestickDTO candlestickDTO) {
-        if (candlestickDTO == null) { return null; }
-
-        Candlestick candlestick = new Candlestick();
-        candlestick.setOpenPrice(CustomBigDecimal.valueOf(candlestickDTO.getOpen()));
-        candlestick.setClosePrice(CustomBigDecimal.valueOf(candlestickDTO.getClose()));
-        candlestick.setVolume(CustomBigDecimal.valueOf(candlestickDTO.getVolume()));
-        candlestick.setMaxPrice(CustomBigDecimal.valueOf(candlestickDTO.getHigh()));
-        candlestick.setMinPrice(CustomBigDecimal.valueOf(candlestickDTO.getLow()));
-        candlestick.setEndTime(exchangeEnum.getParseDateFunction().apply(candlestickDTO.getCloseTime(), periodEnum.getDuration()));
-        candlestick.setBeginTime(candlestick.getEndTime().minus(periodEnum.getDuration()));
-        candlestick.setExchangeProduct(exchangeProduct);
-        candlestick.setPeriodEnum(periodEnum);
-        candlestick.setId(candlestick.toString());
-        return candlestick;
     }
 }

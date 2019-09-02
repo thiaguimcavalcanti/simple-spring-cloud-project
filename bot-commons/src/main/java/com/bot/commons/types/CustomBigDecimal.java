@@ -1,7 +1,9 @@
-package com.bot.exchanges.commons.entities.types;
+package com.bot.commons.types;
 
 import static org.ta4j.core.num.NaN.NaN;
 
+import com.bot.commons.utils.CustomBigDecimalSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.ta4j.core.num.Num;
 
 import java.math.BigDecimal;
@@ -13,6 +15,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
+@JsonSerialize(using = CustomBigDecimalSerializer.class)
 public class CustomBigDecimal implements Num {
 
 	private static final long serialVersionUID = 785564782721079992L;
