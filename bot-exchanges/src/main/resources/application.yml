@@ -48,3 +48,44 @@ eureka:
 logging:
   level:
     root: WARN
+
+exchanges:
+  bittrex:
+    period:
+      oneMin: oneMin
+      fiveMin: fiveMin
+      fifteenMin:
+      thirdMin: thirtyMin
+      oneHour: hour
+    baseUrl: https://api.bittrex.com/api/v1.1
+    baseUrl_2_0: https://bittrex.com/Api/v2.0
+    apis:
+      getTicker: /public/getticker?market={market}
+      getMarkets: /public/getmarkets
+      getTicks: /pub/market/GetTicks?tickInterval={tickInterval}&marketName={marketName}
+      getOpenOrders: /market/getopenorders?market={market}
+      getBalances: /account/getbalances
+      getOpenHistory: /account/getorderhistory?market={market}
+  binance:
+    period:
+      oneMin: 1m
+      fiveMin: 5m
+      fifteenMin: 15m
+      thirdMin: 30m
+      oneHour: 1h
+    baseUrl: https://api.binance.com
+    apis:
+      klines: /api/v1/klines?symbol={symbol}&interval={interval}&startTime={startTime}&endTime={endTime}&limit={limit}
+      exchangeInfo: /api/v1/exchangeInfo
+  cryptoCompare:
+    period:
+      oneMin: 1
+      fiveMin: 5
+      fifteenMin: 15
+      thirdMin: 30
+      oneHour: 60
+    baseUrl: https://min-api.cryptocompare.com
+    apis:
+      coinList: /data/all/coinlist
+      histoMinute: /data/histominute?fsym={fsym}&tsym={tsym}&limit={limit}&e={e}&aggregate={aggregate}&tryConversion={tryConversion}
+      histoHour: /data/histoHour?fsym={fsym}&tsym={tsym}&limit={limit}&e={e}&aggregate={aggregate}&tryConversion={tryConversion}

@@ -1,11 +1,5 @@
 package com.bot.exchanges.bittrex.client;
 
-import static com.bot.exchanges.bittrex.utils.BittrexContants.ACCOUNT_API_GET_BALANCES;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.ACCOUNT_API_GET_ORDER_HISTORY;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.BASE_URL;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.USER_ID;
-
 import com.bot.exchanges.bittrex.BittrexFeignConfiguration;
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
 import com.bot.exchanges.bittrex.dto.account.BittrexBalanceDTO;
@@ -17,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-@FeignClient(name = "bittrex-account", url = BASE_URL, configuration = BittrexFeignConfiguration.class)
+import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET;
+import static com.bot.exchanges.bittrex.utils.BittrexContants.USER_ID;
+
+@FeignClient(name = "bittrex-account", url = "${exchanges.bittrex.baseUrl}", configuration = BittrexFeignConfiguration.class)
 public interface BittrexAccountClient {
 
-    @GetMapping(value = ACCOUNT_API_GET_BALANCES)
+    @GetMapping(value = "${exchanges.bittrex.apis.getBalances}")
     AbstractBittrexDTO<List<BittrexBalanceDTO>> getBalances(@RequestHeader(USER_ID) String userId);
 
-    @GetMapping(value = ACCOUNT_API_GET_ORDER_HISTORY)
+    @GetMapping(value = "${exchanges.bittrex.apis.getOpenHistory}")
     AbstractBittrexDTO<List<BittrexOrderHistoryDTO>> getOrderHistory(@RequestHeader(USER_ID) String userId,
                                                                      @PathVariable(MARKET) String market);
 }

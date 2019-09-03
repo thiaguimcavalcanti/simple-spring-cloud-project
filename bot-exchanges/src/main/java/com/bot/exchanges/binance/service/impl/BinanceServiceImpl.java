@@ -8,6 +8,7 @@ import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
+import com.bot.exchanges.binance.BinanceProperties;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
@@ -24,11 +25,14 @@ import java.util.List;
 public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceService {
 
     private final BinancePublicClient binancePublicClient;
+    private final BinanceProperties binanceProperties;
 
     @Autowired
-    public BinanceServiceImpl(BinancePublicClient binancePublicClient)  {
+    public BinanceServiceImpl(BinancePublicClient binancePublicClient,
+                              BinanceProperties binanceProperties)  {
         super.exchangeEnum = ExchangeEnum.BINANCE;
         this.binancePublicClient = binancePublicClient;
+        this.binanceProperties = binanceProperties;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
     @Override
     public List<BinanceCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         List<BinanceCandlestickDTO> candlesticks = binancePublicClient.getCandlesticks(getSymbol(exchangeProduct),
-                "5m", null, null, null);
+                binanceProperties.getPeriodByPeriodEnum(periodEnum), null, null, null);
 
         candlesticks.forEach(candlestickDTO -> {
             candlestickDTO.setBeginTime(roundZonedDateTime(candlestickDTO.getBeginTime(), periodEnum.getDuration()));
@@ -67,7 +71,7 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
     @Override
     public BinanceCandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         List<BinanceCandlestickDTO> candlesticks = binancePublicClient.getCandlesticks(getSymbol(exchangeProduct),
-                "5m", null, null, 2);
+                binanceProperties.getPeriodByPeriodEnum(periodEnum), null, null, 2);
 
         if (CollectionUtils.isNotEmpty(candlesticks)) {
             BinanceCandlestickDTO candlestickDTO = candlesticks.get(0);

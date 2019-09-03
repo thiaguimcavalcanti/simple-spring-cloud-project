@@ -1,9 +1,7 @@
 package com.bot.ticks.service.impl;
 
-import com.bot.exchanges.ExchangesApiFacade;
-import com.bot.exchanges.commons.dto.BalanceDTO;
-import com.bot.exchanges.commons.dto.TickerDTO;
-import com.bot.exchanges.commons.enums.ExchangeEnum;
+import com.bot.commons.dto.BalanceDTO;
+import com.bot.commons.dto.TickerDTO;
 import com.bot.ticks.client.OrdersClient;
 import com.bot.ticks.service.TicksService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -17,18 +15,14 @@ public class TicksServiceImpl implements TicksService {
 
     private final OrdersClient ordersClient;
 
-    private final ExchangesApiFacade exchangesApiFacade;
-
     @Autowired
-    public TicksServiceImpl(OrdersClient ordersClient,
-                            ExchangesApiFacade exchangesApiFacade) {
+    public TicksServiceImpl(OrdersClient ordersClient) {
         this.ordersClient = ordersClient;
-        this.exchangesApiFacade = exchangesApiFacade;
     }
 
     @Override
     public TickerDTO getTicker(String market) {
-        return exchangesApiFacade.getTicker(ExchangeEnum.BITTREX, market);
+        return null;
     }
 
     @HystrixCommand(fallbackMethod = "fallbackMethod")
@@ -39,7 +33,7 @@ public class TicksServiceImpl implements TicksService {
 
     @Override
     public List<BalanceDTO> getBalances() {
-        return (List<BalanceDTO>) exchangesApiFacade.getBalances(ExchangeEnum.BITTREX, "USER_ID");
+        return null;
     }
 
     public String fallbackMethod(Throwable exception) {

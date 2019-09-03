@@ -2,6 +2,7 @@ package com.bot.exchanges.bittrex.service.impl;
 
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
+import com.bot.exchanges.bittrex.BittrexProperties;
 import com.bot.exchanges.bittrex.client.BittrexAccountClient;
 import com.bot.exchanges.bittrex.client.BittrexMarketClient;
 import com.bot.exchanges.bittrex.client.BittrexPublic2Client;
@@ -28,17 +29,20 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     private final BittrexPublicClient bittrexPublicClient;
     private final BittrexMarketClient bittrexMarketClient;
     private final BittrexPublic2Client bittrexPublic2Client;
+    private final BittrexProperties bittrexProperties;
 
     @Autowired
     public BittrexServiceImpl(BittrexAccountClient bittrexAccountClient,
                               BittrexPublicClient bittrexPublicClient,
                               BittrexMarketClient bittrexMarketClient,
-                              BittrexPublic2Client bittrexPublic2Client)  {
+                              BittrexPublic2Client bittrexPublic2Client,
+                              BittrexProperties bittrexProperties)  {
         super.exchangeEnum = ExchangeEnum.BITTREX;
         this.bittrexAccountClient = bittrexAccountClient;
         this.bittrexPublicClient = bittrexPublicClient;
         this.bittrexMarketClient = bittrexMarketClient;
         this.bittrexPublic2Client = bittrexPublic2Client;
+        this.bittrexProperties = bittrexProperties;
     }
 
     @Override
@@ -63,7 +67,8 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
 
     @Override
     public List<BittrexCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
-        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks("fiveMin", getSymbol(exchangeProduct)).getResult();
+        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks(bittrexProperties
+                .getPeriodByPeriodEnum(periodEnum), getSymbol(exchangeProduct)).getResult();
 
         candlesticks.forEach(candlestickDTO -> {
             candlestickDTO.setBeginTime(candlestickDTO.getEndTime());
@@ -75,7 +80,8 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
 
     @Override
     public BittrexCandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
-        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks("fiveMin", getSymbol(exchangeProduct)).getResult();
+        List<BittrexCandlestickDTO> candlesticks = bittrexPublic2Client.getCandlesticks(bittrexProperties
+                .getPeriodByPeriodEnum(periodEnum), getSymbol(exchangeProduct)).getResult();
 
         if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
             BittrexCandlestickDTO candlestickDTO = candlesticks.get(candlesticks.size() - 2);

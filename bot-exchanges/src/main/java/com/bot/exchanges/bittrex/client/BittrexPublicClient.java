@@ -1,10 +1,5 @@
 package com.bot.exchanges.bittrex.client;
 
-import static com.bot.exchanges.bittrex.utils.BittrexContants.BASE_URL;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.PUBLIC_API_GET_MARKETS;
-import static com.bot.exchanges.bittrex.utils.BittrexContants.PUBLIC_API_TICKER;
-
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexExchangeProductDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexTickerDTO;
@@ -14,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "bittrex-public", url = BASE_URL)
+import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET;
+
+@FeignClient(name = "bittrex-public", url = "${exchanges.bittrex.baseUrl}")
 public interface BittrexPublicClient {
 
-    @GetMapping(value = PUBLIC_API_TICKER)
+    @GetMapping(value = "${exchanges.bittrex.apis.getTicker}")
     AbstractBittrexDTO<BittrexTickerDTO> ticker(@PathVariable(MARKET) String market);
 
-    @GetMapping(value = PUBLIC_API_GET_MARKETS)
+    @GetMapping(value = "${exchanges.bittrex.apis.getMarkets}")
     AbstractBittrexDTO<List<BittrexExchangeProductDTO>> getMarkets();
 }

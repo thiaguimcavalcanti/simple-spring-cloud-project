@@ -1,7 +1,7 @@
 package com.bot.ticks.service;
 
-import com.bot.exchanges.commons.dto.BalanceDTO;
-import com.bot.exchanges.commons.dto.TickerDTO;
+import com.bot.commons.dto.BalanceDTO;
+import com.bot.commons.dto.TickerDTO;
 
 import java.util.List;
 
