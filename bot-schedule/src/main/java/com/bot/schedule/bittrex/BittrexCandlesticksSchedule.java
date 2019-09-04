@@ -17,4 +17,9 @@ public class BittrexCandlesticksSchedule extends CandlestickSchedule {
         super(candlestickService);
         super.exchangeEnum = ExchangeEnum.BITTREX;
     }
+
+    @Override
+    public void refreshLatestCandlesticksFifteenMinsTask() {
+        // Need to implement this period. Bittrex doesnt support this period.
+    }
 }

@@ -1,6 +1,6 @@
 package com.bot.exchanges.bittrex.client;
 
-import com.bot.exchanges.bittrex.BittrexFeignConfiguration;
+import com.bot.exchanges.bittrex.BittrexAuthenticationFeignConfiguration;
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
 import com.bot.exchanges.bittrex.dto.account.BittrexBalanceDTO;
 import com.bot.exchanges.bittrex.dto.account.BittrexOrderHistoryDTO;
@@ -14,7 +14,7 @@ import java.util.List;
 import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET;
 import static com.bot.exchanges.bittrex.utils.BittrexContants.USER_ID;
 
-@FeignClient(name = "bittrex-account", url = "${exchanges.bittrex.baseUrl}", configuration = BittrexFeignConfiguration.class)
+@FeignClient(name = "bittrex-account", url = "${exchanges.bittrex.baseUrl}", configuration = BittrexAuthenticationFeignConfiguration.class)
 public interface BittrexAccountClient {
 
     @GetMapping(value = "${exchanges.bittrex.apis.getBalances}")

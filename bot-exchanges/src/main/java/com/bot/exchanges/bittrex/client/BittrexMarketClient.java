@@ -1,6 +1,6 @@
 package com.bot.exchanges.bittrex.client;
 
-import com.bot.exchanges.bittrex.BittrexFeignConfiguration;
+import com.bot.exchanges.bittrex.BittrexAuthenticationFeignConfiguration;
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
 import com.bot.exchanges.bittrex.dto.market.BittrexOpenOrderDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +13,7 @@ import java.util.List;
 import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET;
 import static com.bot.exchanges.bittrex.utils.BittrexContants.USER_ID;
 
-@FeignClient(name = "bittrex-market", url = "${exchanges.bittrex.baseUrl}", configuration = BittrexFeignConfiguration.class)
+@FeignClient(name = "bittrex-market", url = "${exchanges.bittrex.baseUrl}", configuration = BittrexAuthenticationFeignConfiguration.class)
 public interface BittrexMarketClient {
 
     @GetMapping(value = "${exchanges.bittrex.apis.getOpenOrders}")
