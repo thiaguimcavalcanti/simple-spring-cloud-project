@@ -27,7 +27,7 @@ public interface ExchangeService {
 
     List<? extends CandlestickDTO> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 
-    CandlestickDTO refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
+    void refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 
     void refreshExchangeProductList();
 

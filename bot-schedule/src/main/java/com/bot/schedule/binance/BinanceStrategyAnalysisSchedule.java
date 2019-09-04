@@ -8,16 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletContext;
-
 @Component
 @Conditional(BinanceCondition.class)
 public class BinanceStrategyAnalysisSchedule extends StrategyAnalysisSchedule {
 
     @Autowired
-    public BinanceStrategyAnalysisSchedule(StrategyClient strategiesClient,
-                                           ServletContext servletContext) {
-        super(strategiesClient, servletContext);
+    public BinanceStrategyAnalysisSchedule(StrategyClient strategiesClient) {
+        super(strategiesClient);
         super.exchangeEnum = ExchangeEnum.BINANCE;
     }
 }

@@ -12,11 +12,13 @@ import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.repository.ExchangeRepository;
 import com.bot.exchanges.commons.repository.ProductRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
+import com.bot.exchanges.trade.service.StrategyAnalysisService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -45,10 +47,13 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
     protected CandlestickRepository candlestickRepository;
 
     @Autowired
+    private StrategyAnalysisService strategyAnalysisService;
+
+    @Autowired
     private ModelMapper mapper;
 
     @Override
-    public CandlestickDTO refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+    public void refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         LOG.warn("refreshLatestCandlestick - " + exchangeEnum + " - " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
 
         // Latest candlestick
@@ -56,34 +61,38 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
         Candlestick latestCandlestick = mapper.map(latestCandlestickDTO, Candlestick.class);
         fillAdditionalCandlestickInfo(exchangeProduct, periodEnum, latestCandlestick);
 
-        // Previous candlestick
+        // Previous candlestick to compare with the latest
         Candlestick previousCandlestick = candlestickRepository
                 .findTopByExchangeProductIdAndPeriodEnumOrderByBeginTimeDesc(exchangeProduct.getId(), periodEnum);
-        ZonedDateTime previousEndTime = getPreviousEndTime(periodEnum, previousCandlestick);
 
-        if (latestCandlestick == null || previousEndTime.compareTo(latestCandlestick.getBeginTime()) < 0) {
+        // Refresh all the candlesticks from this Exchange Product if the latestCandlestick is not the next expected tick
+        if (latestCandlestick == null || previousCandlestick == null ||
+                previousCandlestick.getEndTime().compareTo(latestCandlestick.getBeginTime()) < 0) {
             refreshCandlestick(exchangeProduct, periodEnum);
         }
 
         if (latestCandlestick != null) {
             candlestickRepository.save(latestCandlestick);
-        }
 
-        return latestCandlestickDTO;
+            // Perform the technical analysis (async task)
+            if (previousCandlestick == null || previousCandlestick.getBeginTime().compareTo(latestCandlestick.getBeginTime()) < 0) {
+                strategyAnalysisService.analyzeStrategies(exchangeProduct, periodEnum);
+            }
+        }
     }
 
     @Override
+    @Async
     public List<? extends CandlestickDTO> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         LOG.warn("refreshCandlestick - "+ exchangeEnum + " - " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
 
         List<? extends CandlestickDTO> candlesticksDTO = getCandlesticks(exchangeProduct, periodEnum);
-        List<Candlestick> candlesticks = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(candlesticksDTO)) {
             // Ignore the last one, because this candlestick is still opened
             candlesticksDTO.remove(candlesticksDTO.size() - 1);
 
-            candlesticks = candlesticksDTO.stream().map(candlestickDTO -> {
+            List<Candlestick> candlesticks = candlesticksDTO.stream().map(candlestickDTO -> {
                 Candlestick candlestick = mapper.map(candlestickDTO, Candlestick.class);
                 fillAdditionalCandlestickInfo(exchangeProduct, periodEnum, candlestick);
                 return candlestick;
@@ -128,15 +137,6 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
         });
 
         exchangeProductRepository.saveAll(exchangeProducts);
-    }
-
-    private ZonedDateTime getPreviousEndTime(PeriodEnum periodEnum, Candlestick previousCandlestick) {
-        if (previousCandlestick == null) {
-            ZonedDateTime previousEndTime = ZonedDateTime.now().withSecond(0).withNano(0);
-            return previousEndTime.minusMinutes(previousEndTime.getMinute() % periodEnum.getInMinutes())
-                    .minusMinutes(periodEnum.getInMinutes());
-        }
-        return previousCandlestick.getEndTime();
     }
 
     private Map<String, Product> getProducts(Set<String> productsToSearch) {

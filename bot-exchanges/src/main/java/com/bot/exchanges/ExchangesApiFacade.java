@@ -70,10 +70,10 @@ public class ExchangesApiFacade {
         return getExchangeServiceByType(exchangeEnum).refreshCandlestick(exchangeProduct, periodEnum);
     }
 
-    public CandlestickDTO refreshLatestCandlestick(ExchangeEnum exchangeEnum, String baseProductId,
+    public void refreshLatestCandlestick(ExchangeEnum exchangeEnum, String baseProductId,
                                                                        String productId, PeriodEnum periodEnum) {
         ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
-        return getExchangeServiceByType(exchangeEnum).refreshLatestCandlestick(exchangeProduct, periodEnum);
+        getExchangeServiceByType(exchangeEnum).refreshLatestCandlestick(exchangeProduct, periodEnum);
     }
 
     private ExchangeProduct getExchangeProduct(ExchangeEnum exchangeEnum, String baseProductId, String productId) {

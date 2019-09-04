@@ -21,6 +21,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.BaseTimeSeries;
@@ -101,8 +102,10 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
     }
 
     @Override
-    public void analyzeStrategies(ExchangeEnum exchangeEnum, String baseProductId, String productId, PeriodEnum periodEnum) {
-        ExchangeProduct exchangeProduct = exchangeProductRepository.findByExchangeIdAndBaseProductIdAndProductId(exchangeEnum.getId(), baseProductId, productId);
+    @Async
+    public void analyzeStrategies(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        LOG.debug("analyzeStrategies: " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
+
         BaseTimeSeries series = createTimeSeries(periodEnum, exchangeProduct);
 
         List<StrategyRule> strategyRules = strategyRuleRepository.findByExchangeProductAndPeriodEnum(exchangeProduct, periodEnum);

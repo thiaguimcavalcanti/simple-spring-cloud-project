@@ -1,6 +1,5 @@
 package com.bot.schedule.commons.service.impl;
 
-import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
@@ -32,13 +31,8 @@ public class CandlesticksServiceImpl implements CandlestickService {
         ExchangeProductDTO exchangeProduct = exchangeSessionHelper.getFirstExchangeProductToRefreshLatestCandlestick(exchangeEnum, periodEnum);
 
         if (exchangeProduct != null) {
-            CandlestickDTO latestCandlestick = candlesticksClient.refreshLatestCandlestick(exchangeEnum,
-                    exchangeProduct.getBaseProductId(), exchangeProduct.getProductId(), periodEnum);
-
-            // If a new candlestick was found, we added this Exchange Product to start the technical analysis
-            if (latestCandlestick != null) {
-                exchangeSessionHelper.addExchangeProductToStrategyAnalysis(exchangeEnum, periodEnum, exchangeProduct);
-            }
+            candlesticksClient.refreshLatestCandlestick(exchangeEnum, exchangeProduct.getBaseProductId(),
+                    exchangeProduct.getProductId(), periodEnum);
         }
     }
 }

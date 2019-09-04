@@ -20,14 +20,6 @@ public class StrategyController {
         this.strategyAnalysisService = strategyAnalysisService;
     }
 
-    @GetMapping("/analyze")
-    public void analyzeStrategies(@RequestParam ExchangeEnum exchangeEnum,
-                                  @RequestParam String baseProductId,
-                                  @RequestParam String productId,
-                                  @RequestParam PeriodEnum periodEnum) {
-        strategyAnalysisService.analyzeStrategies(exchangeEnum, baseProductId, productId, periodEnum);
-    }
-
     @GetMapping("/monitoring")
     public void monitoringStrategies(@RequestParam ExchangeEnum exchangeEnum) {
         strategyAnalysisService.monitoringStrategies(exchangeEnum);

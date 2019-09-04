@@ -23,11 +23,10 @@ public class CandlestickController {
     }
 
     @GetMapping("/refreshLatestCandlestick")
-    public ResponseEntity<CandlestickDTO> refreshLatestCandlestick(@RequestParam ExchangeEnum exchangeEnum,
+    public void refreshLatestCandlestick(@RequestParam ExchangeEnum exchangeEnum,
                                                                    @RequestParam String baseProductId,
                                                                    @RequestParam String productId,
                                                                    @RequestParam PeriodEnum periodEnum) {
-        CandlestickDTO candlestickDTO = exchangesApiFacade.refreshLatestCandlestick(exchangeEnum, baseProductId, productId, periodEnum);
-        return ResponseEntity.ok(candlestickDTO);
+        exchangesApiFacade.refreshLatestCandlestick(exchangeEnum, baseProductId, productId, periodEnum);
     }
 }

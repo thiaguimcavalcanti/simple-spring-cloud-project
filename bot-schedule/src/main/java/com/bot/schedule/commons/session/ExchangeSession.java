@@ -5,7 +5,6 @@ import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -16,8 +15,6 @@ public class ExchangeSession {
     private ExchangeEnum exchangeEnum;
 
     private PeriodEnumMapSession<ExchangeProductDTO> exchangeProductsToRefreshLatestCandlestick = new PeriodEnumMapSession<>();
-
-    private CustomLinkedList<Pair<PeriodEnum, ExchangeProductDTO>> exchangeProductsToStrategyAnalysis = new CustomLinkedList<>();
 
     public ExchangeSession(ExchangeEnum exchangeEnum) {
         this.exchangeEnum = exchangeEnum;

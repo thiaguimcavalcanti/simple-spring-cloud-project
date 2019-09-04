@@ -4,7 +4,6 @@ import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.schedule.commons.session.ExchangeSession;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.servlet.ServletContext;
 import java.io.Serializable;
@@ -79,23 +78,5 @@ public class ExchangeSessionHelper implements Serializable {
 																									  ExchangeProductDTO exchangeProduct) {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.getExchangeProductsToRefreshLatestCandlestick().put(periodEnum, exchangeProduct);
-	}
-
-	public synchronized void addExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum,
-																  PeriodEnum periodEnum,
-																  ExchangeProductDTO exchangeProducts) {
-		ExchangeSession exchangeSession = get(exchangeEnum);
-		exchangeSession.getExchangeProductsToStrategyAnalysis().add(Pair.of(periodEnum, exchangeProducts));
-	}
-
-	public synchronized Pair<PeriodEnum, ExchangeProductDTO> getFirstExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum) {
-		ExchangeSession exchangeSession = get(exchangeEnum);
-		return exchangeSession.getExchangeProductsToStrategyAnalysis().getFirstItem(true);
-	}
-
-	public synchronized void removeExchangeProductToStrategyAnalysis(ExchangeEnum exchangeEnum,
-																	 Pair<PeriodEnum, ExchangeProductDTO> pair) {
-		ExchangeSession exchangeSession = get(exchangeEnum);
-		exchangeSession.getExchangeProductsToStrategyAnalysis().remove(pair);
 	}
 }
