@@ -1,6 +1,5 @@
 package com.bot.exchanges.binance.client;
 
-import com.bot.exchanges.binance.BinanceAuthenticationFeignConfiguration;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeInfoDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,7 +14,7 @@ import static com.bot.exchanges.binance.utils.BinanceConstants.LIMIT;
 import static com.bot.exchanges.binance.utils.BinanceConstants.START_TIME;
 import static com.bot.exchanges.binance.utils.BinanceConstants.SYMBOL;
 
-@FeignClient(name = "binance-public", url = "${exchanges.binance.baseUrl}", configuration = BinanceAuthenticationFeignConfiguration.class)
+@FeignClient(name = "binance-public", url = "${exchanges.binance.baseUrl}")
 public interface BinancePublicClient {
 
     @GetMapping(value = "${exchanges.binance.apis.klines}")

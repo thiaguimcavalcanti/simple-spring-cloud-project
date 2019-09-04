@@ -49,6 +49,12 @@ logging:
   level:
     root: WARN
 
+feign:
+  client:
+    config:
+      default:
+        retryer: com.bot.exchanges.commons.utils.CustomRetryer
+
 exchanges:
   bittrex:
     period:

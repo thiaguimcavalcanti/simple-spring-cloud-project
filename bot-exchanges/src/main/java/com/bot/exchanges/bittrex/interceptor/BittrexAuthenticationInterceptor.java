@@ -27,18 +27,20 @@ public class BittrexAuthenticationInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        List<String> id = (List<String>) requestTemplate.request().headers().remove(USER_ID);
+        List<String> id = (List<String>) requestTemplate.request().headers().get(USER_ID);
 
         if (id != null && !id.isEmpty()) {
             UserExchange userExchange = userExchangeRepository.findByUserId(id.get(0));
 
-            requestTemplate.query(API_KEY, userExchange.getKey());
-            requestTemplate.query(NONCE, generateNonce());
+            if (userExchange != null) {
+                requestTemplate.query(API_KEY, userExchange.getKey());
+                requestTemplate.query(NONCE, generateNonce());
 
-            String url = bittrexProperties.getBaseUrl() + requestTemplate.request().url();
-            String apiSign = calculateHash(userExchange.getSecret(), url, HMAC_SHA_512);
+                String url = bittrexProperties.getBaseUrl() + requestTemplate.request().url();
+                String apiSign = calculateHash(userExchange.getSecret(), url, HMAC_SHA_512);
 
-            requestTemplate.header(API_SIGN, apiSign);
+                requestTemplate.header(API_SIGN, apiSign);
+            }
         }
     }
 }

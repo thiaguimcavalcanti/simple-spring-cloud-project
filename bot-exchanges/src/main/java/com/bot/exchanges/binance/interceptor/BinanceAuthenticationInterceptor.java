@@ -25,16 +25,18 @@ public class BinanceAuthenticationInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        List<String> id = (List<String>) requestTemplate.request().headers().remove(USER_ID);
+        List<String> id = (List<String>) requestTemplate.request().headers().get(USER_ID);
 
         if (id != null && !id.isEmpty()) {
             UserExchange userExchange = userExchangeRepository.findByUserId(id.get(0));
 
-            String url = binanceProperties.getBaseUrl() + requestTemplate.request().url();
-            String signature = calculateHash(userExchange.getSecret(), url, HMAC_SHA_256);
-            requestTemplate.query(SIGNATURE, signature);
+            if (userExchange != null) {
+                String url = binanceProperties.getBaseUrl() + requestTemplate.request().url();
+                String signature = calculateHash(userExchange.getSecret(), url, HMAC_SHA_256);
+                requestTemplate.query(SIGNATURE, signature);
 
-            requestTemplate.header(API_KEY, userExchange.getKey());
+                requestTemplate.header(API_KEY, userExchange.getKey());
+            }
         }
     }
 }

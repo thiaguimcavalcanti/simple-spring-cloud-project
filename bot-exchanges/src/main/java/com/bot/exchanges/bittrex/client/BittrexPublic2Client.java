@@ -1,6 +1,5 @@
 package com.bot.exchanges.bittrex.client;
 
-import com.bot.exchanges.bittrex.BittrexDefaultFeignConfiguration;
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexCandlestickDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,8 +11,7 @@ import java.util.List;
 import static com.bot.exchanges.bittrex.utils.BittrexContants.MARKET_NAME;
 import static com.bot.exchanges.bittrex.utils.BittrexContants.TICK_INTERVAL;
 
-@FeignClient(name = "bittrex-2-0-public", url = "${exchanges.bittrex.baseUrl_2_0}",
-        configuration = BittrexDefaultFeignConfiguration.class)
+@FeignClient(name = "bittrex-2-0-public", url = "${exchanges.bittrex.baseUrl_2_0}")
 public interface BittrexPublic2Client {
 
     @GetMapping(value = "${exchanges.bittrex.apis.getTicks}")
