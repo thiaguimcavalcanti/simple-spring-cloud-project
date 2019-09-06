@@ -56,13 +56,13 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     }
 
     @Override
-    public List<BittrexOpenOrderDTO> getOpenOrders(String userId, String market) {
-        return bittrexMarketClient.getOpenOrders(userId, market).getResult();
+    public List<BittrexOpenOrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct) {
+        return bittrexMarketClient.getOpenOrders(userId, getSymbol(exchangeProduct)).getResult();
     }
 
     @Override
-    public List<BittrexOrderHistoryDTO> getOrderHistory(String userId, String market) {
-        return bittrexAccountClient.getOrderHistory(userId, market).getResult();
+    public List<BittrexOrderHistoryDTO> getOrderHistory(String userId, ExchangeProduct exchangeProduct) {
+        return bittrexAccountClient.getOrderHistory(userId, getSymbol(exchangeProduct)).getResult();
     }
 
     @Override

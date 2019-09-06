@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserExchangeRepository extends JpaRepository<UserExchange, String> {
 
-    UserExchange findByUserId(String userId);
+    UserExchange findByUserIdAndExchangeId(String userId, Long exchangeId);
 }

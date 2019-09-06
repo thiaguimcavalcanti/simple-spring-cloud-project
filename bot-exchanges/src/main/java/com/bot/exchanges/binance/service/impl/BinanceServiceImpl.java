@@ -9,9 +9,11 @@ import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.binance.BinanceProperties;
+import com.bot.exchanges.binance.client.BinanceAccountClient;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
+import com.bot.exchanges.binance.dto.publicapi.BinanceOrderHistoryDTO;
 import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
@@ -25,13 +27,16 @@ import java.util.List;
 public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceService {
 
     private final BinancePublicClient binancePublicClient;
+    private final BinanceAccountClient binanceAccountClient;
     private final BinanceProperties binanceProperties;
 
     @Autowired
     public BinanceServiceImpl(BinancePublicClient binancePublicClient,
+                              BinanceAccountClient binanceAccountClient,
                               BinanceProperties binanceProperties)  {
         super.exchangeEnum = ExchangeEnum.BINANCE;
         this.binancePublicClient = binancePublicClient;
+        this.binanceAccountClient = binanceAccountClient;
         this.binanceProperties = binanceProperties;
     }
 
@@ -46,13 +51,14 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
     }
 
     @Override
-    public List<? extends OpenOrderDTO> getOpenOrders(String userId, String market) {
+    public List<? extends OpenOrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct) {
         return null;
     }
 
     @Override
-    public List<? extends OrderHistoryDTO> getOrderHistory(String userId, String market) {
-        return null;
+    public List<BinanceOrderHistoryDTO> getOrderHistory(String userId, ExchangeProduct exchangeProduct) {
+        return binanceAccountClient.getMyTrades(userId, getSymbol(exchangeProduct), null, null,
+                null, null, 50000, System.currentTimeMillis());
     }
 
     @Override

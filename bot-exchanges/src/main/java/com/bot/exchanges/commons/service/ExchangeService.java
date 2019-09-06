@@ -17,9 +17,9 @@ public interface ExchangeService {
 
     List<? extends BalanceDTO> getBalances(String userId);
 
-    List<? extends OpenOrderDTO> getOpenOrders(String userId, String market);
+    List<? extends OpenOrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct);
 
-    List<? extends OrderHistoryDTO> getOrderHistory(String userId, String market);
+    List<? extends OrderHistoryDTO> getOrderHistory(String userId, ExchangeProduct exchangeProduct);
 
     List<? extends CandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 

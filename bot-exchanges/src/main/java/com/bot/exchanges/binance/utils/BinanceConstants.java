@@ -8,8 +8,10 @@ public class BinanceConstants {
     public static final String START_TIME = "startTime";
     public static final String END_TIME = "endTime";
     public static final String LIMIT = "limit";
+    public static final String FROM_ID = "fromId";
+    public static final String RECV_WINDOW = "recvWindow";
+    public static final String TIMESTAMP = "timestamp";
 
-    public static final String USER_ID = "userId";
     public static final String API_KEY = "X-MBX-APIKEY";
     public static final String SIGNATURE = "signature";
 

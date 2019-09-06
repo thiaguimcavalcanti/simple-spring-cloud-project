@@ -1,19 +1,21 @@
 package com.bot.commons.dto;
 
+import com.bot.commons.enums.OrderTypeEnum;
+import com.bot.commons.types.CustomBigDecimal;
+import com.bot.commons.utils.CustomBigDecimalDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 public class OrderHistoryDTO {
-    private String uuid;
-    private String market;
-    private LocalDateTime originalDate;
-    private String orderType;
-    private BigDecimal limit;
-    private BigDecimal quantity;
-    private BigDecimal quantityRemaining;
-    private BigDecimal price;
-    private BigDecimal pricePerUnit;
+    private String id;
+    private String symbol;
+    private OrderTypeEnum orderType;
+    @JsonDeserialize(using = CustomBigDecimalDeserializer.class)
+    private CustomBigDecimal quantity;
+    @JsonDeserialize(using = CustomBigDecimalDeserializer.class)
+    private CustomBigDecimal price;
+    private ZonedDateTime openedDate;
 }

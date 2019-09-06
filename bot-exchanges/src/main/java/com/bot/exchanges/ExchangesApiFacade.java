@@ -50,22 +50,26 @@ public class ExchangesApiFacade {
         return getExchangeServiceByType(exchangeEnum).getBalances(userId);
     }
 
-    public List<? extends OpenOrderDTO> getOpenOrders(ExchangeEnum exchangeEnum, String userId, String market) {
-        return getExchangeServiceByType(exchangeEnum).getOpenOrders(userId, market);
+    public List<? extends OpenOrderDTO> getOpenOrders(ExchangeEnum exchangeEnum, String baseProductId,
+                                                      String productId, String userId) {
+        ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
+        return getExchangeServiceByType(exchangeEnum).getOpenOrders(userId, exchangeProduct);
     }
 
-    public List<? extends OrderHistoryDTO> getOrderHistory(ExchangeEnum exchangeEnum, String userId, String market) {
-        return getExchangeServiceByType(exchangeEnum).getOrderHistory(userId, market);
+    public List<? extends OrderHistoryDTO> getOrderHistory(ExchangeEnum exchangeEnum, String baseProductId,
+                                                           String productId, String userId) {
+        ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
+        return getExchangeServiceByType(exchangeEnum).getOrderHistory(userId, exchangeProduct);
     }
 
-    public List<? extends CandlestickDTO> getCandlesticks(ExchangeEnum exchangeEnum, String baseProductId, String productId,
-                                                          PeriodEnum periodEnum) {
+    public List<? extends CandlestickDTO> getCandlesticks(ExchangeEnum exchangeEnum, String baseProductId,
+                                                          String productId, PeriodEnum periodEnum) {
         ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
         return getExchangeServiceByType(exchangeEnum).getCandlesticks(exchangeProduct, periodEnum);
     }
 
-    public List<? extends CandlestickDTO> refreshCandlestick(ExchangeEnum exchangeEnum, String baseProductId, String productId,
-                                                             PeriodEnum periodEnum) {
+    public List<? extends CandlestickDTO> refreshCandlestick(ExchangeEnum exchangeEnum, String baseProductId,
+                                                             String productId, PeriodEnum periodEnum) {
         ExchangeProduct exchangeProduct = getExchangeProduct(exchangeEnum, baseProductId, productId);
         return getExchangeServiceByType(exchangeEnum).refreshCandlestick(exchangeProduct, periodEnum);
     }

@@ -26,6 +26,9 @@ public class UserExchange extends AbstractLongIDEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Exchange exchange;
 
+    @Column(name = "Exchange_ID", insertable = false, updatable = false)
+    private Long exchangeId;
+
     @Column(name = "Key")
     private String key;
 

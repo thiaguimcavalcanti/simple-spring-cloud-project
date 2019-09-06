@@ -20,6 +20,7 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     compile group: 'mysql', name: 'mysql-connector-java'
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.13'
 
     compile project(':bot-commons')
 
