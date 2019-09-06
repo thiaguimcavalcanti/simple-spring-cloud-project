@@ -16,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.Duration;
@@ -97,14 +98,5 @@ public class Candlestick extends AbstractStringIDEntity implements Bar {
 	@Override
 	public void addPrice(Num price) {
 		// Do nothing
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		return sb.append(exchangeProduct.getId()).append("-")
-				.append(periodEnum.getDuration().toString()).append("-")
-				.append(beginTime.toEpochSecond()).append("-")
-				.append(endTime.toEpochSecond()).toString().toUpperCase();
 	}
 }

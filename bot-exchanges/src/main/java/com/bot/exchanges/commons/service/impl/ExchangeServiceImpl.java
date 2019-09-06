@@ -164,7 +164,12 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
         if (latestCandlestick != null) {
             latestCandlestick.setExchangeProduct(exchangeProduct);
             latestCandlestick.setPeriodEnum(periodEnum);
-            latestCandlestick.setId(latestCandlestick.toString());
+
+            StringBuilder sb = new StringBuilder();
+            latestCandlestick.setId(sb.append(latestCandlestick.getExchangeProduct().getId()).append("-")
+                    .append(latestCandlestick.getPeriodEnum().getDuration().toString()).append("-")
+                    .append(latestCandlestick.getBeginTime().toEpochSecond()).append("-")
+                    .append(latestCandlestick.getEndTime().toEpochSecond()).toString().toUpperCase());
         }
     }
 }
