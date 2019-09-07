@@ -35,3 +35,6 @@ exchanges:
   bittrex:
     schedules:
       active: false
+  bovespa:
+    schedules:
+      active: false

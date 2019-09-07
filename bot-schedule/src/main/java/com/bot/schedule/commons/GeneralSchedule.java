@@ -40,6 +40,9 @@ public class GeneralSchedule {
 
         exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BINANCE);
         sessionHelper.initializeExchangeSession(ExchangeEnum.BINANCE, exchangeProducts);
+
+        exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BOVESPA);
+        sessionHelper.initializeExchangeSession(ExchangeEnum.BOVESPA, exchangeProducts);
     }
 
     @Async

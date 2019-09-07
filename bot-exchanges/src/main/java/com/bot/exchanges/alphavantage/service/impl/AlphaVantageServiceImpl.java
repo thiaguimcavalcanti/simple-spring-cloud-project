@@ -9,6 +9,7 @@ import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.alphavantage.client.AlphaVantagePublicClient;
 import com.bot.exchanges.alphavantage.dto.AlphaVantageCandlestickDTO;
+import com.bot.exchanges.alphavantage.enums.AlphaVantageSymbolEnum;
 import com.bot.exchanges.alphavantage.enums.FunctionTypeEnum;
 import com.bot.exchanges.alphavantage.service.AlphaVantageService;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
@@ -85,6 +86,6 @@ public class AlphaVantageServiceImpl extends ExchangeServiceImpl implements Alph
     }
 
     private String getSymbol(ExchangeProduct exchangeProduct) {
-        return "PETR4.SAO"; //exchangeProduct.getProductId();
+        return AlphaVantageSymbolEnum.valueOf(exchangeProduct.getProductId()).getSymbol();
     }
 }

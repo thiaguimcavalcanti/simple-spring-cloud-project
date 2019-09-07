@@ -1,5 +1,6 @@
 package com.bot.exchanges.alphavantage.utils;
 
+import com.bot.commons.exceptions.AppException;
 import com.bot.commons.utils.DateUtils;
 import com.bot.exchanges.alphavantage.dto.AlphaVantageCandlestickDTO;
 import com.bot.exchanges.alphavantage.dto.AlphaVantageStockTimeSeriesDTO;
@@ -31,16 +32,20 @@ public class AlphaVantageDeserializer extends StdDeserializer<AlphaVantageStockT
         JsonNode root = oc.readTree(jp);
         HashMap map = oc.readValue(root.toString(), HashMap.class);
 
-        AlphaVantageStockTimeSeriesDTO dto = new AlphaVantageStockTimeSeriesDTO();
+        try {
+            AlphaVantageStockTimeSeriesDTO dto = new AlphaVantageStockTimeSeriesDTO();
 
-        String key = String.valueOf(map.keySet().toArray()[0]);
-        Map<String, HashMap> candlesticks = (Map<String, HashMap>) map.get(key);
-        candlesticks.forEach((time, candlestick) -> {
-            AlphaVantageCandlestickDTO candlestickDTO = dto.newInstance(candlestick);
-            candlestickDTO.setBeginTime(DateUtils.convertDateToZonedDateTime(time, dto.getDateTimeFormatter()));
-            dto.addItem(candlestickDTO);
-        });
+            String key = String.valueOf(map.keySet().toArray()[0]);
+            Map<String, HashMap> candlesticks = (Map<String, HashMap>) map.get(key);
+            candlesticks.forEach((time, candlestick) -> {
+                AlphaVantageCandlestickDTO candlestickDTO = dto.newInstance(candlestick);
+                candlestickDTO.setBeginTime(DateUtils.convertDateToZonedDateTime(time, dto.getDateTimeFormatter()));
+                dto.addItem(candlestickDTO);
+            });
 
-        return dto;
+            return dto;
+        } catch (Exception e) {
+            throw new AppException("ERROR - Deserialize Alpha Vantage api object");
+        }
     }
 }

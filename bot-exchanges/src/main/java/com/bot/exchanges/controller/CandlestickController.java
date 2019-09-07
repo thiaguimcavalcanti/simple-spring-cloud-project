@@ -24,9 +24,9 @@ public class CandlestickController {
 
     @GetMapping("/refreshLatestCandlestick")
     public void refreshLatestCandlestick(@RequestParam ExchangeEnum exchangeEnum,
-                                                                   @RequestParam String baseProductId,
-                                                                   @RequestParam String productId,
-                                                                   @RequestParam PeriodEnum periodEnum) {
+                                         @RequestParam(required = false) String baseProductId,
+                                         @RequestParam String productId,
+                                         @RequestParam PeriodEnum periodEnum) {
         exchangesApiFacade.refreshLatestCandlestick(exchangeEnum, baseProductId, productId, periodEnum);
     }
 }
