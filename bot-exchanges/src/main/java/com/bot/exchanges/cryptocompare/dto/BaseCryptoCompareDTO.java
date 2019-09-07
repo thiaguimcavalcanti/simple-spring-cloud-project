@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AbstractCryptoCompareDTO<T> {
+public class BaseCryptoCompareDTO<T> {
 
     @JsonProperty("Data")
     private List<T> data;

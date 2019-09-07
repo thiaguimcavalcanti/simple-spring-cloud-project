@@ -41,7 +41,7 @@ public class CryptoCompareServiceImpl implements CryptoCompareService {
     @Override
     public CandlestickDTO getLatestCandlestick(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         List<CryptoCompareCandlestickDTO> candlesticks = cryptoComparePublicClient.historicalMinute(exchangeProduct.getProductId(),
-                exchangeProduct.getBaseProductId(), 2, exchangeEnum.getCryptoCompareName(), periodEnum.getInMinutes(), false).getData();
+                exchangeProduct.getBaseProductId(), 2, exchangeEnum.getName(), periodEnum.getInMinutes(), false).getData();
 
         if (CollectionUtils.isNotEmpty(candlesticks) && candlesticks.size() >= 2) {
             CryptoCompareCandlestickDTO candlestickDTO = candlesticks.get(candlesticks.size() - 2);

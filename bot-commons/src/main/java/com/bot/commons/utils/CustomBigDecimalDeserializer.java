@@ -23,6 +23,7 @@ public class CustomBigDecimalDeserializer extends StdDeserializer<CustomBigDecim
     public CustomBigDecimal deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
         ObjectCodec oc = jp.getCodec();
         JsonNode root = oc.readTree(jp);
-        return (CustomBigDecimal) CustomBigDecimal.valueOf(root.asText());
+        String value = root.asText();
+        return value != null ? (CustomBigDecimal) CustomBigDecimal.valueOf(value) : null;
     }
 }

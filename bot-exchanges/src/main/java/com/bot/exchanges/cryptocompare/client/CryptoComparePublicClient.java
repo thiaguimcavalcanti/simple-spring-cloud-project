@@ -1,7 +1,7 @@
 package com.bot.exchanges.cryptocompare.client;
 
 import com.bot.exchanges.cryptocompare.CryptoCompareFeignConfiguration;
-import com.bot.exchanges.cryptocompare.dto.AbstractCryptoCompareDTO;
+import com.bot.exchanges.cryptocompare.dto.BaseCryptoCompareDTO;
 import com.bot.exchanges.cryptocompare.dto.CryptoCompareCandlestickDTO;
 import com.bot.exchanges.cryptocompare.dto.CryptoCompareCoinListDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,25 +15,25 @@ import static com.bot.exchanges.cryptocompare.utils.CryptoCompareContants.LIMIT;
 import static com.bot.exchanges.cryptocompare.utils.CryptoCompareContants.TRY_CONVERSION;
 import static com.bot.exchanges.cryptocompare.utils.CryptoCompareContants.TSYM;
 
-@FeignClient(name = "crypto-compare-public", url = "${exchanges.cryptoCompare.baseUrl}", configuration = CryptoCompareFeignConfiguration.class)
+@FeignClient(name = "crypto-compare-public", url = "${exchanges.cryptocompare.baseUrl}", configuration = CryptoCompareFeignConfiguration.class)
 public interface CryptoComparePublicClient {
 
-    @GetMapping(value = "${exchanges.cryptoCompare.apis.coinList}")
+    @GetMapping(value = "${exchanges.cryptocompare.apis.coinList}")
     CryptoCompareCoinListDTO getCoinList();
 
-    @GetMapping(value = "${exchanges.cryptoCompare.apis.histoMinute}")
-    AbstractCryptoCompareDTO<CryptoCompareCandlestickDTO> historicalMinute(@PathVariable(FSYM) String fsym,
-                                                                           @PathVariable(TSYM) String tsym,
-                                                                           @PathVariable(LIMIT) int limit,
-                                                                           @PathVariable(EXCHANGE) String exchange,
-                                                                           @PathVariable(AGGREGATE) long aggregate,
-                                                                           @PathVariable(TRY_CONVERSION) boolean tryConversion);
+    @GetMapping(value = "${exchanges.cryptocompare.apis.histoMinute}")
+    BaseCryptoCompareDTO<CryptoCompareCandlestickDTO> historicalMinute(@PathVariable(FSYM) String fsym,
+                                                                       @PathVariable(TSYM) String tsym,
+                                                                       @PathVariable(LIMIT) int limit,
+                                                                       @PathVariable(EXCHANGE) String exchange,
+                                                                       @PathVariable(AGGREGATE) long aggregate,
+                                                                       @PathVariable(TRY_CONVERSION) boolean tryConversion);
 
-    @GetMapping(value = "${exchanges.cryptoCompare.apis.histoHour}")
-    AbstractCryptoCompareDTO<CryptoCompareCandlestickDTO> historicalHour(@PathVariable(FSYM) String fsym,
-                                                                         @PathVariable(TSYM) String tsym,
-                                                                         @PathVariable(LIMIT) int limit,
-                                                                         @PathVariable(EXCHANGE) String exchange,
-                                                                         @PathVariable(AGGREGATE) long aggregate,
-                                                                         @PathVariable(TRY_CONVERSION) boolean tryConversion);
+    @GetMapping(value = "${exchanges.cryptocompare.apis.histoHour}")
+    BaseCryptoCompareDTO<CryptoCompareCandlestickDTO> historicalHour(@PathVariable(FSYM) String fsym,
+                                                                     @PathVariable(TSYM) String tsym,
+                                                                     @PathVariable(LIMIT) int limit,
+                                                                     @PathVariable(EXCHANGE) String exchange,
+                                                                     @PathVariable(AGGREGATE) long aggregate,
+                                                                     @PathVariable(TRY_CONVERSION) boolean tryConversion);
 }

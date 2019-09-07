@@ -2,7 +2,6 @@ package com.bot.exchanges.bittrex.service.impl;
 
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
-import com.bot.exchanges.bittrex.BittrexProperties;
 import com.bot.exchanges.bittrex.client.BittrexAccountClient;
 import com.bot.exchanges.bittrex.client.BittrexMarketClient;
 import com.bot.exchanges.bittrex.client.BittrexPublic2Client;
@@ -14,6 +13,7 @@ import com.bot.exchanges.bittrex.dto.publicapi.BittrexCandlestickDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexExchangeProductDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexTickerDTO;
 import com.bot.exchanges.bittrex.service.BittrexService;
+import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,14 +29,14 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     private final BittrexPublicClient bittrexPublicClient;
     private final BittrexMarketClient bittrexMarketClient;
     private final BittrexPublic2Client bittrexPublic2Client;
-    private final BittrexProperties bittrexProperties;
+    private final CommonExchangeProperties bittrexProperties;
 
     @Autowired
     public BittrexServiceImpl(BittrexAccountClient bittrexAccountClient,
                               BittrexPublicClient bittrexPublicClient,
                               BittrexMarketClient bittrexMarketClient,
                               BittrexPublic2Client bittrexPublic2Client,
-                              BittrexProperties bittrexProperties)  {
+                              CommonExchangeProperties bittrexProperties)  {
         super.exchangeEnum = ExchangeEnum.BITTREX;
         this.bittrexAccountClient = bittrexAccountClient;
         this.bittrexPublicClient = bittrexPublicClient;

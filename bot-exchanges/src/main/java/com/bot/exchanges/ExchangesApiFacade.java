@@ -7,12 +7,14 @@ import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
+import com.bot.exchanges.alphavantage.service.AlphaVantageService;
 import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.bittrex.service.BittrexService;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
 import com.bot.exchanges.cryptocompare.service.CryptoCompareService;
+import org.apache.commons.lang.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,7 @@ public class ExchangesApiFacade {
     private final BittrexService bittrexService;
     private final BinanceService binanceService;
     private final CryptoCompareService cryptoCompareService;
+    private final AlphaVantageService alphaVantageService;
     private final ExchangeProductRepository exchangeProductRepository;
 
     private ModelMapper mapper;
@@ -33,11 +36,13 @@ public class ExchangesApiFacade {
     public ExchangesApiFacade(BittrexService bittrexService,
                               BinanceService binanceService,
                               CryptoCompareService cryptoCompareService,
+                              AlphaVantageService alphaVantageService,
                               ExchangeProductRepository exchangeProductRepository,
                               ModelMapper mapper) {
         this.bittrexService = bittrexService;
         this.binanceService = binanceService;
         this.cryptoCompareService = cryptoCompareService;
+        this.alphaVantageService = alphaVantageService;
         this.exchangeProductRepository = exchangeProductRepository;
         this.mapper = mapper;
     }
@@ -81,6 +86,8 @@ public class ExchangesApiFacade {
     }
 
     private ExchangeProduct getExchangeProduct(ExchangeEnum exchangeEnum, String baseProductId, String productId) {
+        baseProductId = StringUtils.isBlank(baseProductId) ? null : baseProductId;
+        productId = StringUtils.isBlank(productId) ? null : productId;
         return exchangeProductRepository.findByExchangeIdAndBaseProductIdAndProductId(exchangeEnum.getId(),
                 baseProductId, productId);
     }
@@ -97,6 +104,8 @@ public class ExchangesApiFacade {
                 return bittrexService;
             case BINANCE:
                 return binanceService;
+            case BOVESPA:
+                return alphaVantageService;
             default:
                 return null;
         }

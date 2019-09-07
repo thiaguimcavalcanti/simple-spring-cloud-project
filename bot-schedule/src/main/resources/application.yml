@@ -34,4 +34,4 @@ exchanges:
       active: true
   bittrex:
     schedules:
-      active: true
+      active: false

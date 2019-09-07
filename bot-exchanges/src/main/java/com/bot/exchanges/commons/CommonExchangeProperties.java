@@ -1,14 +1,10 @@
-package com.bot.exchanges.binance;
+package com.bot.exchanges.commons;
 
 import com.bot.commons.enums.PeriodEnum;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 @Data
-@Component
-@ConfigurationProperties("exchanges.binance")
-public class BinanceProperties {
+public class CommonExchangeProperties {
     private String baseUrl;
     private com.bot.exchanges.commons.dto.Period Period;
 

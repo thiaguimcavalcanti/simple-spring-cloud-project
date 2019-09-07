@@ -1,7 +1,7 @@
 package com.bot.exchanges.bittrex.interceptor;
 
 import com.bot.commons.enums.ExchangeEnum;
-import com.bot.exchanges.bittrex.BittrexProperties;
+import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.UserExchange;
 import com.bot.exchanges.commons.repository.UserExchangeRepository;
 import feign.RequestInterceptor;
@@ -24,7 +24,7 @@ public class BittrexAuthenticationInterceptor implements RequestInterceptor {
     private UserExchangeRepository userExchangeRepository;
 
     @Autowired
-    private BittrexProperties bittrexProperties;
+    private CommonExchangeProperties bittrexProperties;
 
     @Override
     public void apply(RequestTemplate requestTemplate) {

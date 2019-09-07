@@ -8,13 +8,14 @@ public enum ExchangeEnum {
     POLONIEX((long) 1, "Poloniex"),
     BITTREX((long) 2, "Bittrex"),
     BLEUTRADE((long) 3, "Bleutrade"),
-    BINANCE((long) 4, "Binance");
+    BINANCE((long) 4, "Binance"),
+    BOVESPA((long) 5, "Bovespa");
 
     private Long id;
-    private String cryptoCompareName;
+    private String name;
 
-    ExchangeEnum(Long id, String cryptoCompareName) {
+    ExchangeEnum(Long id, String name) {
         this.id = id;
-        this.cryptoCompareName = cryptoCompareName;
+        this.name = name;
     }
 }

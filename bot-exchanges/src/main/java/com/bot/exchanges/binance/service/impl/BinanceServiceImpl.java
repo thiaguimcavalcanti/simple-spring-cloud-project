@@ -4,17 +4,16 @@ import static com.bot.commons.utils.DateUtils.roundZonedDateTime;
 
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.OpenOrderDTO;
-import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
-import com.bot.exchanges.binance.BinanceProperties;
 import com.bot.exchanges.binance.client.BinanceAccountClient;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceOrderHistoryDTO;
 import com.bot.exchanges.binance.service.BinanceService;
+import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,12 +27,12 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
 
     private final BinancePublicClient binancePublicClient;
     private final BinanceAccountClient binanceAccountClient;
-    private final BinanceProperties binanceProperties;
+    private final CommonExchangeProperties binanceProperties;
 
     @Autowired
     public BinanceServiceImpl(BinancePublicClient binancePublicClient,
                               BinanceAccountClient binanceAccountClient,
-                              BinanceProperties binanceProperties)  {
+                              CommonExchangeProperties binanceProperties)  {
         super.exchangeEnum = ExchangeEnum.BINANCE;
         this.binancePublicClient = binancePublicClient;
         this.binanceAccountClient = binanceAccountClient;

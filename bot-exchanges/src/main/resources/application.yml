@@ -84,7 +84,7 @@ exchanges:
       klines: /api/v1/klines?symbol={symbol}&interval={interval}&startTime={startTime}&endTime={endTime}&limit={limit}
       exchangeInfo: /api/v1/exchangeInfo
       myTrades: /api/v3/myTrades?symbol={symbol}&startTime={startTime}&endTime={endTime}&fromId={fromId}&limit={limit}&recvWindow={recvWindow}&timestamp={timestamp}
-  cryptoCompare:
+  cryptocompare:
     period:
       oneMin: 1
       fiveMin: 5
@@ -96,3 +96,13 @@ exchanges:
       coinList: /data/all/coinlist
       histoMinute: /data/histominute?fsym={fsym}&tsym={tsym}&limit={limit}&e={e}&aggregate={aggregate}&tryConversion={tryConversion}
       histoHour: /data/histoHour?fsym={fsym}&tsym={tsym}&limit={limit}&e={e}&aggregate={aggregate}&tryConversion={tryConversion}
+  alphavantage:
+    period:
+      oneMin: 1min
+      fiveMin: 5min
+      fifteenMin: 15min
+      thirdMin: 30min
+      oneHour: 60min
+    baseUrl: https://www.alphavantage.co
+    apis:
+      getTicks: /query?function={function}&symbol={symbol}&interval={interval}

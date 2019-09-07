@@ -15,6 +15,9 @@ public class DateUtils {
     public static final DateTimeFormatter DATETIME_WITH_T_FORMAT_DESERIALIZE = DateTimeFormatter
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
+    public static final DateTimeFormatter DATETIME_FORMAT_DESERIALIZE = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public static ZonedDateTime convertEpochMilliToZonedDateTime(String time) {
         Instant instant = Instant.ofEpochMilli(Long.parseLong(time));
         return ZonedDateTime.ofInstant(instant, DEFAULT_ZONE_OFFSET);

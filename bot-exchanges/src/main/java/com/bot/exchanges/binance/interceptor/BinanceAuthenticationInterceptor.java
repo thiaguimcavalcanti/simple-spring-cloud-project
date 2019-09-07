@@ -1,10 +1,9 @@
 package com.bot.exchanges.binance.interceptor;
 
 import com.bot.commons.enums.ExchangeEnum;
-import com.bot.exchanges.binance.BinanceProperties;
+import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.UserExchange;
 import com.bot.exchanges.commons.repository.UserExchangeRepository;
-import com.bot.exchanges.commons.utils.CommonConstants;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class BinanceAuthenticationInterceptor implements RequestInterceptor {
     private UserExchangeRepository userExchangeRepository;
 
     @Autowired
-    private BinanceProperties binanceProperties;
+    private CommonExchangeProperties binanceProperties;
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
