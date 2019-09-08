@@ -7,6 +7,7 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
+import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import org.ta4j.core.trading.rules.OverIndicatorRule;
 import org.ta4j.core.trading.rules.StopGainRule;
 import org.ta4j.core.trading.rules.UnderIndicatorRule;
@@ -39,6 +40,9 @@ class RuleBuilder {
 			break;
 		case "CrossedDownIndicatorRule":
 			rule = buildRule(CrossedDownIndicatorRule.class, jsonRule, series, createdObjects);
+			break;
+		case "CrossedUpIndicatorRule":
+			rule = buildRule(CrossedUpIndicatorRule.class, jsonRule, series, createdObjects);
 			break;
 		case "StopGainRule":
 			rule = buildStopGainRule(jsonRule, series, createdObjects);

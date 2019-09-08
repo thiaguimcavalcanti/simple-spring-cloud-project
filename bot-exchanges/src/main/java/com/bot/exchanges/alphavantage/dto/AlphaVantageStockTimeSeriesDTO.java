@@ -4,13 +4,13 @@ import com.bot.exchanges.alphavantage.utils.AlphaVantageDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static com.bot.commons.utils.DateUtils.DATETIME_FORMAT_DESERIALIZE;
 
-@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = AlphaVantageDeserializer.class)
 public class AlphaVantageStockTimeSeriesDTO extends BaseAlphaVantageDTO<AlphaVantageCandlestickDTO> {

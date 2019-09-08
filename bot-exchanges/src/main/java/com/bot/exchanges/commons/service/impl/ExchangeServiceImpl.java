@@ -76,7 +76,7 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
             // Perform the technical analysis (async task)
             if (previousCandlestick == null || previousCandlestick.getBeginTime().compareTo(latestCandlestick.getBeginTime()) < 0) {
-                strategyAnalysisService.analyzeStrategies(exchangeProduct, periodEnum);
+                strategyAnalysisService.analyzeStrategies(exchangeProduct, latestCandlestick.getEndTime(), periodEnum);
             }
         }
     }

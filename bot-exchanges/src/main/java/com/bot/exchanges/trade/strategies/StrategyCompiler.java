@@ -27,7 +27,7 @@ public class StrategyCompiler {
 				Map<String, Object> createdObjects = new HashMap<>();
 				return createFullRuleStructure(null, (String) array.remove(0), array, series, createdObjects);
 			} else {
-				return new BooleanRule(true);
+				return new BooleanRule(false);
 			}
 		} catch (Exception e) {
 			logger.error("translateJsonToRule", e);

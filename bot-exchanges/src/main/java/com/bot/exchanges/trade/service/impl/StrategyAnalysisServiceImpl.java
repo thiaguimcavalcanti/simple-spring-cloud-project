@@ -4,6 +4,7 @@ import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.OrderStatusEnum;
 import com.bot.commons.enums.OrderTypeEnum;
 import com.bot.commons.enums.PeriodEnum;
+import com.bot.commons.types.CustomBigDecimal;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.OrderHistory;
@@ -18,11 +19,13 @@ import com.bot.exchanges.trade.service.StrategyAnalysisService;
 import com.bot.exchanges.trade.strategies.StrategyCompiler;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.ta4j.core.Bar;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.Rule;
@@ -32,6 +35,10 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.bot.commons.enums.OrderTypeEnum.BUY;
+import static org.apache.commons.lang.StringUtils.EMPTY;
 
 @Service
 @Transactional
@@ -59,75 +66,71 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
         this.exchangeProductRepository = exchangeProductRepository;
     }
 
-    @Override
-    public void monitoringStrategies(ExchangeEnum exchangeEnum) {
-        List<Strategy> strategies = strategyRepository.findByActiveIsTrueAndExchangeId(exchangeEnum.getId()); // change to find by exchange enum
+    private void monitoringStrategy(Strategy strategyToSearch, Bar currentBar) {
+        Optional<Strategy> strategyOptional = strategyRepository.findById(strategyToSearch.getId());
 
-        for (Strategy strategy : strategies) {
+        strategyOptional.ifPresent(strategy -> {
             boolean buySatisfied = CollectionUtils.isNotEmpty(strategy.getStrategyRules());
             boolean sellSatisfied = buySatisfied;
 
             for (StrategyRule rule : strategy.getStrategyRules()) {
-                buySatisfied &= BooleanUtils.isTrue(rule.getBuySatisfied());
-                sellSatisfied &= BooleanUtils.isTrue(rule.getSellSatisfied());
+                if (rule.getBuyActive()) {
+                    buySatisfied &= BooleanUtils.isTrue(rule.getBuySatisfied());
+                }
+                if (rule.getSellActive()) {
+                    sellSatisfied &= BooleanUtils.isTrue(rule.getSellSatisfied());
+                }
             }
-
-            strategy.setBuySatisfied(buySatisfied);
-            strategy.setSellSatisfied(sellSatisfied);
-            strategyRepository.save(strategy);
 
             // Create new open order to start the trade
-            createNewOrderBasedOnStrategy(exchangeEnum, strategy);
+            Optional<OrderHistory> orderHistory = orderHistoryService.save(buySatisfied, sellSatisfied,
+                    strategy.getExchangeProduct(), strategy.getUserExchange(), currentBar.getEndTime(),
+                    (CustomBigDecimal) currentBar.getClosePrice());
 
-            LOG.debug("Strategy - Buy: " + strategy.getBuySatisfied() + " - Sell: " + strategy.getSellSatisfied());
-        }
-    }
-
-    private void createNewOrderBasedOnStrategy(ExchangeEnum exchangeEnum, Strategy strategy) {
-        Boolean buySatisfied = BooleanUtils.isTrue(strategy.getBuySatisfied());
-        Boolean sellSatisfied = BooleanUtils.isTrue(strategy.getSellSatisfied());
-
-        if (buySatisfied || sellSatisfied) {
-            OrderHistory latestOrderHistory = orderHistoryService.findTopByExchangeProductIdAndUserExchangeId(strategy.getExchangeProductId(),
-                    strategy.getUserExchangeId());
-
-            if (buySatisfied && (latestOrderHistory == null
-                    || (OrderTypeEnum.SELL.equals(latestOrderHistory.getType()) && OrderStatusEnum.CLOSED.equals(latestOrderHistory.getStatus())))) {
-                orderHistoryService.save(strategy.getExchangeProduct(), strategy.getUserExchange(), OrderTypeEnum.BUY);
-            } else if (sellSatisfied && (latestOrderHistory != null && OrderTypeEnum.BUY.equals(latestOrderHistory.getType())
-                    && OrderStatusEnum.CLOSED.equals(latestOrderHistory.getStatus()))) {
-                orderHistoryService.save(strategy.getExchangeProduct(), strategy.getUserExchange(), OrderTypeEnum.SELL);
-            }
-        }
+            orderHistory.ifPresent(oh -> {
+                orderHistoryService.confirmBuySellExecutedWithSuccess(oh);
+                LOG.warn("Order executed - " + oh.getType());
+            }); // ONLY TO TEST
+        });
     }
 
     @Override
     @Async
-    public void analyzeStrategies(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
-        LOG.debug("analyzeStrategies: " + periodEnum + ": " + exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
+    public void analyzeStrategies(ExchangeProduct exchangeProduct, ZonedDateTime time, PeriodEnum periodEnum) {
+        BaseTimeSeries series = createTimeSeries(periodEnum, exchangeProduct, time);
+        Bar currentBar = series.getBar(series.getEndIndex());
 
-        BaseTimeSeries series = createTimeSeries(periodEnum, exchangeProduct);
+        LOG.warn("analyzeStrategies: " + periodEnum + ": " + exchangeProduct.getBaseProductId() +
+                "-" + exchangeProduct.getProductId() + " - " + currentBar.getBeginTime());
 
         List<StrategyRule> strategyRules = strategyRuleRepository.findByExchangeProductAndPeriodEnum(exchangeProduct, periodEnum);
+        if (CollectionUtils.isNotEmpty(strategyRules)) {
+            for (StrategyRule strategyRule : strategyRules) {
+                String buy = strategyRule.getBuyActive() ? strategyRule.getBuy() : EMPTY;
+                String sell = strategyRule.getSellActive() ? strategyRule.getSell() : EMPTY;
 
-        for (StrategyRule strategyRule : strategyRules) {
-            Rule buyRule = StrategyCompiler.translateJsonToRule(strategyRule.getBuy(), series);
-            Rule sellRule = StrategyCompiler.translateJsonToRule(strategyRule.getSell(), series);
+                Rule buyRule = StrategyCompiler.translateJsonToRule(buy, series);
+                Rule sellRule = StrategyCompiler.translateJsonToRule(sell, series);
+                org.ta4j.core.Strategy strategy = new BaseStrategy(buyRule, sellRule);
 
-            org.ta4j.core.Strategy strategy = new BaseStrategy(buyRule, sellRule);
-            strategyRule.setBuySatisfied(strategy.shouldEnter(series.getEndIndex()));
-            strategyRule.setSellSatisfied(strategy.shouldExit(series.getEndIndex()));
+                strategyRule.setBuySatisfied(strategy.shouldEnter(series.getEndIndex()));
+                strategyRule.setSellSatisfied(strategy.shouldExit(series.getEndIndex()));
 
-            strategyRuleRepository.save(strategyRule);
+                strategyRuleRepository.save(strategyRule);
+            }
+
+            // Monitoring current strategy
+            Strategy strategy = strategyRules.get(0).getStrategy();
+            monitoringStrategy(strategy, currentBar);
         }
     }
 
-    private BaseTimeSeries createTimeSeries(PeriodEnum periodEnum, ExchangeProduct exchangeProduct) {
+    private BaseTimeSeries createTimeSeries(PeriodEnum periodEnum, ExchangeProduct exchangeProduct, ZonedDateTime time) {
         Duration ticks = ((Duration) periodEnum.getDuration()).multipliedBy(200);
-        ZonedDateTime beginTime = ZonedDateTime.now().minusMinutes(ticks.toMinutes());
+        ZonedDateTime beginTime = time.minusMinutes(ticks.toMinutes());
 
         // Get ticks to analyze
-        List<Candlestick> candlesticks = candlestickRepository.getToAnalyze(exchangeProduct, beginTime, null, periodEnum);
+        List<Candlestick> candlesticks = candlestickRepository.getToAnalyze(exchangeProduct, beginTime, time, periodEnum);
 
         return new BaseTimeSeries(new ArrayList<>(candlesticks));
     }

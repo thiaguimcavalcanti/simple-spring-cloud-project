@@ -42,10 +42,4 @@ public class Strategy extends AbstractLongIDEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "strategy")
 	private List<StrategyRule> strategyRules;
-
-	@Column(name = "BuySatisfied")
-	private Boolean buySatisfied = Boolean.FALSE;
-
-	@Column(name = "SellSatisfied")
-	private Boolean sellSatisfied = Boolean.FALSE;
 }

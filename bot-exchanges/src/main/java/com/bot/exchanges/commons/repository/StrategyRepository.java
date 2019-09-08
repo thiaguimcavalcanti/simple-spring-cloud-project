@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StrategyRepository extends JpaRepository<Strategy, Long>, CustomStrategyRepository {
 
+    Strategy findByExchangeProductIdAndUserExchangeId(Long exchangeProductId, Long userExchangeId);
 }

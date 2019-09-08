@@ -36,8 +36,10 @@ public class StrategyRuleRepositoryImpl implements CustomStrategyRuleRepository 
         predicates.add(cb.equal(joinStrategy.get(Strategy_.exchangeProduct), exchangeProduct));
         predicates.add(cb.isTrue(joinStrategy.get(Strategy_.active)));
         predicates.add(cb.equal(root.get(StrategyRule_.periodEnum), periodEnum));
-        predicates.add(cb.isTrue(root.get(StrategyRule_.buyActive)));
-        predicates.add(cb.isTrue(root.get(StrategyRule_.sellActive)));
+
+        Predicate buySellActive = cb.or(cb.isTrue(root.get(StrategyRule_.buyActive)),
+                cb.isTrue(root.get(StrategyRule_.sellActive)));
+        predicates.add(buySellActive);
 
         cq.where(predicates.toArray(new Predicate[0]));
 

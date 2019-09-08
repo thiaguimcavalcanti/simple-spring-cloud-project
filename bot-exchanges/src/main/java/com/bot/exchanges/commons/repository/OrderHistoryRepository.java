@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long> {
 
-    OrderHistory findTopByExchangeProductIdAndUserExchangeIdOrderByDateDesc(Long exchangeProductId, Long userExchangeId);
+    OrderHistory findTopByExchangeProductIdAndUserExchangeIdOrderByDateDescTypeDesc(Long exchangeProductId, Long userExchangeId);
 }

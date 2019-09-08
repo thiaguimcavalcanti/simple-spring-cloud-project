@@ -44,8 +44,7 @@ public class CandlestickRepositoryImpl implements CustomCandlestickRepository {
 
         cq.where(predicates.toArray(new Predicate[0]));
 
-        cq.orderBy(cb.asc(joinExchangeProduct.get(ExchangeProduct_.exchangeId)),
-                cb.asc(root.get(Candlestick_.beginTime)));
+        cq.orderBy(cb.asc(joinExchangeProduct.get(ExchangeProduct_.exchangeId)), cb.asc(root.get(Candlestick_.beginTime)));
 
         Query query = entityManager.createQuery(cq);
 

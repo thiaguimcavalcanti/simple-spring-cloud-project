@@ -1,5 +1,6 @@
 package com.bot.exchanges.commons.repository;
 
+import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.Strategy;
 import org.springframework.stereotype.Repository;
 
