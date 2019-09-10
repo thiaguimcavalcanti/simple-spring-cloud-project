@@ -2,9 +2,17 @@ package com.bot.exchanges.backtesting;
 
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.Candlestick;
+import com.bot.exchanges.commons.entities.Exchange;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
+import com.bot.exchanges.commons.entities.Strategy;
+import com.bot.exchanges.commons.entities.StrategyRule;
+import com.bot.exchanges.commons.entities.UserExchange;
 import com.bot.exchanges.commons.repository.CandlestickRepository;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
+import com.bot.exchanges.commons.repository.ExchangeRepository;
+import com.bot.exchanges.commons.repository.StrategyRepository;
+import com.bot.exchanges.commons.repository.StrategyRuleRepository;
+import com.bot.exchanges.commons.repository.UserExchangeRepository;
 import com.bot.exchanges.trade.service.StrategyAnalysisService;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +40,18 @@ public class BinanceBacktestingTest {
 	@Autowired
 	private StrategyAnalysisService strategyAnalysisService;
 
+	@Autowired
+	private StrategyRepository strategyRepository;
+
+	@Autowired
+	private StrategyRuleRepository strategyRuleRepository;
+
+	@Autowired
+	private UserExchangeRepository userExchangeRepository;
+
+	@Autowired
+	private ExchangeRepository exchangeRepository;
+
 	private Map<String, ExchangeProduct> exchangeProducts;
 
 	@Before
@@ -47,14 +67,41 @@ public class BinanceBacktestingTest {
 		List<Candlestick> candlesticks = candlestickRepository.findByExchangeProductIdAndPeriodEnumOrderByBeginTimeAsc(
 				exchangeProduct.getId(), fiveMin);
 
-		candlesticks.forEach(candlestick -> {
-			strategyAnalysisService.analyzeStrategies(exchangeProduct, candlestick.getEndTime(), fiveMin);
+		candlesticks.forEach(candlestick -> strategyAnalysisService
+				.analyzeStrategies(exchangeProduct, candlestick.getEndTime(), fiveMin));
+	}
 
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+	//@Test
+	public void createStrategies() {
+		String buyStrategy = "[\"AND\",{\"rule\":\"CrossedDownIndicatorRule\",\"indicators\":[{\"type\":\"RSIIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"barCount\":14},{\"type\":\"Number\",\"value\":20}]}]";
+		String sellStrategy = "[\"OR\",{\"rule\":\"CrossedUpIndicatorRule\",\"indicators\":[{\"type\":\"RSIIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"barCount\":14},{\"type\":\"Number\",\"value\":70}]},{\"rule\":\"CrossedDownIndicatorRule\",\"indicators\":[{\"type\":\"MACDIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"shortBarCount\":9,\"longBarCount\":16},{\"type\":\"EMAIndicator\",\"indicator\":{\"type\":\"MACDIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"shortBarCount\":9,\"longBarCount\":16},\"barCount\":18}]}]";
+
+		strategyRuleRepository.deleteAll();
+		strategyRepository.deleteAll();
+
+		Map<Long, UserExchange> userExchangeMap = userExchangeRepository.findAll().stream()
+				.collect(Collectors.toMap(UserExchange::getExchangeId, u -> u));
+
+		Map<Long, Exchange> exchangeMap = exchangeRepository.findAll().stream()
+				.collect(Collectors.toMap(Exchange::getId, e -> e));
+
+		exchangeProducts.values().forEach(ep -> {
+				Strategy newStrategy = new Strategy();
+				newStrategy.setActive(Boolean.TRUE);
+				newStrategy.setExchangeProduct(ep);
+				newStrategy.setUserExchange(userExchangeMap.get(ep.getExchangeId()));
+				newStrategy.setName(exchangeMap.get(ep.getExchangeId()).getName() + " - " + ep.getBaseProductId() + "_" + ep.getProductId());
+				strategyRepository.save(newStrategy);
+
+				StrategyRule newStrategyRule = new StrategyRule();
+				newStrategyRule.setBuyActive(Boolean.TRUE);
+				newStrategyRule.setBuy(buyStrategy);
+				newStrategyRule.setSellActive(Boolean.TRUE);
+				newStrategyRule.setSell(sellStrategy);
+				newStrategyRule.setPeriodEnum(PeriodEnum.FIVE_MIN);
+				newStrategyRule.setStrategy(newStrategy);
+				newStrategyRule.setStrategyId(newStrategy.getId());
+				strategyRuleRepository.save(newStrategyRule);
 		});
 	}
 }

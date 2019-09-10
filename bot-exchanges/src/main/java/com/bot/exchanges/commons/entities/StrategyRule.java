@@ -29,7 +29,7 @@ public class StrategyRule extends AbstractLongIDEntity {
 
 	/** Time period (e.g. 1 day, 15 min, etc.) of the bar */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "timePeriod")
+	@Column(name = "TimePeriod")
 	private PeriodEnum periodEnum;
 
 	@Type(type="text")

@@ -26,7 +26,7 @@ import java.time.ZonedDateTime;
 @Setter
 @Entity
 @Table(name = "Candlestick", uniqueConstraints = {
-		@UniqueConstraint(columnNames = { "timePeriod", "BeginTime", "EndTime", "ExchangeProduct_ID" }) })
+		@UniqueConstraint(columnNames = { "TimePeriod", "BeginTime", "EndTime", "ExchangeProduct_ID" }) })
 @TypeDef(name = "num_type", defaultForType = Num.class, typeClass = NumType.class)
 public class Candlestick extends AbstractStringIDEntity implements Bar {
 
@@ -39,7 +39,7 @@ public class Candlestick extends AbstractStringIDEntity implements Bar {
 
 	/** Time period (e.g. 1 day, 15 min, etc.) of the bar */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "timePeriod")
+	@Column(name = "TimePeriod")
 	private PeriodEnum periodEnum;
 
 	/** Begin time of the bar */
