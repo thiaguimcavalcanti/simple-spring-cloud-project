@@ -87,10 +87,10 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
                     strategy.getExchangeProduct(), strategy.getUserExchange(), currentBar.getEndTime(),
                     (CustomBigDecimal) currentBar.getClosePrice());
 
-            orderHistory.ifPresent(oh -> {
+            /*orderHistory.ifPresent(oh -> {
                 orderHistoryService.confirmBuySellExecutedWithSuccess(oh);
                 LOG.warn("Order executed - " + oh.getType());
-            }); // ONLY TO TEST
+            }); // ONLY TO TEST*/
         });
     }
 

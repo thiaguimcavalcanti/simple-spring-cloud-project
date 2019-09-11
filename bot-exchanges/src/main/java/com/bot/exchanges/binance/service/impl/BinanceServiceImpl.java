@@ -62,30 +62,15 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
 
     @Override
     public List<BinanceCandlestickDTO> getCandlesticks(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
-        List<BinanceCandlestickDTO> candlesticks = binancePublicClient.getCandlesticks(getSymbol(exchangeProduct),
+        return binancePublicClient.getCandlesticks(getSymbol(exchangeProduct),
                 binanceProperties.getPeriodByPeriodEnum(periodEnum), null, null, null);
-
-        candlesticks.forEach(candlestickDTO -> {
-            candlestickDTO.setBeginTime(roundZonedDateTime(candlestickDTO.getBeginTime(), periodEnum.getDuration()));
-            candlestickDTO.setEndTime(candlestickDTO.getBeginTime().plus(periodEnum.getDuration()));
-        });
-
-        return candlesticks;
     }
 
     @Override
     public BinanceCandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
         List<BinanceCandlestickDTO> candlesticks = binancePublicClient.getCandlesticks(getSymbol(exchangeProduct),
                 binanceProperties.getPeriodByPeriodEnum(periodEnum), null, null, 2);
-
-        if (CollectionUtils.isNotEmpty(candlesticks)) {
-            BinanceCandlestickDTO candlestickDTO = candlesticks.get(0);
-            candlestickDTO.setBeginTime(roundZonedDateTime(candlestickDTO.getBeginTime(), periodEnum.getDuration()));
-            candlestickDTO.setEndTime(candlestickDTO.getBeginTime().plus(periodEnum.getDuration()));
-            return candlestickDTO;
-        }
-
-        return null;
+        return CollectionUtils.isNotEmpty(candlesticks) ? candlesticks.get(0) : null;
     }
 
     @Override

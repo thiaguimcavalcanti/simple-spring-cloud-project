@@ -39,4 +39,8 @@ public class DateUtils {
                 .withSecond(0)
                 .withNano(0);
     }
+
+    public static ZonedDateTime roundZonedDateTimeCeiling(ZonedDateTime zonedDateTime) {
+        return zonedDateTime.truncatedTo(ChronoUnit.MINUTES).plusMinutes(1);
+    }
 }
