@@ -11,6 +11,7 @@ import com.bot.exchanges.binance.client.BinanceAccountClient;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
+import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummarytDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceOrderHistoryDTO;
 import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.commons.CommonExchangeProperties;
@@ -78,7 +79,12 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
         return binancePublicClient.getExchangeInfo().getSymbols();
     }
 
+    @Override
+    public List<BinanceMarketSummarytDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
+        return binancePublicClient.getMarketSummaries(getSymbol(exchangeProduct));
+    }
+
     private String getSymbol(ExchangeProduct exchangeProduct) {
-        return exchangeProduct.getBaseProductId() + exchangeProduct.getProductId();
+        return exchangeProduct != null ? exchangeProduct.getBaseProductId() + exchangeProduct.getProductId() : null;
     }
 }

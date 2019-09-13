@@ -1,5 +1,6 @@
 package com.bot.exchanges.bittrex.service.impl;
 
+import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.bittrex.client.BittrexAccountClient;
@@ -98,7 +99,12 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
         return bittrexPublicClient.getMarkets().getResult();
     }
 
+    @Override
+    public List<? extends MarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
+        return null;
+    }
+
     private String getSymbol(ExchangeProduct exchangeProduct) {
-        return exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId();
+        return exchangeProduct != null ? exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId() : null;
     }
 }

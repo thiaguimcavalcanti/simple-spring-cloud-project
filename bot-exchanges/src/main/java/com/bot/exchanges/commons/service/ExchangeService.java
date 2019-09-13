@@ -3,9 +3,11 @@ package com.bot.exchanges.commons.service;
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
+import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
+import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 
@@ -32,4 +34,8 @@ public interface ExchangeService {
     void refreshExchangeProductList();
 
     List<? extends ExchangeProductDTO> getExchangeProductList();
+
+    public List<? extends MarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct);
+
+    void refreshMarketSummaries(ExchangeProduct exchangeProduct);
 }

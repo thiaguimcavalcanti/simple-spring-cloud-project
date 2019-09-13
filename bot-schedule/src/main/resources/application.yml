@@ -29,6 +29,9 @@ exchanges:
     product:
       basePath: /product
       refreshProductList: /refreshProductList
+    market-summary:
+      basePath: /marketSummary
+      refreshAll: /refreshAll?exchangeEnum={exchangeEnum}
   binance:
     schedules:
       active: true

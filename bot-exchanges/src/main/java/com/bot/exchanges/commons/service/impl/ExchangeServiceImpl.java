@@ -1,15 +1,19 @@
 package com.bot.exchanges.commons.service.impl;
 
 import com.bot.commons.dto.CandlestickDTO;
+import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
+import com.bot.commons.utils.DateUtils;
 import com.bot.exchanges.commons.entities.Candlestick;
 import com.bot.exchanges.commons.entities.Exchange;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
+import com.bot.exchanges.commons.entities.MarketSummary;
 import com.bot.exchanges.commons.entities.Product;
 import com.bot.exchanges.commons.repository.CandlestickRepository;
 import com.bot.exchanges.commons.repository.ExchangeProductRepository;
 import com.bot.exchanges.commons.repository.ExchangeRepository;
+import com.bot.exchanges.commons.repository.MarketSummaryRepository;
 import com.bot.exchanges.commons.repository.ProductRepository;
 import com.bot.exchanges.commons.service.ExchangeService;
 import com.bot.exchanges.trade.service.StrategyAnalysisService;
@@ -20,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -42,6 +47,9 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
 
     @Autowired
     protected ProductRepository productRepository;
+
+    @Autowired
+    protected MarketSummaryRepository marketSummaryRepository;
 
     @Autowired
     protected CandlestickRepository candlestickRepository;
@@ -137,6 +145,32 @@ public abstract class ExchangeServiceImpl implements ExchangeService {
         });
 
         exchangeProductRepository.saveAll(exchangeProducts);
+    }
+
+    @Override
+    public void refreshMarketSummaries(ExchangeProduct exchangeProduct) {
+        List<? extends MarketSummaryDTO> marketSummariesDTO = getMarketSummaries(exchangeProduct);
+
+        if (CollectionUtils.isNotEmpty(marketSummariesDTO)) {
+            ZonedDateTime latestTickDate = DateUtils.roundZonedDateTime(ZonedDateTime.now(), Duration.ofMinutes(5));
+
+            Map<String, ExchangeProduct> exchangeProducts = exchangeProductRepository.findByExchangeId(exchangeEnum.getId())
+                    .stream() .collect(Collectors.toMap(ep -> ep.getBaseProductId() + ep.getProductId(), ep -> ep));
+
+            List<MarketSummary> marketSummaries = new ArrayList<>();
+            marketSummariesDTO.forEach(marketSummaryDTO -> {
+                ExchangeProduct ep = exchangeProducts.get(marketSummaryDTO.getBaseProduct() + marketSummaryDTO.getProduct());
+                if (ep != null) {
+                    MarketSummary marketSummary = mapper.map(marketSummaryDTO, MarketSummary.class);
+                    marketSummary.setExchangeProduct(ep);
+                    marketSummary.setTickDate(latestTickDate);
+                    marketSummaries.add(marketSummary);
+                }
+            });
+
+            marketSummaryRepository.saveAll(marketSummaries);
+            marketSummaryRepository.flush();
+        }
     }
 
     private Map<String, Product> getProducts(Set<String> productsToSearch) {

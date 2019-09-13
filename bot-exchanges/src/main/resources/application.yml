@@ -84,6 +84,7 @@ exchanges:
       klines: /api/v1/klines?symbol={symbol}&interval={interval}&startTime={startTime}&endTime={endTime}&limit={limit}
       exchangeInfo: /api/v1/exchangeInfo
       myTrades: /api/v3/myTrades?symbol={symbol}&startTime={startTime}&endTime={endTime}&fromId={fromId}&limit={limit}&recvWindow={recvWindow}&timestamp={timestamp}
+      ticker24h: /api/v1/ticker/24hr?symbol={symbol}
   cryptocompare:
     period:
       oneMin: 1

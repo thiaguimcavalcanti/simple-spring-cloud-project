@@ -2,6 +2,7 @@ package com.bot.exchanges.alphavantage.service.impl;
 
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
+import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
@@ -85,7 +86,12 @@ public class AlphaVantageServiceImpl extends ExchangeServiceImpl implements Alph
         return null;
     }
 
+    @Override
+    public List<? extends MarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
+        return null;
+    }
+
     private String getSymbol(ExchangeProduct exchangeProduct) {
-        return AlphaVantageSymbolEnum.valueOf(exchangeProduct.getProductId()).getSymbol();
+        return exchangeProduct != null ? AlphaVantageSymbolEnum.valueOf(exchangeProduct.getProductId()).getSymbol() : null;
     }
 }

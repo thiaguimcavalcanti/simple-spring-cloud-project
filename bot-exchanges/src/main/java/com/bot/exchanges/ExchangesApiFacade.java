@@ -85,6 +85,11 @@ public class ExchangesApiFacade {
         getExchangeServiceByType(exchangeEnum).refreshLatestCandlestick(exchangeProduct, periodEnum);
     }
 
+    public void refreshMarketSummaries(ExchangeEnum exchangeEnum) {
+        binanceService.refreshMarketSummaries(null);
+        bittrexService.refreshMarketSummaries(null);
+    }
+
     private ExchangeProduct getExchangeProduct(ExchangeEnum exchangeEnum, String baseProductId, String productId) {
         baseProductId = StringUtils.isBlank(baseProductId) ? null : baseProductId;
         productId = StringUtils.isBlank(productId) ? null : productId;
