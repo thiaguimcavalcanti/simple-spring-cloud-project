@@ -15,4 +15,7 @@ public interface ExchangeProductClient {
 
     @GetMapping(value = "${exchanges.apis.exchangeProduct.findByExchangeId}")
     List<ExchangeProductDTO> findByExchangeId(@PathVariable(EXCHANGE_ENUM) ExchangeEnum exchangeEnum);
+
+    @GetMapping(value = "${exchanges.apis.exchangeProduct.refreshAll}")
+    void refreshAll();
 }

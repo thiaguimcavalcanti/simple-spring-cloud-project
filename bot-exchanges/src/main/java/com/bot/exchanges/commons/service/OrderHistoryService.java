@@ -16,4 +16,6 @@ public interface OrderHistoryService {
     void confirmBuySellExecutedWithSuccess(OrderHistory orderHistory);
 
     OrderHistory findTopByExchangeProductIdAndUserExchangeId(Long exchangeProductId, Long userExchangeId);
+
+    boolean createNewOrder(ExchangeProduct exchangeProduct, CustomBigDecimal value, CustomBigDecimal amount);
 }

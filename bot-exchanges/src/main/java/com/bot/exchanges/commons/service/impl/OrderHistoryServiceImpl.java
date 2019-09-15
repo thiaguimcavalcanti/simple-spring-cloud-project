@@ -1,5 +1,6 @@
 package com.bot.exchanges.commons.service.impl;
 
+import com.bot.commons.enums.OrderStatusEnum;
 import com.bot.commons.enums.OrderTypeEnum;
 import com.bot.commons.types.CustomBigDecimal;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
@@ -15,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ta4j.core.num.Num;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -109,5 +109,17 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     public OrderHistory findTopByExchangeProductIdAndUserExchangeId(Long exchangeProductId, Long userExchangeId) {
         return orderHistoryRepository.findTopByExchangeProductIdAndUserExchangeIdOrderByDateDescTypeDesc(exchangeProductId,
                 userExchangeId);
+    }
+
+    @Override
+    public boolean createNewOrder(ExchangeProduct exchangeProduct, CustomBigDecimal value, CustomBigDecimal amount) {
+        OrderHistory latestOrder = orderHistoryRepository.findTopByExchangeProductIdAndUserExchangeIdOrderByDateDescTypeDesc(
+                exchangeProduct.getId(), exchangeProduct.getExchange().getId());
+
+        if (latestOrder == null || OrderStatusEnum.CLOSED.equals(latestOrder.getStatus())) {
+
+        }
+
+        return false;
     }
 }

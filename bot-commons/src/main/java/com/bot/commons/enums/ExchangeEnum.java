@@ -18,4 +18,13 @@ public enum ExchangeEnum {
         this.id = id;
         this.name = name;
     }
+
+    public static ExchangeEnum getById(Long id) {
+        for (ExchangeEnum exchangeEnum : ExchangeEnum.values()) {
+            if (exchangeEnum.getId().equals(id)) {
+                return exchangeEnum;
+            }
+        }
+        return null;
+    }
 }

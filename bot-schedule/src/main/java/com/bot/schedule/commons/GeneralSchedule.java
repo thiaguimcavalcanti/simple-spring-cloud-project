@@ -3,7 +3,6 @@ package com.bot.schedule.commons;
 import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.enums.ExchangeEnum;
 import com.bot.schedule.commons.client.ExchangeProductClient;
-import com.bot.schedule.commons.client.ProductClient;
 import com.bot.schedule.commons.session.helpers.ExchangeSessionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -21,13 +20,10 @@ public class GeneralSchedule {
     private ServletContext servletContext;
 
     private final ExchangeProductClient exchangeProductClient;
-    private final ProductClient productClient;
 
     @Autowired
-    public GeneralSchedule(ProductClient productClient,
-                           ExchangeProductClient exchangeProductClient,
+    public GeneralSchedule(ExchangeProductClient exchangeProductClient,
                            ServletContext servletContext) {
-        this.productClient = productClient;
         this.exchangeProductClient = exchangeProductClient;
         this.servletContext = servletContext;
     }
@@ -50,7 +46,7 @@ public class GeneralSchedule {
     @Async
     @Scheduled(cron = "0 0 * ? * *")
     public void refreshProductList() {
-        productClient.refreshProductList();
+        exchangeProductClient.refreshAll();
     }
 
 }

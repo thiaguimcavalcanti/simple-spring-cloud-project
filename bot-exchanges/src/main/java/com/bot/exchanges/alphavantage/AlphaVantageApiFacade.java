@@ -1,4 +1,4 @@
-package com.bot.exchanges.alphavantage.service.impl;
+package com.bot.exchanges.alphavantage;
 
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
@@ -6,17 +6,14 @@ import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
-import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.alphavantage.client.AlphaVantagePublicClient;
 import com.bot.exchanges.alphavantage.dto.AlphaVantageCandlestickDTO;
 import com.bot.exchanges.alphavantage.enums.AlphaVantageSymbolEnum;
 import com.bot.exchanges.alphavantage.enums.FunctionTypeEnum;
-import com.bot.exchanges.alphavantage.service.AlphaVantageService;
-import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
+import com.bot.exchanges.commons.ExchangeApiFacade;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,21 +21,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AlphaVantageServiceImpl extends ExchangeServiceImpl implements AlphaVantageService {
+public class AlphaVantageApiFacade implements ExchangeApiFacade {
 
     private final AlphaVantagePublicClient alphaVantagePublicClient;
     private final CommonExchangeProperties alphaVantageProperties;
 
     @Autowired
-    public AlphaVantageServiceImpl(AlphaVantagePublicClient alphaVantagePublicClient,
-                                   CommonExchangeProperties alphaVantageProperties) {
-        super.exchangeEnum = ExchangeEnum.BOVESPA;
+    public AlphaVantageApiFacade(AlphaVantagePublicClient alphaVantagePublicClient,
+                                 CommonExchangeProperties alphaVantageProperties) {
         this.alphaVantagePublicClient = alphaVantagePublicClient;
         this.alphaVantageProperties = alphaVantageProperties;
     }
 
     @Override
-    public TickerDTO getTicker(String market) {
+    public TickerDTO getTicker(ExchangeProduct market) {
         return null;
     }
 

@@ -1,7 +1,6 @@
-package com.bot.exchanges.bittrex.service.impl;
+package com.bot.exchanges.bittrex;
 
 import com.bot.commons.dto.MarketSummaryDTO;
-import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.bittrex.client.BittrexAccountClient;
 import com.bot.exchanges.bittrex.client.BittrexMarketClient;
@@ -13,10 +12,9 @@ import com.bot.exchanges.bittrex.dto.market.BittrexOpenOrderDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexCandlestickDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexExchangeProductDTO;
 import com.bot.exchanges.bittrex.dto.publicapi.BittrexTickerDTO;
-import com.bot.exchanges.bittrex.service.BittrexService;
 import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
+import com.bot.exchanges.commons.ExchangeApiFacade;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexService {
+public class BittrexApiFacade implements ExchangeApiFacade {
 
     private final BittrexAccountClient bittrexAccountClient;
     private final BittrexPublicClient bittrexPublicClient;
@@ -33,12 +31,11 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     private final CommonExchangeProperties bittrexProperties;
 
     @Autowired
-    public BittrexServiceImpl(BittrexAccountClient bittrexAccountClient,
-                              BittrexPublicClient bittrexPublicClient,
-                              BittrexMarketClient bittrexMarketClient,
-                              BittrexPublic2Client bittrexPublic2Client,
-                              CommonExchangeProperties bittrexProperties)  {
-        super.exchangeEnum = ExchangeEnum.BITTREX;
+    public BittrexApiFacade(BittrexAccountClient bittrexAccountClient,
+                            BittrexPublicClient bittrexPublicClient,
+                            BittrexMarketClient bittrexMarketClient,
+                            BittrexPublic2Client bittrexPublic2Client,
+                            CommonExchangeProperties bittrexProperties)  {
         this.bittrexAccountClient = bittrexAccountClient;
         this.bittrexPublicClient = bittrexPublicClient;
         this.bittrexMarketClient = bittrexMarketClient;
@@ -47,8 +44,8 @@ public class BittrexServiceImpl extends ExchangeServiceImpl implements BittrexSe
     }
 
     @Override
-    public BittrexTickerDTO getTicker(String market) {
-        return bittrexPublicClient.ticker(market).getResult();
+    public BittrexTickerDTO getTicker(ExchangeProduct exchangeProduct) {
+        return bittrexPublicClient.ticker(getSymbol(exchangeProduct)).getResult();
     }
 
     @Override

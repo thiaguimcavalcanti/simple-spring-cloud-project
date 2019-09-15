@@ -26,9 +26,7 @@ exchanges:
     exchangeProduct:
       basePath: /exchangeProduct
       findByExchangeId: /findByExchangeId?exchangeEnum={exchangeEnum}
-    product:
-      basePath: /product
-      refreshProductList: /refreshProductList
+      refreshAll: /refreshAll
     market-summary:
       basePath: /marketSummary
       refreshAll: /refreshAll?exchangeEnum={exchangeEnum}

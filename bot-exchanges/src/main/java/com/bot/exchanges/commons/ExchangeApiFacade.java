@@ -1,4 +1,4 @@
-package com.bot.exchanges.commons.service;
+package com.bot.exchanges.commons;
 
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.CandlestickDTO;
@@ -7,15 +7,14 @@ import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
-import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 
 import java.util.List;
 
-public interface ExchangeService {
+public interface ExchangeApiFacade {
 
-    TickerDTO getTicker(String market);
+    TickerDTO getTicker(ExchangeProduct market);
 
     List<? extends BalanceDTO> getBalances(String userId);
 
@@ -27,15 +26,7 @@ public interface ExchangeService {
 
     CandlestickDTO getLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
 
-    List<? extends CandlestickDTO> refreshCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
-
-    void refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum);
-
-    void refreshExchangeProductList();
-
     List<? extends ExchangeProductDTO> getExchangeProductList();
 
-    public List<? extends MarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct);
-
-    void refreshMarketSummaries(ExchangeProduct exchangeProduct);
+    List<? extends MarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct);
 }

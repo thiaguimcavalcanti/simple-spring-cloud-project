@@ -1,9 +1,8 @@
-package com.bot.exchanges.binance.service.impl;
+package com.bot.exchanges.binance;
 
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.TickerDTO;
-import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.exchanges.binance.client.BinanceAccountClient;
 import com.bot.exchanges.binance.client.BinancePublicClient;
@@ -11,10 +10,9 @@ import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummaryDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceOrderHistoryDTO;
-import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
-import com.bot.exchanges.commons.service.impl.ExchangeServiceImpl;
+import com.bot.exchanges.commons.ExchangeApiFacade;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,24 +20,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceService {
+public class BinanceApiFacade implements ExchangeApiFacade {
 
     private final BinancePublicClient binancePublicClient;
     private final BinanceAccountClient binanceAccountClient;
     private final CommonExchangeProperties binanceProperties;
 
     @Autowired
-    public BinanceServiceImpl(BinancePublicClient binancePublicClient,
-                              BinanceAccountClient binanceAccountClient,
-                              CommonExchangeProperties binanceProperties)  {
-        super.exchangeEnum = ExchangeEnum.BINANCE;
+    public BinanceApiFacade(BinancePublicClient binancePublicClient,
+                            BinanceAccountClient binanceAccountClient,
+                            CommonExchangeProperties binanceProperties)  {
         this.binancePublicClient = binancePublicClient;
         this.binanceAccountClient = binanceAccountClient;
         this.binanceProperties = binanceProperties;
     }
 
     @Override
-    public TickerDTO getTicker(String market) {
+    public TickerDTO getTicker(ExchangeProduct exchangeProduct) {
         return null;
     }
 
