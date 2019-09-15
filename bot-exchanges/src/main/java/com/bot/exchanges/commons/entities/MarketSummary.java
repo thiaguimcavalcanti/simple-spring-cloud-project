@@ -1,8 +1,8 @@
 package com.bot.exchanges.commons.entities;
 
-import com.bot.commons.types.CustomBigDecimal;
 import com.bot.exchanges.commons.entities.types.NumType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.ta4j.core.num.Num;
@@ -16,7 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.ZonedDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "MarketSummary", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "ExchangeProduct_ID", "TickDate" }, name = "uk_exchangeProduct_tickDate") })

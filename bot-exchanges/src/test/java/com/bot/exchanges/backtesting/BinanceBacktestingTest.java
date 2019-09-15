@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.bot.commons.enums.ExchangeEnum.BINANCE;
+import static com.bot.commons.enums.ExchangeEnum.BITTREX;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -56,7 +56,7 @@ public class BinanceBacktestingTest {
 
 	@Before
 	public void initialize() {
-		exchangeProducts = exchangeProductRepository.findByExchangeId(BINANCE.getId())
+		exchangeProducts = exchangeProductRepository.findByExchangeId(BITTREX.getId())
 				.stream().collect(Collectors.toMap(c -> c.getBaseProductId() + c.getProductId(), c -> c));
 	}
 
@@ -71,13 +71,13 @@ public class BinanceBacktestingTest {
 				.analyzeStrategies(exchangeProduct, candlestick.getEndTime(), fiveMin));
 	}
 
-	//@Test
+	@Test
 	public void createStrategies() {
 		String buyStrategy = "[\"AND\",{\"rule\":\"CrossedDownIndicatorRule\",\"indicators\":[{\"type\":\"RSIIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"barCount\":14},{\"type\":\"Number\",\"value\":20}]}]";
 		String sellStrategy = "[\"OR\",{\"rule\":\"CrossedUpIndicatorRule\",\"indicators\":[{\"type\":\"RSIIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"barCount\":14},{\"type\":\"Number\",\"value\":70}]},{\"rule\":\"CrossedDownIndicatorRule\",\"indicators\":[{\"type\":\"MACDIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"shortBarCount\":9,\"longBarCount\":16},{\"type\":\"EMAIndicator\",\"indicator\":{\"type\":\"MACDIndicator\",\"indicator\":{\"type\":\"ClosePriceIndicator\"},\"shortBarCount\":9,\"longBarCount\":16},\"barCount\":18}]}]";
 
-		strategyRuleRepository.deleteAll();
-		strategyRepository.deleteAll();
+		//strategyRuleRepository.deleteAll();
+		//strategyRepository.deleteAll();
 
 		Map<Long, UserExchange> userExchangeMap = userExchangeRepository.findAll().stream()
 				.collect(Collectors.toMap(UserExchange::getExchangeId, u -> u));
