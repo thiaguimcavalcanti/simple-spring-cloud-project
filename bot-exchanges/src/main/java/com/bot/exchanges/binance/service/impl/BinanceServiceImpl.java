@@ -1,7 +1,5 @@
 package com.bot.exchanges.binance.service.impl;
 
-import static com.bot.commons.utils.DateUtils.roundZonedDateTime;
-
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.OpenOrderDTO;
 import com.bot.commons.dto.TickerDTO;
@@ -11,7 +9,7 @@ import com.bot.exchanges.binance.client.BinanceAccountClient;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
-import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummarytDTO;
+import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummaryDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceOrderHistoryDTO;
 import com.bot.exchanges.binance.service.BinanceService;
 import com.bot.exchanges.commons.CommonExchangeProperties;
@@ -80,11 +78,11 @@ public class BinanceServiceImpl extends ExchangeServiceImpl implements BinanceSe
     }
 
     @Override
-    public List<BinanceMarketSummarytDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
+    public List<BinanceMarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
         return binancePublicClient.getMarketSummaries(getSymbol(exchangeProduct));
     }
 
     private String getSymbol(ExchangeProduct exchangeProduct) {
-        return exchangeProduct != null ? exchangeProduct.getBaseProductId() + exchangeProduct.getProductId() : null;
+        return exchangeProduct != null ?  exchangeProduct.getProductId() + exchangeProduct.getBaseProductId() : null;
     }
 }

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.bot.commons.enums.ExchangeEnum.BITTREX;
+import static com.bot.commons.enums.ExchangeEnum.BINANCE;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -56,14 +56,14 @@ public class BinanceBacktestingTest {
 
 	@Before
 	public void initialize() {
-		exchangeProducts = exchangeProductRepository.findByExchangeId(BITTREX.getId())
+		exchangeProducts = exchangeProductRepository.findByExchangeId(BINANCE.getId())
 				.stream().collect(Collectors.toMap(c -> c.getBaseProductId() + c.getProductId(), c -> c));
 	}
 
 	@Test
 	public void performBTCETHBacktesting() {
 		PeriodEnum fiveMin = PeriodEnum.FIVE_MIN;
-		ExchangeProduct exchangeProduct = exchangeProducts.get("ETHBTC");
+		ExchangeProduct exchangeProduct = exchangeProducts.get("BTCETH");
 		List<Candlestick> candlesticks = candlestickRepository.findByExchangeProductIdAndPeriodEnumOrderByBeginTimeAsc(
 				exchangeProduct.getId(), fiveMin);
 

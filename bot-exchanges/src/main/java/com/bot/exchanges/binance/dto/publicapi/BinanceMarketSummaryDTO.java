@@ -5,13 +5,13 @@ import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.types.CustomBigDecimal;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-public class BinanceMarketSummarytDTO extends MarketSummaryDTO {
+public class BinanceMarketSummaryDTO extends MarketSummaryDTO {
 
     @Override
     public void setSymbol(String symbol) {
         super.setSymbol(symbol);
-        super.setBaseProduct(symbol.substring(0, 3));
-        super.setProduct(symbol.substring(3));
+        super.setBaseProduct(symbol.substring(3));
+        super.setProduct(symbol.substring(0, 3));
     }
 
     @JsonSetter("priceChangePercent")

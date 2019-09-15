@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 public class BinanceExchangeProductDTO extends ExchangeProductDTO {
 
     @Override
-    @JsonSetter("quoteAsset")
+    @JsonSetter("baseAsset")
     public void setProductId(String productId) { super.setProductId(productId); }
 
     @Override
-    @JsonSetter("baseAsset")
+    @JsonSetter("quoteAsset")
     public void setBaseProductId(String baseProductId) { super.setBaseProductId(baseProductId); }
 
     public void setStatus(String status) { super.setActive("TRADING".equals(status)); }
