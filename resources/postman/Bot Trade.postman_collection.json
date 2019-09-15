@@ -1,10 +1,104 @@
 {
 	"info": {
-		"_postman_id": "eafc1eb8-a560-414a-a193-68aa2dcf17b2",
+		"_postman_id": "20e38d7c-bec3-4f2a-8d8f-ed3236e0c8dd",
 		"name": "Bot Trade",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Bittrex",
+			"item": [
+				{
+					"name": "https://api.binance.com/api/v3/myTrades?symbol=LTCBTC&recvWindow=50000&timestamp=1567742767656&signature=872ac575f8bafa5c1c4366c40bab46f3a2f0791287316dc3cdeace34792f7b02",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-MBX-APIKEY",
+								"value": "m63MbwQMWFBRcWKhN4OYJcLO1nNWQcQZlhHEqCnJyjB9N8gLpM6wU5ZENKKWNsfZ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.binance.com/api/v3/myTrades?symbol=LTCBTC&recvWindow=50000&timestamp=1567742767656&signature=872ac575f8bafa5c1c4366c40bab46f3a2f0791287316dc3cdeace34792f7b02",
+							"protocol": "https",
+							"host": [
+								"api",
+								"binance",
+								"com"
+							],
+							"path": [
+								"api",
+								"v3",
+								"myTrades"
+							],
+							"query": [
+								{
+									"key": "symbol",
+									"value": "LTCBTC"
+								},
+								{
+									"key": "recvWindow",
+									"value": "50000"
+								},
+								{
+									"key": "timestamp",
+									"value": "1567742767656"
+								},
+								{
+									"key": "signature",
+									"value": "872ac575f8bafa5c1c4366c40bab46f3a2f0791287316dc3cdeace34792f7b02"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bovespa",
+			"item": [
+				{
+					"name": "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=PETR4.SAO&interval=5min&apikey=CXCWOTF3TWYWRUX3",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=PETR4.SAO&interval=5min&apikey=CXCWOTF3TWYWRUX3",
+							"protocol": "https",
+							"host": [
+								"www",
+								"alphavantage",
+								"co"
+							],
+							"path": [
+								"query"
+							],
+							"query": [
+								{
+									"key": "function",
+									"value": "TIME_SERIES_INTRADAY"
+								},
+								{
+									"key": "symbol",
+									"value": "PETR4.SAO"
+								},
+								{
+									"key": "interval",
+									"value": "5min"
+								},
+								{
+									"key": "apikey",
+									"value": "CXCWOTF3TWYWRUX3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "http://localhost:8080/api/signin",
 			"event": [
@@ -63,7 +157,6 @@
 						"value": "{{Authorization}}"
 					}
 				],
-				"body": {},
 				"url": {
 					"raw": "http://localhost:8080/api/ticks/ticks",
 					"protocol": "http",
@@ -93,7 +186,6 @@
 						"value": "{{Authorization}}"
 					}
 				],
-				"body": {},
 				"url": {
 					"raw": "http://localhost:8080/api/ticks/ticker/ETH-BTC",
 					"protocol": "http",
@@ -124,7 +216,6 @@
 						"value": "{{Authorization}}"
 					}
 				],
-				"body": {},
 				"url": {
 					"raw": "http://localhost:8080/api/ticks/msg",
 					"protocol": "http",
@@ -154,7 +245,6 @@
 						"value": "{{Authorization}}"
 					}
 				],
-				"body": {},
 				"url": {
 					"raw": "http://localhost:8080/api/orders/greeting",
 					"protocol": "http",
@@ -184,7 +274,6 @@
 						"value": "{{Authorization}}"
 					}
 				],
-				"body": {},
 				"url": {
 					"raw": "http://localhost:8080/api/signout",
 					"protocol": "http",
@@ -195,6 +284,71 @@
 					"path": [
 						"api",
 						"signout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": ":8085/candlestick/refreshLatestCandlestick",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Authorization}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/candlestick/refreshLatestCandlestick?exchangeEnum=BOVESPA&baseProductId=&productId=PETR4&periodEnum=FIVE_MIN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"candlestick",
+						"refreshLatestCandlestick"
+					],
+					"query": [
+						{
+							"key": "exchangeEnum",
+							"value": "BOVESPA"
+						},
+						{
+							"key": "baseProductId",
+							"value": ""
+						},
+						{
+							"key": "productId",
+							"value": "PETR4"
+						},
+						{
+							"key": "periodEnum",
+							"value": "FIVE_MIN"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": ":8085/product/refreshProductList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8085/product/refreshProductList",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"product",
+						"refreshProductList"
 					]
 				}
 			},
