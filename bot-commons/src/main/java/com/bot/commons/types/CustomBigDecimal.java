@@ -1,6 +1,8 @@
 package com.bot.commons.types;
 
+import com.bot.commons.utils.CustomBigDecimalDeserializer;
 import com.bot.commons.utils.CustomBigDecimalSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.ta4j.core.num.Num;
 
@@ -15,6 +17,7 @@ import java.util.function.Function;
 
 import static org.ta4j.core.num.NaN.NaN;
 
+@JsonDeserialize(using = CustomBigDecimalDeserializer.class)
 @JsonSerialize(using = CustomBigDecimalSerializer.class)
 public class CustomBigDecimal implements Num {
 

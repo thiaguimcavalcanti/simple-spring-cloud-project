@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import org.ta4j.core.num.Num;
 
-@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor", date = "2019-09-16T22:08:07.067-0300")
+@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor", date = "2019-09-16T22:22:05.160-0300")
 @StaticMetamodel(MarketSummary.class)
 public abstract class MarketSummary_ extends com.bot.exchanges.commons.entities.AbstractLongIDEntity_ {
 
