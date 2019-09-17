@@ -64,19 +64,21 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     }
 
     private Optional<OrderHistory> save(ExchangeProduct exchangeProduct, UserExchange userExchange,
-                                        OrderTypeEnum orderTypeEnum, ZonedDateTime closeTime,
-                                        CustomBigDecimal price, CustomBigDecimal profit) {
+                                        OrderTypeEnum orderTypeEnum, ZonedDateTime originalTime,
+                                        CustomBigDecimal originalPrice, CustomBigDecimal total,
+                                        CustomBigDecimal profit) {
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setQuantity(CustomBigDecimal.valueOf(100)); // get this value by user
-        orderHistory.setOriginalDate(ZonedDateTime.now().withSecond(0).withNano(0));
-        orderHistory.setDate(closeTime);
-        orderHistory.setOriginalPrice(price); // get the current value
-        orderHistory.setPrice(price); // get the current value
+        orderHistory.setQuantity(total.dividedBy(originalPrice));
+        orderHistory.setOriginalDate(originalTime);
+        orderHistory.setDate(originalTime);
+        orderHistory.setOriginalPrice(originalPrice);
+        orderHistory.setPrice(originalPrice);
         orderHistory.setExchangeProduct(exchangeProduct);
         orderHistory.setSimulation(Boolean.TRUE);
         orderHistory.setStatus(READY_TO_START);
         orderHistory.setUserExchange(userExchange);
         orderHistory.setType(orderTypeEnum);
+        orderHistory.setTotal(total);
         orderHistory.setProfit(profit);
 
         return Optional.ofNullable(orderHistoryRepository.save(orderHistory));
@@ -84,7 +86,8 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
 
     @Override
     public Optional<OrderHistory> save(Boolean buySatisfied, Boolean sellSatisfied, ExchangeProduct exchangeProduct,
-                                       UserExchange userExchange, ZonedDateTime closeTime, CustomBigDecimal closePrice) {
+                                       UserExchange userExchange, ZonedDateTime originalTime,
+                                       CustomBigDecimal originalPrice, CustomBigDecimal total) {
          buySatisfied = BooleanUtils.isTrue(buySatisfied);
          sellSatisfied = BooleanUtils.isTrue(sellSatisfied);
 
@@ -94,11 +97,11 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
 
             boolean closed = latestOrderHistory != null ? OrderStatusEnum.isClosed(latestOrderHistory.getStatus()) : false;
             if (buySatisfied && (latestOrderHistory == null || (SELL.equals(latestOrderHistory.getType()) && closed))) {
-                return save(exchangeProduct, userExchange, BUY, closeTime, closePrice, null);
+                return save(exchangeProduct, userExchange, BUY, originalTime, originalPrice, total,null);
             } else if (sellSatisfied && (latestOrderHistory != null && BUY.equals(latestOrderHistory.getType()) && closed)) {
-                CustomBigDecimal profit = (CustomBigDecimal) closePrice.minus(latestOrderHistory.getPrice())
+                CustomBigDecimal profit = (CustomBigDecimal) originalPrice.minus(latestOrderHistory.getPrice())
                         .dividedBy(latestOrderHistory.getPrice()).multipliedBy(CustomBigDecimal.valueOf(100));
-                return save(exchangeProduct, userExchange, SELL, closeTime, closePrice, profit);
+                return save(exchangeProduct, userExchange, SELL, originalTime, originalPrice, total, profit);
             } else {
                 LOG.warn("New order try - ExchangeProductId: " + exchangeProduct.getId() +  ", Buy Satisfied: " +
                         buySatisfied + ", Sell Satisfied: " + sellSatisfied);
@@ -151,6 +154,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                     } else {
                         orderHistory.setPrice(tickerDTO.getBid().minus(MIN_VALUE));
                     }
+                    orderHistory.setQuantity(orderHistory.getTotal().dividedBy(orderHistory.getPrice()));
 
                     OrderDTO orderDTO = exchangesApiFacade.createNewOrder(orderHistory);
 

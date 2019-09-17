@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface OrderHistoryService {
 
     Optional<OrderHistory> save(Boolean buySatisfied, Boolean sellSatisfied, ExchangeProduct exchangeProduct,
-                                UserExchange userExchange, ZonedDateTime endTime, CustomBigDecimal closePrice);
+                                UserExchange userExchange, ZonedDateTime originalTime,
+                                CustomBigDecimal originalPrice, CustomBigDecimal total);
 
     void confirmBuySellExecutedWithSuccess(OrderHistory orderHistory);
 
