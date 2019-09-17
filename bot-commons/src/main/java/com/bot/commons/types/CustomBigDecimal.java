@@ -21,8 +21,6 @@ import static org.ta4j.core.num.NaN.NaN;
 @JsonSerialize(using = CustomBigDecimalSerializer.class)
 public class CustomBigDecimal implements Num {
 
-	private static final long serialVersionUID = 785564782721079992L;
-
 	private static final int DEFAULT_PRECISION = 32;
 
 	private final MathContext mathContext;
