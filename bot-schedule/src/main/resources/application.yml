@@ -30,6 +30,10 @@ exchanges:
     market-summary:
       basePath: /marketSummary
       refreshAll: /refreshAll?exchangeEnum={exchangeEnum}
+    order:
+      basePath: /order
+      executeAll: /executeAll?exchangeEnum={exchangeEnum}
+      monitoringOpenOrders: /monitoringOpenOrders?exchangeEnum={exchangeEnum}
   binance:
     schedules:
       active: true

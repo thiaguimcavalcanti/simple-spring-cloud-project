@@ -1,6 +1,17 @@
 package com.bot.commons.enums;
 
-public enum OrderStatusEnum {
+import java.util.Arrays;
 
-	NEW, OPEN, CLOSED
+public enum OrderStatusEnum {
+	READY_TO_START,
+	NEW,
+	PARTIALLY_FILLED,
+	FILLED,
+	CANCELED,
+	REJECTED,
+	EXPIRED;
+
+	public static boolean isClosed(OrderStatusEnum orderStatusEnum) {
+		return Arrays.asList(FILLED, CANCELED, REJECTED, EXPIRED).contains(orderStatusEnum);
+	}
 }

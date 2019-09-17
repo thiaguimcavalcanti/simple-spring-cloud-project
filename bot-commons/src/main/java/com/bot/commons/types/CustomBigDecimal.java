@@ -1,7 +1,5 @@
 package com.bot.commons.types;
 
-import static org.ta4j.core.num.NaN.NaN;
-
 import com.bot.commons.utils.CustomBigDecimalSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.ta4j.core.num.Num;
@@ -14,6 +12,8 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
+
+import static org.ta4j.core.num.NaN.NaN;
 
 @JsonSerialize(using = CustomBigDecimalSerializer.class)
 public class CustomBigDecimal implements Num {
@@ -583,7 +583,7 @@ public class CustomBigDecimal implements Num {
 
 	@Override
 	public String toString() {
-		return delegate.toString();
+		return delegate.toPlainString();
 	}
 
 	@Override

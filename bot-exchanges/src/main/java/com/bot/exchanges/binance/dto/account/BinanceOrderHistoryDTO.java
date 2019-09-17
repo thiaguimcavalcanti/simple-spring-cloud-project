@@ -1,4 +1,4 @@
-package com.bot.exchanges.binance.dto.publicapi;
+package com.bot.exchanges.binance.dto.account;
 
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.enums.OrderTypeEnum;

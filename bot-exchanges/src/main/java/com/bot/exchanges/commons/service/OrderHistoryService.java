@@ -1,5 +1,6 @@
 package com.bot.exchanges.commons.service;
 
+import com.bot.commons.enums.ExchangeEnum;
 import com.bot.commons.types.CustomBigDecimal;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.entities.OrderHistory;
@@ -17,5 +18,7 @@ public interface OrderHistoryService {
 
     OrderHistory findTopByExchangeProductIdAndUserExchangeId(Long exchangeProductId, Long userExchangeId);
 
-    boolean createNewOrder(ExchangeProduct exchangeProduct, CustomBigDecimal value, CustomBigDecimal amount);
+    void executeAll(ExchangeEnum exchangeEnum);
+
+    void monitoringOpenOrders(ExchangeEnum exchangeEnum);
 }

@@ -1,23 +1,30 @@
 package com.bot.exchanges.binance;
 
 import com.bot.commons.dto.BalanceDTO;
-import com.bot.commons.dto.OpenOrderDTO;
+import com.bot.commons.dto.OrderDTO;
 import com.bot.commons.dto.TickerDTO;
+import com.bot.commons.enums.OrderStatusEnum;
 import com.bot.commons.enums.PeriodEnum;
+import com.bot.commons.types.CustomBigDecimal;
 import com.bot.exchanges.binance.client.BinanceAccountClient;
 import com.bot.exchanges.binance.client.BinancePublicClient;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummaryDTO;
-import com.bot.exchanges.binance.dto.publicapi.BinanceOrderHistoryDTO;
+import com.bot.exchanges.binance.dto.account.BinanceOrderHistoryDTO;
+import com.bot.exchanges.binance.enums.BinanceOrderTypeEnum;
 import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.ExchangeApiFacade;
+import com.bot.exchanges.commons.entities.OrderHistory;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
+import static com.bot.exchanges.binance.enums.BinanceOrderTypeEnum.LIMIT_MAKER;
 
 @Service
 public class BinanceApiFacade implements ExchangeApiFacade {
@@ -37,7 +44,7 @@ public class BinanceApiFacade implements ExchangeApiFacade {
 
     @Override
     public TickerDTO getTicker(ExchangeProduct exchangeProduct) {
-        return null;
+        return binancePublicClient.getTicker(getSymbol(exchangeProduct));
     }
 
     @Override
@@ -46,8 +53,15 @@ public class BinanceApiFacade implements ExchangeApiFacade {
     }
 
     @Override
-    public List<? extends OpenOrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct) {
-        return null;
+    public List<? extends OrderDTO> getAllOrders(String userId, ExchangeProduct exchangeProduct) {
+        return binanceAccountClient.getAllOrders(userId, getSymbol(exchangeProduct), 50000,
+                System.currentTimeMillis());
+    }
+
+    @Override
+    public List<? extends OrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct) {
+        return binanceAccountClient.getOpenOrders(userId, getSymbol(exchangeProduct), 50000,
+                System.currentTimeMillis());
     }
 
     @Override
@@ -77,6 +91,32 @@ public class BinanceApiFacade implements ExchangeApiFacade {
     @Override
     public List<BinanceMarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
         return binancePublicClient.getMarketSummaries(getSymbol(exchangeProduct));
+    }
+
+    @Override
+    public OrderDTO createNewOrder(OrderHistory orderHistory) {
+        /*return binanceAccountClient.createNewOrder(orderHistory.getUserExchange().getUserId(),
+                getSymbol(orderHistory.getExchangeProduct()), orderHistory.getType(), LIMIT_MAKER,
+                orderHistory.getQuantity(), orderHistory.getPrice(), 50000, System.currentTimeMillis());*/
+        return createNewOrderTest(orderHistory);
+    }
+
+    private OrderDTO createNewOrderTest(OrderHistory orderHistory) {
+        OrderDTO newOrderTest = binanceAccountClient.createNewOrderTest(orderHistory.getUserExchange().getUserId(),
+                getSymbol(orderHistory.getExchangeProduct()), orderHistory.getType(), LIMIT_MAKER,
+                orderHistory.getQuantity(), orderHistory.getPrice(), 50000, System.currentTimeMillis());
+        newOrderTest.setId(((int)(Math.random() * 20 + 1)) + "");
+        newOrderTest.setStatus(OrderStatusEnum.NEW);
+        newOrderTest.setPrice((CustomBigDecimal) orderHistory.getPrice());
+        newOrderTest.setQuantity((CustomBigDecimal) orderHistory.getQuantity());
+        newOrderTest.setDate(orderHistory.getDate());
+        return newOrderTest;
+    }
+
+    @Override
+    public OrderDTO cancelOrder(String userId, ExchangeProduct exchangeProduct, String orderId) {
+        return binanceAccountClient.cancelOrder(userId, getSymbol(exchangeProduct), orderId, 50000,
+                System.currentTimeMillis());
     }
 
     private String getSymbol(ExchangeProduct exchangeProduct) {

@@ -54,6 +54,7 @@ feign:
     config:
       default:
         retryer: com.bot.exchanges.commons.utils.CustomRetryer
+        errorDecoder: com.bot.exchanges.commons.utils.CustomErrorDecoder
 
 exchanges:
   bittrex:
@@ -85,6 +86,12 @@ exchanges:
       exchangeInfo: /api/v1/exchangeInfo
       myTrades: /api/v3/myTrades?symbol={symbol}&startTime={startTime}&endTime={endTime}&fromId={fromId}&limit={limit}&recvWindow={recvWindow}&timestamp={timestamp}
       ticker24h: /api/v1/ticker/24hr?symbol={symbol}
+      newOrder: /api/v3/order?symbol={symbol}&side={side}&type={type}&quantity={quantity}&price={price}&recvWindow={recvWindow}&timestamp={timestamp}
+      newOrderTest: /api/v3/order/test?symbol={symbol}&side={side}&type={type}&quantity={quantity}&price={price}&recvWindow={recvWindow}&timestamp={timestamp}
+      cancelOrder: /api/v3/order?symbol={symbol}&orderId={orderId}&recvWindow={recvWindow}&timestamp={timestamp}
+      openOrders: /api/v3/openOrders?symbol={symbol}&recvWindow={recvWindow}&timestamp={timestamp}
+      allOrders: /api/v3/allOrders?symbol={symbol}&recvWindow={recvWindow}&timestamp={timestamp}
+      ticker: /api/v3/ticker/bookTicker?symbol={symbol}
   cryptocompare:
     period:
       oneMin: 1

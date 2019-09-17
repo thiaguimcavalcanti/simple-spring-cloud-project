@@ -1,18 +1,26 @@
 package com.bot.commons.dto;
 
+import com.bot.commons.enums.OrderStatusEnum;
+import com.bot.commons.enums.OrderTypeEnum;
 import com.bot.commons.types.CustomBigDecimal;
 import com.bot.commons.utils.CustomBigDecimalDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
+
 @Data
-public class TickerDTO {
+public class OrderDTO {
+    private String id;
     private String baseProduct;
     private String product;
+    private OrderStatusEnum status;
+    private OrderTypeEnum orderType;
     @JsonDeserialize(using = CustomBigDecimalDeserializer.class)
-    private CustomBigDecimal bid;
+    private CustomBigDecimal quantity;
     @JsonDeserialize(using = CustomBigDecimalDeserializer.class)
-    private CustomBigDecimal ask;
+    private CustomBigDecimal price;
     @JsonDeserialize(using = CustomBigDecimalDeserializer.class)
-    private CustomBigDecimal last;
+    private CustomBigDecimal pricePerUnit;
+    private ZonedDateTime date;
 }

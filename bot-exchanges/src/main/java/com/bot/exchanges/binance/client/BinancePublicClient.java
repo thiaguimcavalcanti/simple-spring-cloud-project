@@ -3,6 +3,7 @@ package com.bot.exchanges.binance.client;
 import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeInfoDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummaryDTO;
+import com.bot.exchanges.binance.dto.publicapi.BinanceTickerDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,4 +31,7 @@ public interface BinancePublicClient {
 
     @GetMapping(value = "${exchanges.binance.apis.ticker24h}")
     List<BinanceMarketSummaryDTO> getMarketSummaries(@PathVariable(SYMBOL) String symbol);
+
+    @GetMapping(value = "${exchanges.binance.apis.ticker}")
+    BinanceTickerDTO getTicker(@PathVariable(SYMBOL) String symbol);
 }

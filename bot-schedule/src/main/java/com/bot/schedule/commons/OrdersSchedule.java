@@ -16,16 +16,14 @@ public abstract class OrdersSchedule {
     }
 
     @Async
-    @Scheduled(cron = "* * * ? * *")
+    @Scheduled(cron = "*/5 * * ? * *")
     public void monitoringOpenOrders() {
         orderService.monitoringOpenOrders(exchangeEnum);
     }
 
     @Async
     @Scheduled(cron = "*/20 * * ? * *")
-    public void executeBuyOrSellOrdersTask() {
-
-    }
+    public void executeBuyOrSellOrdersTask() { orderService.executeBuyOrSellOrders(exchangeEnum); }
 
     @Async
     @Scheduled(cron = "0 * * ? * *")

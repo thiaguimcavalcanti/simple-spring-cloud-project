@@ -3,7 +3,7 @@ package com.bot.exchanges.alphavantage;
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.dto.MarketSummaryDTO;
-import com.bot.commons.dto.OpenOrderDTO;
+import com.bot.commons.dto.OrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.PeriodEnum;
@@ -14,6 +14,7 @@ import com.bot.exchanges.alphavantage.enums.FunctionTypeEnum;
 import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.ExchangeApiFacade;
+import com.bot.exchanges.commons.entities.OrderHistory;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,12 @@ public class AlphaVantageApiFacade implements ExchangeApiFacade {
     }
 
     @Override
-    public List<? extends OpenOrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct) {
+    public List<? extends OrderDTO> getAllOrders(String userId, ExchangeProduct exchangeProduct) {
+        return null;
+    }
+
+    @Override
+    public List<? extends OrderDTO> getOpenOrders(String userId, ExchangeProduct exchangeProduct) {
         return null;
     }
 
@@ -84,6 +90,16 @@ public class AlphaVantageApiFacade implements ExchangeApiFacade {
 
     @Override
     public List<? extends MarketSummaryDTO> getMarketSummaries(ExchangeProduct exchangeProduct) {
+        return null;
+    }
+
+    @Override
+    public OrderDTO createNewOrder(OrderHistory orderHistory) {
+        return null;
+    }
+
+    @Override
+    public OrderDTO cancelOrder(String userId, ExchangeProduct exchangeProduct, String orderId) {
         return null;
     }
 

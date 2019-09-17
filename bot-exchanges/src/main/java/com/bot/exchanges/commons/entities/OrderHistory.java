@@ -24,6 +24,9 @@ import java.time.ZonedDateTime;
 @Table(name = "OrderHistory")
 public class OrderHistory extends AbstractLongIDEntity {
 
+	@Column(name = "OrderId")
+	private String orderId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ExchangeProduct_ID", referencedColumnName = "id")
 	private ExchangeProduct exchangeProduct;
@@ -46,17 +49,17 @@ public class OrderHistory extends AbstractLongIDEntity {
 	@Column(name = "OrderStatus")
 	private OrderStatusEnum status;
 
-	@Column(name = "Rate", precision = 14, scale = 8)
+	@Column(name = "Price", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num rate;
+	private Num price;
 
-	@Column(name = "OriginalRate", precision = 14, scale = 8)
+	@Column(name = "OriginalPrice", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num originalRate;
+	private Num originalPrice;
 
-	@Column(name = "Amount", precision = 14, scale = 8)
+	@Column(name = "Quantity", precision = 14, scale = 8)
 	@Type(type = "num_type")
-	private Num amount;
+	private Num quantity;
 
 	@Column(name = "Total", precision = 14, scale = 8)
 	@Type(type = "num_type")
@@ -86,7 +89,4 @@ public class OrderHistory extends AbstractLongIDEntity {
 	@Column(name = "ProfitWithFee", precision = 7, scale = 2)
 	@Type(type = "num_type")
 	private Num profitWithFee;
-
-	@Column(name = "number")
-	private String number;
 }

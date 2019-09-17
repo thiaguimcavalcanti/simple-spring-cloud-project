@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long>, CustomOrderHistoryRepository {
+public interface CustomOrderHistoryRepository {
 
-    OrderHistory findTopByExchangeProductIdAndUserExchangeIdOrderByDateDescTypeDesc(Long exchangeProductId, Long userExchangeId);
+    List<OrderHistory> findByExchangeIdAndStatusIn(Long exchangeId, List<OrderStatusEnum> orderStatusEnums);
 }

@@ -4,7 +4,7 @@ import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.CandlestickDTO;
 import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.dto.MarketSummaryDTO;
-import com.bot.commons.dto.OpenOrderDTO;
+import com.bot.commons.dto.OrderDTO;
 import com.bot.commons.dto.OrderHistoryDTO;
 import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.enums.ExchangeEnum;
@@ -14,6 +14,7 @@ import com.bot.exchanges.binance.BinanceApiFacade;
 import com.bot.exchanges.bittrex.BittrexApiFacade;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.ExchangeApiFacade;
+import com.bot.exchanges.commons.entities.OrderHistory;
 import com.bot.exchanges.cryptocompare.service.CryptoCompareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,16 +40,16 @@ public class ExchangesApiFacade {
         this.alphaVantageService = alphaVantageService;
     }
 
-    public TickerDTO getTicker(Long exchangeId, ExchangeProduct exchangeProduct) {
-        return getExchangeServiceByType(exchangeId).getTicker(exchangeProduct);
+    public TickerDTO getTicker(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct) {
+        return getExchangeServiceByType(exchangeEnum.getId()).getTicker(exchangeProduct);
     }
 
     public List<? extends BalanceDTO> getBalances(Long exchangeId, String userId) {
         return getExchangeServiceByType(exchangeId).getBalances(userId);
     }
 
-    public List<? extends OpenOrderDTO> getOpenOrders(ExchangeProduct exchangeProduct, String userId) {
-        return getExchangeServiceByType(exchangeProduct.getExchangeId()).getOpenOrders(userId, exchangeProduct);
+    public List<? extends OrderDTO> getOpenOrders(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct, String userId) {
+        return getExchangeServiceByType(exchangeEnum.getId()).getOpenOrders(userId, exchangeProduct);
     }
 
     public List<? extends OrderHistoryDTO> getOrderHistory(ExchangeProduct exchangeProduct, String userId) {
@@ -73,6 +74,18 @@ public class ExchangesApiFacade {
 
     public void refreshProductList() {
         cryptoCompareService.refreshProductList();
+    }
+
+    public OrderDTO createNewOrder(OrderHistory orderHistory) {
+        return getExchangeServiceByType(orderHistory.getExchangeProduct().getExchangeId()).createNewOrder(orderHistory);
+    }
+
+    public OrderDTO cancelOrder(String userId, ExchangeProduct exchangeProduct, String orderId) {
+        return getExchangeServiceByType(exchangeProduct.getExchangeId()).cancelOrder(userId, exchangeProduct, orderId);
+    }
+
+    public List<? extends OrderDTO> getAllOrders(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct, String userId) {
+        return getExchangeServiceByType(exchangeEnum.getId()).getAllOrders(userId, exchangeProduct);
     }
 
     private ExchangeApiFacade getExchangeServiceByType(Long exchangeId) {

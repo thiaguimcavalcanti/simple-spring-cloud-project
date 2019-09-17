@@ -2,8 +2,7 @@ package com.bot.exchanges.bittrex.client;
 
 import com.bot.exchanges.bittrex.BittrexAuthenticationFeignConfiguration;
 import com.bot.exchanges.bittrex.dto.AbstractBittrexDTO;
-import com.bot.exchanges.bittrex.dto.market.BittrexOpenOrderDTO;
-import com.bot.exchanges.commons.utils.CommonConstants;
+import com.bot.exchanges.bittrex.dto.market.BittrexOrderDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,6 @@ import static com.bot.exchanges.commons.utils.CommonConstants.USER_ID;
 public interface BittrexMarketClient {
 
     @GetMapping(value = "${exchanges.bittrex.apis.getOpenOrders}")
-    AbstractBittrexDTO<List<BittrexOpenOrderDTO>> getOpenOrders(@RequestHeader(USER_ID) String userId,
-                                                                @PathVariable(MARKET) String market);
+    AbstractBittrexDTO<List<BittrexOrderDTO>> getOpenOrders(@RequestHeader(USER_ID) String userId,
+                                                            @PathVariable(MARKET) String market);
 }
