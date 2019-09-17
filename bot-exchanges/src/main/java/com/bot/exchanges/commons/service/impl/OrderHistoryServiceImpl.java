@@ -154,7 +154,8 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                     } else {
                         orderHistory.setPrice(tickerDTO.getBid().minus(MIN_VALUE));
                     }
-                    orderHistory.setQuantity(orderHistory.getTotal().dividedBy(orderHistory.getPrice()));
+                    Num quantity = orderHistory.getTotal().dividedBy(orderHistory.getPrice());
+                    orderHistory.setQuantity(CustomBigDecimal.valueOf(quantity.intValue() + 1));
 
                     OrderDTO orderDTO = exchangesApiFacade.createNewOrder(orderHistory);
 
@@ -236,6 +237,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
         orderHistory.setPrice(orderDTO.getPrice());
         orderHistory.setQuantity(orderDTO.getQuantity());
         orderHistory.setDate(orderDTO.getDate());
+        orderHistory.setTotal(orderDTO.getPrice().multipliedBy(orderDTO.getQuantity()));
         orderHistoryRepository.save(orderHistory);
     }
 }
