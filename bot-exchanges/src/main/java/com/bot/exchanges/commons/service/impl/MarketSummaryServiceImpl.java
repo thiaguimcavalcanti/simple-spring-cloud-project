@@ -13,6 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,9 +47,11 @@ public class MarketSummaryServiceImpl implements MarketSummaryService {
 
     @Override
     public void refreshMarketSummaries(ExchangeEnum exchangeEnum, ExchangeProduct exchangeProduct) {
-        List<? extends MarketSummaryDTO> marketSummariesDTO = exchangesApiFacade.getMarketSummaries(exchangeEnum,
-                exchangeProduct);
+        refreshMarketSummaries(exchangeEnum, exchangesApiFacade.getMarketSummaries(exchangeEnum, exchangeProduct));
+    }
 
+    @Override
+    public void refreshMarketSummaries(ExchangeEnum exchangeEnum, List<? extends MarketSummaryDTO> marketSummariesDTO) {
         if (CollectionUtils.isNotEmpty(marketSummariesDTO)) {
             ZonedDateTime latestTickDate = DateUtils.roundZonedDateTime(ZonedDateTime.now(), Duration.ofMinutes(5));
 

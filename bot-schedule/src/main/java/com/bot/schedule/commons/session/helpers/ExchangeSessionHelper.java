@@ -79,4 +79,9 @@ public class ExchangeSessionHelper implements Serializable {
 		ExchangeSession exchangeSession = get(exchangeEnum);
 		exchangeSession.getExchangeProductsToRefreshLatestCandlestick().put(periodEnum, exchangeProduct);
 	}
+
+	public List<ExchangeProductDTO> getExchangeProducts(ExchangeEnum exchangeEnum) {
+		ExchangeSession exchangeSession = get(exchangeEnum);
+		return exchangeSession.getExchangeProducts();
+	}
 }

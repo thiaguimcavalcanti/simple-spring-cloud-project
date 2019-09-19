@@ -5,6 +5,8 @@ import com.bot.commons.enums.ExchangeEnum;
 import com.bot.schedule.commons.client.ExchangeProductClient;
 import com.bot.schedule.commons.session.helpers.ExchangeSessionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,7 @@ import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
 public class GeneralSchedule {
 

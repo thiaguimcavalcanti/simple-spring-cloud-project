@@ -8,6 +8,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
 
+    compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.4.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     compile project(':bot-commons')

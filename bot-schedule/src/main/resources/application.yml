@@ -35,8 +35,10 @@ exchanges:
       executeAll: /executeAll?exchangeEnum={exchangeEnum}
       monitoringOpenOrders: /monitoringOpenOrders?exchangeEnum={exchangeEnum}
   binance:
+    websocket:
+      url: wss://stream.binance.com:9443
     schedules:
-      active: true
+      active: false
   bittrex:
     schedules:
       active: false

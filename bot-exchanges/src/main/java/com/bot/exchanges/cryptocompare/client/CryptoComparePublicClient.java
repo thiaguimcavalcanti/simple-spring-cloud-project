@@ -1,7 +1,7 @@
 package com.bot.exchanges.cryptocompare.client;
 
+import com.bot.commons.dto.BaseListDTO;
 import com.bot.exchanges.cryptocompare.CryptoCompareFeignConfiguration;
-import com.bot.exchanges.cryptocompare.dto.BaseCryptoCompareDTO;
 import com.bot.exchanges.cryptocompare.dto.CryptoCompareCandlestickDTO;
 import com.bot.exchanges.cryptocompare.dto.CryptoCompareCoinListDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,18 +22,18 @@ public interface CryptoComparePublicClient {
     CryptoCompareCoinListDTO getCoinList();
 
     @GetMapping(value = "${exchanges.cryptocompare.apis.histoMinute}")
-    BaseCryptoCompareDTO<CryptoCompareCandlestickDTO> historicalMinute(@PathVariable(FSYM) String fsym,
-                                                                       @PathVariable(TSYM) String tsym,
-                                                                       @PathVariable(LIMIT) int limit,
-                                                                       @PathVariable(EXCHANGE) String exchange,
-                                                                       @PathVariable(AGGREGATE) long aggregate,
-                                                                       @PathVariable(TRY_CONVERSION) boolean tryConversion);
+    BaseListDTO<CryptoCompareCandlestickDTO> historicalMinute(@PathVariable(FSYM) String fsym,
+                                                              @PathVariable(TSYM) String tsym,
+                                                              @PathVariable(LIMIT) int limit,
+                                                              @PathVariable(EXCHANGE) String exchange,
+                                                              @PathVariable(AGGREGATE) long aggregate,
+                                                              @PathVariable(TRY_CONVERSION) boolean tryConversion);
 
     @GetMapping(value = "${exchanges.cryptocompare.apis.histoHour}")
-    BaseCryptoCompareDTO<CryptoCompareCandlestickDTO> historicalHour(@PathVariable(FSYM) String fsym,
-                                                                     @PathVariable(TSYM) String tsym,
-                                                                     @PathVariable(LIMIT) int limit,
-                                                                     @PathVariable(EXCHANGE) String exchange,
-                                                                     @PathVariable(AGGREGATE) long aggregate,
-                                                                     @PathVariable(TRY_CONVERSION) boolean tryConversion);
+    BaseListDTO<CryptoCompareCandlestickDTO> historicalHour(@PathVariable(FSYM) String fsym,
+                                                            @PathVariable(TSYM) String tsym,
+                                                            @PathVariable(LIMIT) int limit,
+                                                            @PathVariable(EXCHANGE) String exchange,
+                                                            @PathVariable(AGGREGATE) long aggregate,
+                                                            @PathVariable(TRY_CONVERSION) boolean tryConversion);
 }

@@ -28,7 +28,7 @@ subprojects {
     targetCompatibility = 1.11
 
     ext {
-        springBootVersion = '2.1.6.RELEASE'
+        springBootVersion = '2.1.8.RELEASE'
         springCloudVersion = 'Greenwich.SR1'
     }
 

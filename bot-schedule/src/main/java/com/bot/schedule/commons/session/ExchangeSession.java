@@ -14,6 +14,8 @@ public class ExchangeSession {
 
     private ExchangeEnum exchangeEnum;
 
+    private List<ExchangeProductDTO> exchangeProducts;
+
     private PeriodEnumMapSession<ExchangeProductDTO> exchangeProductsToRefreshLatestCandlestick = new PeriodEnumMapSession<>();
 
     public ExchangeSession(ExchangeEnum exchangeEnum) {
@@ -21,6 +23,7 @@ public class ExchangeSession {
     }
 
     public void initialize(List<ExchangeProductDTO> exchangeProducts) {
+        this.exchangeProducts = exchangeProducts;
         getExchangeProductsToRefreshLatestCandlestick().putAll(PeriodEnum.FIVE_MIN, exchangeProducts);
         getExchangeProductsToRefreshLatestCandlestick().putAll(PeriodEnum.FIFTEEN_MIN, exchangeProducts);
         getExchangeProductsToRefreshLatestCandlestick().putAll(PeriodEnum.ONE_HOUR, exchangeProducts);
