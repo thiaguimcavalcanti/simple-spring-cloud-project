@@ -18,6 +18,6 @@ public abstract class MarketSummarySchedule {
     @Async
     @Scheduled(cron = "0 */5 * ? * *")
     public void refreshAllTask() {
-        marketSummaryClient.refreshAll(exchangeEnum, null);
+        marketSummaryClient.refreshAll(exchangeEnum);
     }
 }

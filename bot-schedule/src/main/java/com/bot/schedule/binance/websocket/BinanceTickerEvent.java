@@ -72,7 +72,6 @@ public class BinanceTickerEvent extends BinanceCommonEvent {
     public void onMessage(String message) {
         String symbol = message.substring(message.indexOf(STREAM) + 9, message.indexOf(TOPIC));
         tickers.put(symbol, message);
-        LOG.warn(message);
     }
 
     private List<MarketSummaryDTO> getBinanceMarketSummariesToRefresh() {
