@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
@@ -38,8 +37,7 @@ public class GeneralSchedule {
         List<ExchangeProductDTO> exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BITTREX);
         sessionHelper.initializeExchangeSession(ExchangeEnum.BITTREX, exchangeProducts);
 
-        exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BINANCE).stream()
-                .filter(ep -> "BTC".equals(ep.getBaseProductId())).collect(Collectors.toList());
+        exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BINANCE);
         sessionHelper.initializeExchangeSession(ExchangeEnum.BINANCE, exchangeProducts);
 
         exchangeProducts = exchangeProductClient.findByExchangeId(ExchangeEnum.BOVESPA);
