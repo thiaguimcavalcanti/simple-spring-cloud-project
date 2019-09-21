@@ -3,7 +3,6 @@ package com.bot.exchanges.binance;
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.OrderDTO;
 import com.bot.commons.dto.TickerDTO;
-import com.bot.commons.dto.TickerTestDTO;
 import com.bot.commons.enums.OrderStatusEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.commons.types.CustomBigDecimal;
@@ -13,7 +12,6 @@ import com.bot.exchanges.binance.dto.publicapi.BinanceCandlestickDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceExchangeProductDTO;
 import com.bot.exchanges.binance.dto.publicapi.BinanceMarketSummaryDTO;
 import com.bot.exchanges.binance.dto.account.BinanceOrderHistoryDTO;
-import com.bot.exchanges.binance.enums.BinanceOrderTypeEnum;
 import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.ExchangeApiFacade;
@@ -25,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.bot.exchanges.binance.enums.BinanceOrderTypeEnum.LIMIT_MAKER;
 
@@ -53,8 +50,7 @@ public class BinanceApiFacade implements ExchangeApiFacade {
 
     @Override
     public TickerDTO getTicker(ExchangeProduct exchangeProduct) {
-        TickerDTO map = mapper.map(tickerRepository.findByExchangeProductId(exchangeProduct.getId()), TickerDTO.class);
-        return null;
+        return mapper.map(tickerRepository.findByExchangeProductId(exchangeProduct.getId()), TickerDTO.class);
     }
 
     @Override

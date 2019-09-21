@@ -15,8 +15,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
-import static org.ta4j.core.num.NaN.NaN;
-
 @JsonDeserialize(using = CustomBigDecimalDeserializer.class)
 @JsonSerialize(using = CustomBigDecimalSerializer.class)
 public class CustomBigDecimal implements Num {
@@ -37,7 +35,7 @@ public class CustomBigDecimal implements Num {
 	 * 
 	 * @param val the string representation of the Num value
 	 */
-	private CustomBigDecimal(String val) {
+	public CustomBigDecimal(String val) {
 		delegate = new BigDecimal(val);
 		int precision = Math.max(delegate.precision(), DEFAULT_PRECISION);
 		mathContext = new MathContext(precision, RoundingMode.HALF_UP);
@@ -50,7 +48,7 @@ public class CustomBigDecimal implements Num {
 	 * @param val       the string representation of the Num value
 	 * @param precision the int precision of the Num value
 	 */
-	private CustomBigDecimal(String val, int precision) {
+	public CustomBigDecimal(String val, int precision) {
 		mathContext = new MathContext(precision, RoundingMode.HALF_UP);
 		delegate = new BigDecimal(val, new MathContext(precision, RoundingMode.HALF_UP));
 	}
@@ -110,9 +108,9 @@ public class CustomBigDecimal implements Num {
 	}
 
 	@Override
-	public Num plus(Num augend) {
-		if (augend.isNaN()) {
-			return NaN;
+	public CustomBigDecimal plus(Num augend) {
+		if (augend == null || augend.isNaN()) {
+			throw new IllegalArgumentException("This parameter is required!");
 		}
 		BigDecimal bigDecimal = ((CustomBigDecimal) augend).delegate;
 		int precision = mathContext.getPrecision();
@@ -129,9 +127,9 @@ public class CustomBigDecimal implements Num {
 	 * @see BigDecimal#subtract(BigDecimal, MathContext)
 	 */
 	@Override
-	public Num minus(Num subtrahend) {
-		if (subtrahend.isNaN()) {
-			return NaN;
+	public CustomBigDecimal minus(Num subtrahend) {
+		if (subtrahend == null || subtrahend.isNaN()) {
+			throw new IllegalArgumentException("This parameter is required!");
 		}
 		BigDecimal bigDecimal = ((CustomBigDecimal) subtrahend).delegate;
 		int precision = mathContext.getPrecision();
@@ -148,9 +146,9 @@ public class CustomBigDecimal implements Num {
 	 * @see BigDecimal#multiply(BigDecimal, MathContext)
 	 */
 	@Override
-	public Num multipliedBy(Num multiplicand) {
-		if (multiplicand.isNaN()) {
-			return NaN;
+	public CustomBigDecimal multipliedBy(Num multiplicand) {
+		if (multiplicand == null || multiplicand.isNaN()) {
+			throw new IllegalArgumentException("This parameter is required!");
 		}
 		BigDecimal bigDecimal = ((CustomBigDecimal) multiplicand).delegate;
 		int precision = mathContext.getPrecision();
@@ -167,9 +165,9 @@ public class CustomBigDecimal implements Num {
 	 * @see BigDecimal#divide(BigDecimal, MathContext)
 	 */
 	@Override
-	public Num dividedBy(Num divisor) {
-		if (divisor.isNaN() || divisor.isZero()) {
-			return NaN;
+	public CustomBigDecimal dividedBy(Num divisor) {
+		if (divisor == null || divisor.isNaN() || divisor.isZero()) {
+			throw new IllegalArgumentException("This parameter is required!");
 		}
 		BigDecimal bigDecimal = ((CustomBigDecimal) divisor).delegate;
 		int precision = mathContext.getPrecision();
@@ -186,7 +184,7 @@ public class CustomBigDecimal implements Num {
 	 * @see BigDecimal#remainder(BigDecimal, MathContext)
 	 */
 	@Override
-	public Num remainder(Num divisor) {
+	public CustomBigDecimal remainder(Num divisor) {
 		BigDecimal bigDecimal = ((CustomBigDecimal) divisor).delegate;
 		int precision = mathContext.getPrecision();
 		BigDecimal result = delegate.remainder(bigDecimal, new MathContext(precision, RoundingMode.HALF_UP));
@@ -199,7 +197,7 @@ public class CustomBigDecimal implements Num {
 	 * 
 	 * @return <tt>this<sup>n</sup></tt>
 	 */
-	public Num floor() {
+	public CustomBigDecimal floor() {
 		int precision = Math.max(mathContext.getPrecision(), DEFAULT_PRECISION);
 		return new CustomBigDecimal(delegate.setScale(0, RoundingMode.FLOOR), precision);
 	}
@@ -209,7 +207,7 @@ public class CustomBigDecimal implements Num {
 	 * 
 	 * @return <tt>this<sup>n</sup></tt>
 	 */
-	public Num ceil() {
+	public CustomBigDecimal ceil() {
 		int precision = Math.max(mathContext.getPrecision(), DEFAULT_PRECISION);
 		return new CustomBigDecimal(delegate.setScale(0, RoundingMode.CEILING), precision);
 	}
@@ -222,7 +220,7 @@ public class CustomBigDecimal implements Num {
 	 * @see BigDecimal#pow(int, MathContext)
 	 */
 	@Override
-	public Num pow(int n) {
+	public CustomBigDecimal pow(int n) {
 		int precision = mathContext.getPrecision();
 		BigDecimal result = delegate.pow(n, new MathContext(precision, RoundingMode.HALF_UP));
 		return new CustomBigDecimal(result, precision);
@@ -235,7 +233,7 @@ public class CustomBigDecimal implements Num {
 	 * @return the positive square root of {@code this}
 	 * @see CustomBigDecimal#sqrt(int)
 	 */
-	public Num sqrt() {
+	public CustomBigDecimal sqrt() {
 		return sqrt(DEFAULT_PRECISION);
 	}
 
@@ -246,12 +244,11 @@ public class CustomBigDecimal implements Num {
 	 * @return <tt>this<sup>n</sup></tt>
 	 */
 	@Override
-	public Num sqrt(int precision) {
+	public CustomBigDecimal sqrt(int precision) {
 		int comparedToZero = delegate.compareTo(BigDecimal.ZERO);
 		switch (comparedToZero) {
 		case -1:
-			return NaN;
-
+			return null;
 		case 0:
 			return CustomBigDecimal.valueOf(0);
 		}
@@ -302,7 +299,7 @@ public class CustomBigDecimal implements Num {
 	 * @return {@code abs(this)}
 	 */
 	@Override
-	public Num abs() {
+	public CustomBigDecimal abs() {
 		return new CustomBigDecimal(delegate.abs(), mathContext.getPrecision());
 	}
 
@@ -447,8 +444,11 @@ public class CustomBigDecimal implements Num {
 	 *         {@link #compareTo(Num) compareTo} method, {@code this} is returned.
 	 */
 	@Override
-	public Num min(Num other) {
-		return other.isNaN() ? NaN : (compareTo(other) <= 0 ? this : other);
+	public CustomBigDecimal min(Num other) {
+		if (other == null || other.isNaN()) {
+			throw new IllegalArgumentException("This parameter is required!");
+		}
+		return compareTo(other) <= 0 ? this : (CustomBigDecimal) other;
 	}
 
 	/**
@@ -460,8 +460,11 @@ public class CustomBigDecimal implements Num {
 	 *         {@link #compareTo(Num) compareTo} method, {@code this} is returned.
 	 */
 	@Override
-	public Num max(Num other) {
-		return other.isNaN() ? NaN : (compareTo(other) >= 0 ? this : other);
+	public CustomBigDecimal max(Num other) {
+		if (other == null || other.isNaN()) {
+			throw new IllegalArgumentException("This parameter is required!");
+		}
+		return compareTo(other) >= 0 ? this : (CustomBigDecimal) other;
 	}
 
 	@Override
@@ -487,8 +490,8 @@ public class CustomBigDecimal implements Num {
 	 * @param val the number
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(String val) {
-		return val.toUpperCase().equals("NAN") ? NaN : new CustomBigDecimal(val);
+	public static CustomBigDecimal valueOf(String val) {
+		return new CustomBigDecimal(val);
 	}
 
 	/**
@@ -499,8 +502,8 @@ public class CustomBigDecimal implements Num {
 	 * 
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(String val, int precision) {
-		return val.toUpperCase().equals("NAN") ? NaN : new CustomBigDecimal(val, precision);
+	public static CustomBigDecimal valueOf(String val, int precision) {
+		return new CustomBigDecimal(val, precision);
 	}
 
 	/**
@@ -509,7 +512,7 @@ public class CustomBigDecimal implements Num {
 	 * @param val the number
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(short val) {
+	public static CustomBigDecimal valueOf(short val) {
 		return new CustomBigDecimal(val);
 	}
 
@@ -519,7 +522,7 @@ public class CustomBigDecimal implements Num {
 	 * @param val the number
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(int val) {
+	public static CustomBigDecimal valueOf(int val) {
 		return new CustomBigDecimal(val);
 	}
 
@@ -529,7 +532,7 @@ public class CustomBigDecimal implements Num {
 	 * @param val the number
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(long val) {
+	public static CustomBigDecimal valueOf(long val) {
 		return new CustomBigDecimal(val);
 	}
 
@@ -539,8 +542,8 @@ public class CustomBigDecimal implements Num {
 	 * @param val the number
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(float val) {
-		return val == Float.NaN ? NaN : new CustomBigDecimal(val);
+	public static CustomBigDecimal valueOf(float val) {
+		return new CustomBigDecimal(val);
 	}
 
 	public static CustomBigDecimal valueOf(BigDecimal val) {
@@ -557,8 +560,8 @@ public class CustomBigDecimal implements Num {
 	 * @param val the number
 	 * @return the {@code Num}
 	 */
-	public static Num valueOf(double val) {
-		return val == Double.NaN ? NaN : new CustomBigDecimal(val);
+	public static CustomBigDecimal valueOf(double val) {
+		return new CustomBigDecimal(val);
 	}
 
 	/**
@@ -588,7 +591,7 @@ public class CustomBigDecimal implements Num {
 	}
 
 	@Override
-	public Num pow(Num n) {
+	public CustomBigDecimal pow(Num n) {
 		// There is no BigDecimal.pow(BigDecimal). We could do:
 		// double Math.pow(double delegate.doubleValue(), double n)
 		// But that could overflow any of the three doubles.

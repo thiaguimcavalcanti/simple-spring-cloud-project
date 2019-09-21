@@ -68,7 +68,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                                         CustomBigDecimal originalPrice, CustomBigDecimal total,
                                         CustomBigDecimal profit) {
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setQuantity(total.dividedBy(originalPrice));
+        orderHistory.setQuantity((CustomBigDecimal) total.dividedBy(originalPrice));
         orderHistory.setOriginalDate(originalTime);
         orderHistory.setDate(originalTime);
         orderHistory.setOriginalPrice(originalPrice);

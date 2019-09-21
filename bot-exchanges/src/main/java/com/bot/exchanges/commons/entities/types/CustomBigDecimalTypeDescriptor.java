@@ -3,39 +3,38 @@ package com.bot.exchanges.commons.entities.types;
 import com.bot.commons.types.CustomBigDecimal;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractTypeDescriptor;
-import org.ta4j.core.num.Num;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class NumTypeDescriptor extends AbstractTypeDescriptor<Num> {
+public class CustomBigDecimalTypeDescriptor extends AbstractTypeDescriptor<CustomBigDecimal> {
 
-	static final NumTypeDescriptor INSTANCE = new NumTypeDescriptor();
+	static final CustomBigDecimalTypeDescriptor INSTANCE = new CustomBigDecimalTypeDescriptor();
 
-    private NumTypeDescriptor() {
-		super(Num.class);
+    private CustomBigDecimalTypeDescriptor() {
+		super(CustomBigDecimal.class);
 	}
 
-	public String toString(Num value) {
+	public String toString(CustomBigDecimal value) {
 		return value.toString();
 	}
 
-	public Num fromString(String string) {
-		return CustomBigDecimal.valueOf(string);
+	public CustomBigDecimal fromString(String string) {
+		return new CustomBigDecimal(string);
 	}
 
 	@Override
-	public boolean areEqual(Num one, Num another) {
+	public boolean areEqual(CustomBigDecimal one, CustomBigDecimal another) {
 		return one == another || (one != null && another != null && one.compareTo(another) == 0);
 	}
 
 	@Override
-	public int extractHashCode(Num value) {
+	public int extractHashCode(CustomBigDecimal value) {
 		return value.intValue();
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public <X> X unwrap(Num value, Class<X> type, WrapperOptions options) {
+	public <X> X unwrap(CustomBigDecimal value, Class<X> type, WrapperOptions options) {
 		if (value == null) {
 			return null;
 		}
@@ -45,7 +44,7 @@ public class NumTypeDescriptor extends AbstractTypeDescriptor<Num> {
 		throw unknownUnwrap(type);
 	}
 
-	public <X> Num wrap(X value, WrapperOptions options) {
+	public <X> CustomBigDecimal wrap(X value, WrapperOptions options) {
 		if (value == null) {
 			return null;
 		}
@@ -59,7 +58,7 @@ public class NumTypeDescriptor extends AbstractTypeDescriptor<Num> {
 			return CustomBigDecimal.valueOf((Number) value);
 		}
 		if (value instanceof String) {
-			return CustomBigDecimal.valueOf((String) value);
+			return new CustomBigDecimal((String) value);
 		}
 		throw unknownWrap(value.getClass());
 	}
