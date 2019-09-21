@@ -3,15 +3,19 @@ package com.bot.exchanges.binance.dto.publicapi;
 import com.bot.commons.dto.ExchangeProductDTO;
 import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.commons.types.CustomBigDecimal;
+import com.bot.exchanges.binance.utils.BinanceUtils;
 import com.fasterxml.jackson.annotation.JsonSetter;
+
+import static com.bot.exchanges.binance.utils.BinanceUtils.splitSymbol;
 
 public class BinanceMarketSummaryDTO extends MarketSummaryDTO {
 
     @Override
     public void setSymbol(String symbol) {
         super.setSymbol(symbol);
-        super.setBaseProduct(symbol.substring(3));
-        super.setProduct(symbol.substring(0, 3));
+        String[] products = splitSymbol(symbol);
+        super.setBaseProduct(products[0]);
+        super.setProduct(products[1]);
     }
 
     @JsonSetter("priceChangePercent")

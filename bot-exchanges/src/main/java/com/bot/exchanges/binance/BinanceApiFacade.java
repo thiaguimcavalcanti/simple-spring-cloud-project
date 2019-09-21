@@ -3,6 +3,7 @@ package com.bot.exchanges.binance;
 import com.bot.commons.dto.BalanceDTO;
 import com.bot.commons.dto.OrderDTO;
 import com.bot.commons.dto.TickerDTO;
+import com.bot.commons.dto.TickerTestDTO;
 import com.bot.commons.enums.OrderStatusEnum;
 import com.bot.commons.enums.PeriodEnum;
 import com.bot.commons.types.CustomBigDecimal;
@@ -17,7 +18,9 @@ import com.bot.exchanges.commons.CommonExchangeProperties;
 import com.bot.exchanges.commons.entities.ExchangeProduct;
 import com.bot.exchanges.commons.ExchangeApiFacade;
 import com.bot.exchanges.commons.entities.OrderHistory;
+import com.bot.exchanges.commons.repository.TickerRepository;
 import org.apache.commons.collections4.CollectionUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,20 +34,27 @@ public class BinanceApiFacade implements ExchangeApiFacade {
 
     private final BinancePublicClient binancePublicClient;
     private final BinanceAccountClient binanceAccountClient;
+    private final TickerRepository tickerRepository;
+    private final ModelMapper mapper;
     private final CommonExchangeProperties binanceProperties;
 
     @Autowired
     public BinanceApiFacade(BinancePublicClient binancePublicClient,
                             BinanceAccountClient binanceAccountClient,
+                            TickerRepository tickerRepository,
+                            ModelMapper mapper,
                             CommonExchangeProperties binanceProperties)  {
         this.binancePublicClient = binancePublicClient;
         this.binanceAccountClient = binanceAccountClient;
+        this.tickerRepository = tickerRepository;
+        this.mapper = mapper;
         this.binanceProperties = binanceProperties;
     }
 
     @Override
     public TickerDTO getTicker(ExchangeProduct exchangeProduct) {
-        return binancePublicClient.getTicker(getSymbol(exchangeProduct));
+        TickerDTO map = mapper.map(tickerRepository.findByExchangeProductId(exchangeProduct.getId()), TickerDTO.class);
+        return null;
     }
 
     @Override

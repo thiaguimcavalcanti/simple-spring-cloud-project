@@ -5,9 +5,15 @@ import lombok.Data;
 
 @Data
 public class TickerDTO {
+    private String symbol;
     private String baseProduct;
     private String product;
-    private CustomBigDecimal bid;
-    private CustomBigDecimal ask;
+    private Double changePercent;
+    private CustomBigDecimal volume;
+    private CustomBigDecimal high;
+    private CustomBigDecimal low;
     private CustomBigDecimal last;
+    private CustomBigDecimal ask;
+    private CustomBigDecimal bid;
+    private CustomBigDecimal prevDay;
 }

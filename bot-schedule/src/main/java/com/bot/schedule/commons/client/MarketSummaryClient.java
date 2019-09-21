@@ -16,7 +16,7 @@ public interface MarketSummaryClient {
 
     @PostMapping(value = "${exchanges.apis.market-summary.refreshAll}")
     void refreshAll(@PathVariable(EXCHANGE_ENUM) ExchangeEnum exchangeEnum,
-                    @RequestBody BaseListDTO<MarketSummaryDTO> marketSummaries);
+                    @RequestBody BaseListDTO<? extends MarketSummaryDTO> marketSummaries);
 
     @GetMapping(value = "${exchanges.apis.market-summary.refreshAll}")
     void refreshAll(@PathVariable(EXCHANGE_ENUM) ExchangeEnum exchangeEnum);

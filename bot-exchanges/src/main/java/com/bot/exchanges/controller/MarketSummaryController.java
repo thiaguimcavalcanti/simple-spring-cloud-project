@@ -29,7 +29,7 @@ public class MarketSummaryController {
 
     @PostMapping("/refreshAll")
     public void refreshAll(@RequestParam ExchangeEnum exchangeEnum,
-                           @RequestBody BaseListDTO<MarketSummaryDTO> marketSummariesDTO) {
+                           @RequestBody BaseListDTO<? extends MarketSummaryDTO> marketSummariesDTO) {
         marketSummaryService.refreshMarketSummaries(exchangeEnum, marketSummariesDTO.getData());
     }
 

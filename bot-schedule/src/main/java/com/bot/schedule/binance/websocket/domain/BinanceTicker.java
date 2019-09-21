@@ -1,12 +1,12 @@
 package com.bot.schedule.binance.websocket.domain;
 
-import com.bot.commons.dto.MarketSummaryDTO;
+import com.bot.commons.dto.TickerDTO;
 import com.bot.commons.types.CustomBigDecimal;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import static com.bot.schedule.binance.utils.BinanceUtils.splitSymbol;
 
-public class BinanceMarketSummary extends MarketSummaryDTO {
+public class BinanceTicker extends TickerDTO {
 
     @JsonSetter("s")
     public void setSymbol_(String symbol) {

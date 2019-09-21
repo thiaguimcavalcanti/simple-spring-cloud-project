@@ -4,19 +4,23 @@ import com.bot.commons.dto.OrderDTO;
 import com.bot.commons.enums.OrderTypeEnum;
 import com.bot.commons.types.CustomBigDecimal;
 import com.bot.commons.utils.EpochMilliToZonedDateTimeDeserializer;
+import com.bot.exchanges.binance.utils.BinanceUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.time.ZonedDateTime;
 
+import static com.bot.exchanges.binance.utils.BinanceUtils.splitSymbol;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BinanceOrderDTO extends OrderDTO {
 
     @JsonSetter("symbol")
     public void setSymbol(String symbol) {
-        super.setBaseProduct(symbol.substring(3));
-        super.setProduct(symbol.substring(0, 3));
+        String[] products = splitSymbol(symbol);
+        super.setBaseProduct(products[0]);
+        super.setProduct(products[1]);
     }
 
     @JsonSetter("orderId")

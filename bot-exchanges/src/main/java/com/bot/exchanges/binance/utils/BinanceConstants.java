@@ -20,5 +20,4 @@ public class BinanceConstants {
 
     public static final String API_KEY = "X-MBX-APIKEY";
     public static final String SIGNATURE = "signature";
-
 }

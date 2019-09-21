@@ -34,11 +34,14 @@ exchanges:
       basePath: /order
       executeAll: /executeAll?exchangeEnum={exchangeEnum}
       monitoringOpenOrders: /monitoringOpenOrders?exchangeEnum={exchangeEnum}
+    ticker:
+      basePath: /ticker
+      refreshAll: /refreshAll?exchangeEnum={exchangeEnum}
   binance:
     websocket:
       url: wss://stream.binance.com:9443
     schedules:
-      active: false
+      active: true
   bittrex:
     schedules:
       active: false

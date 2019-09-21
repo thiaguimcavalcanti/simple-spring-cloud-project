@@ -1,9 +1,10 @@
 package com.bot.schedule.binance.websocket;
 
 import com.bot.commons.dto.BaseListDTO;
-import com.bot.commons.dto.MarketSummaryDTO;
 import com.bot.schedule.binance.websocket.domain.BinanceMarketSummary;
+import com.bot.schedule.binance.websocket.domain.BinanceTicker;
 import com.bot.schedule.commons.client.MarketSummaryClient;
+import com.bot.schedule.commons.client.TickerClient;
 import com.bot.schedule.commons.session.helpers.ExchangeSessionHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,7 @@ public class BinanceTickerEvent extends BinanceCommonEvent {
     private static final String STREAMS = "/" + STREAM + "?" + STREAM + "s=";
     private Map<String, String> tickers;
 
+    private TickerClient tickerClient;
     private MarketSummaryClient marketSummaryClient;
     private ObjectMapper mapper;
 
@@ -45,22 +47,24 @@ public class BinanceTickerEvent extends BinanceCommonEvent {
     public BinanceTickerEvent(@Value("${exchanges.binance.websocket.url}") String url,
                               ServletContext servletContext,
                               MarketSummaryClient marketSummaryClient,
-                              ObjectMapper mapper) {
+                              ObjectMapper mapper,
+                              TickerClient tickerClient) {
         super(url, servletContext);
         this.marketSummaryClient = marketSummaryClient;
         this.mapper = mapper;
+        this.tickerClient = tickerClient;
     }
 
     @Async
     @Scheduled(cron = "0 */5 * ? * *")
     public void refreshMarketSummaries() throws JsonProcessingException {
-        marketSummaryClient.refreshAll(BINANCE, BaseListDTO.of(getBinanceMarketSummariesToRefresh()));
+        marketSummaryClient.refreshAll(BINANCE, BaseListDTO.of(convertTickersToEntity(BinanceMarketSummary.class)));
     }
 
     @Async
     @Scheduled(cron = "* * * ? * *")
     public void refreshTickers() {
-
+        tickerClient.refreshAll(BINANCE, BaseListDTO.of(convertTickersToEntity(BinanceTicker.class)));
     }
 
     @Override
@@ -74,19 +78,19 @@ public class BinanceTickerEvent extends BinanceCommonEvent {
         tickers.put(symbol, message);
     }
 
-    private List<MarketSummaryDTO> getBinanceMarketSummariesToRefresh() {
-        List<MarketSummaryDTO> marketSummaries = new ArrayList<>();
-        tickers.values().forEach(summary -> {
-            if (StringUtils.isNotBlank(summary)) {
+    private <T> List<T> convertTickersToEntity(Class<T> clazz) {
+        List<T> tickersDTO = new ArrayList<>();
+        tickers.values().forEach(ticker -> {
+            if (StringUtils.isNotBlank(ticker)) {
                 try {
-                    String data = mapper.readTree(summary).get("data").toString();
-                    marketSummaries.add(mapper.readValue(data, BinanceMarketSummary.class));
+                    String data = mapper.readTree(ticker).get("data").toString();
+                    tickersDTO.add(mapper.readValue(data, clazz));
                 } catch (RuntimeException | IOException e) {
                     LOG.error(e);
                 }
             }
         });
-        return marketSummaries;
+        return tickersDTO;
     }
 
     private String getStreamNames() {
