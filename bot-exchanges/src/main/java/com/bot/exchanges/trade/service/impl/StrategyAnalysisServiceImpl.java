@@ -96,7 +96,6 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
     }
 
     @Override
-    @Async
     public void analyzeStrategies(ExchangeProduct exchangeProduct, ZonedDateTime time, PeriodEnum periodEnum) {
         BaseTimeSeries series = createTimeSeries(periodEnum, exchangeProduct, time);
         Bar currentBar = series.getBar(series.getEndIndex());

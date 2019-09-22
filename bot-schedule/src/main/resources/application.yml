@@ -19,6 +19,7 @@ exchanges:
     candlestick:
       basePath: /candlestick
       refreshLatestCandlestick: /refreshLatestCandlestick?exchangeEnum={exchangeEnum}&baseProductId={baseProductId}&productId={productId}&periodEnum={periodEnum}
+      refreshLatestCandlesticks: /refreshLatestCandlesticks?exchangeEnum={exchangeEnum}
     strategy:
       basePath: /strategy
       analyze: /analyze?exchangeEnum={exchangeEnum}&baseProductId={baseProductId}&productId={productId}&periodEnum={periodEnum}
@@ -41,7 +42,7 @@ exchanges:
     websocket:
       url: wss://stream.binance.com:9443
     schedules:
-      active: true
+      active: false
   bittrex:
     schedules:
       active: false

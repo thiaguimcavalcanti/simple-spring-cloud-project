@@ -42,11 +42,17 @@ public class CandlestickServiceImpl implements CandlestickService {
 
     @Override
     public void refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum) {
+        CandlestickDTO latestCandlestickDTO = exchangesApiFacade.getLatestCandlestick(exchangeProduct, periodEnum);
+        refreshLatestCandlestick(exchangeProduct, periodEnum, latestCandlestickDTO);
+    }
+
+    @Override
+    @Async
+    public void refreshLatestCandlestick(ExchangeProduct exchangeProduct, PeriodEnum periodEnum,
+                                         CandlestickDTO latestCandlestickDTO) {
         LOG.warn("refreshLatestCandlestick - " + exchangeProduct.getExchangeId() + " - " + periodEnum + ": " +
                 exchangeProduct.getBaseProductId() + "-" + exchangeProduct.getProductId());
 
-        // Latest candlestick
-        CandlestickDTO latestCandlestickDTO = exchangesApiFacade.getLatestCandlestick(exchangeProduct, periodEnum);
         Candlestick latestCandlestick = mapper.map(latestCandlestickDTO, Candlestick.class);
         fillAdditionalCandlestickInfo(exchangeProduct, periodEnum, latestCandlestick);
 

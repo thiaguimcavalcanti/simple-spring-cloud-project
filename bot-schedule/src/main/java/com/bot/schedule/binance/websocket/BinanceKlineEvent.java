@@ -1,12 +1,9 @@
 package com.bot.schedule.binance.websocket;
 
 import com.bot.commons.dto.BaseListDTO;
-import com.bot.schedule.binance.websocket.domain.BinanceMarketSummary;
-import com.bot.schedule.binance.websocket.domain.BinanceTicker;
-import com.bot.schedule.commons.client.MarketSummaryClient;
-import com.bot.schedule.commons.client.TickerClient;
+import com.bot.schedule.binance.websocket.domain.BinanceCandlestick;
+import com.bot.schedule.commons.client.CandlestickClient;
 import com.bot.schedule.commons.session.helpers.ExchangeSessionHelper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +19,7 @@ import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,40 +29,31 @@ import static com.bot.commons.enums.ExchangeEnum.BINANCE;
 
 @DependsOn({"generalSchedule"})
 @Component
-public class BinanceTickerEvent extends BinanceCommonEvent {
+public class BinanceKlineEvent extends BinanceCommonEvent {
 
-    private static final Logger LOG = LogManager.getLogger(BinanceTickerEvent.class.getName());
-    private static final String TOPIC = "@ticker";
+    private static final Logger LOG = LogManager.getLogger(BinanceKlineEvent.class.getName());
+    private static final String TOPIC = "@kline";
     private static final String STREAM = "stream";
     private static final String STREAMS = "/" + STREAM + "?" + STREAM + "s=";
-    private Map<String, String> tickers;
+    private Map<String, String> candlesticks;
 
-    private TickerClient tickerClient;
-    private MarketSummaryClient marketSummaryClient;
+    private CandlestickClient candlestickClient;
     private ObjectMapper mapper;
 
     @Autowired
-    public BinanceTickerEvent(@Value("${exchanges.binance.websocket.url}") String url,
-                              ServletContext servletContext,
-                              MarketSummaryClient marketSummaryClient,
-                              ObjectMapper mapper,
-                              TickerClient tickerClient) {
+    public BinanceKlineEvent(@Value("${exchanges.binance.websocket.url}") String url,
+                             ServletContext servletContext,
+                             ObjectMapper mapper,
+                             CandlestickClient candlestickClient) {
         super(url, servletContext);
-        this.marketSummaryClient = marketSummaryClient;
         this.mapper = mapper;
-        this.tickerClient = tickerClient;
-    }
-
-    @Async
-    @Scheduled(cron = "0 */5 * ? * *")
-    public void refreshMarketSummaries() throws JsonProcessingException {
-        marketSummaryClient.refreshAll(BINANCE, BaseListDTO.of(convertTickersToEntity(BinanceMarketSummary.class)));
+        this.candlestickClient = candlestickClient;
     }
 
     @Async
     @Scheduled(cron = "* * * ? * *")
-    public void refreshTickers() {
-        tickerClient.refreshAll(BINANCE, BaseListDTO.of(convertTickersToEntity(BinanceTicker.class)));
+    public void refreshLatestCandlesticks() {
+        candlestickClient.refreshLatestCandlesticks(BINANCE, BaseListDTO.of(convertCandlesticksToEntity(BinanceCandlestick.class)));
     }
 
     @Override
@@ -74,32 +63,37 @@ public class BinanceTickerEvent extends BinanceCommonEvent {
 
     @Override
     public void onMessage(String message) {
-        String symbol = message.substring(message.indexOf(STREAM) + 9, message.indexOf(TOPIC));
-        tickers.put(symbol, message);
+        boolean isClosed = message.substring(message.indexOf("\"x\"") + 4, message.indexOf("\"x\"") + 10).contains("true");
+        if (isClosed) {
+            String symbol = message.substring(message.indexOf(STREAM) + 9, message.indexOf(TOPIC));
+            String substring = message.substring(message.indexOf(TOPIC) + 7);
+            String period = substring.substring(0, substring.indexOf("\""));
+            candlesticks.put(symbol+ "_" + period, message);
+        }
     }
 
-    private <T> List<T> convertTickersToEntity(Class<T> clazz) {
-        List<T> tickersDTO = new ArrayList<>();
-        tickers.values().forEach(ticker -> {
-            if (StringUtils.isNotBlank(ticker)) {
+    private <T> List<T> convertCandlesticksToEntity(Class<T> clazz) {
+        List<T> candlesticksDTO = new ArrayList<>();
+        new HashMap<>(candlesticks).forEach((key, value) -> {
+            if (StringUtils.isNotBlank(value)) {
                 try {
-                    String data = mapper.readTree(ticker).get("data").toString();
-                    tickersDTO.add(mapper.readValue(data, clazz));
+                    String data = mapper.readTree(value).get("data").get("k").toString();
+                    candlesticksDTO.add(mapper.readValue(data, clazz));
                 } catch (RuntimeException | IOException e) {
                     LOG.error(e);
                 }
             }
+            candlesticks.remove(key);
         });
-        return tickersDTO;
+        return candlesticksDTO;
     }
 
     private String getStreamNames() {
-        tickers = new ConcurrentHashMap<>();
+        candlesticks = new ConcurrentHashMap<>();
         ExchangeSessionHelper exchangeSessionHelper = ExchangeSessionHelper.getInstance(servletContext);
         List<String> streams = exchangeSessionHelper.getExchangeProducts(BINANCE).stream().map(ep -> {
                 String symbol = (ep.getProductId() + ep.getBaseProductId()).toLowerCase();
-                tickers.put(symbol, "");
-                return symbol + TOPIC;
+                return symbol + TOPIC + "_5m";
             }).collect(Collectors.toList());
         return String.join("/", streams);
     }
