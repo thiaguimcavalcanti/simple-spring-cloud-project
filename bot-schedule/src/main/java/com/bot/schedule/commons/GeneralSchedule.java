@@ -45,7 +45,7 @@ public class GeneralSchedule {
     }
 
     @Async
-    @Scheduled(cron = "0 0 * ? * *")
+    @Scheduled(cron = "0 */5 * ? * *")
     public void refreshProductList() {
         exchangeProductClient.refreshAll();
     }

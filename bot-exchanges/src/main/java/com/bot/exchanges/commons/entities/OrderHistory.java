@@ -61,15 +61,15 @@ public class OrderHistory extends AbstractLongIDEntity {
 	@Type(type = CUSTOMBIGDECIMAL_DATA_TYPE)
 	private CustomBigDecimal originalPrice;
 
-	@Column(name = "Quantity", precision = 14, scale = 8)
+	@Column(name = "Quantity", precision = 20, scale = 8)
 	@Type(type =  CUSTOMBIGDECIMAL_DATA_TYPE)
 	private CustomBigDecimal quantity;
 
-	@Column(name = "Total", precision = 14, scale = 8)
+	@Column(name = "Total", precision = 20, scale = 8)
 	@Type(type =  CUSTOMBIGDECIMAL_DATA_TYPE)
 	private CustomBigDecimal total = CustomBigDecimal.valueOf(0);
 
-	@Column(name = "TotalWithFee", precision = 14, scale = 8)
+	@Column(name = "TotalWithFee", precision = 20, scale = 8)
 	@Type(type =  CUSTOMBIGDECIMAL_DATA_TYPE)
 	private CustomBigDecimal totalWithFee;
 

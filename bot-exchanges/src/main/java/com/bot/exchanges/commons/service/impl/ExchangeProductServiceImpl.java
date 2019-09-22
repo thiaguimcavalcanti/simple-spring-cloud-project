@@ -75,7 +75,7 @@ public class ExchangeProductServiceImpl implements ExchangeProductService {
             ExchangeProduct exchangeProduct = exchangeProductsByProduct.get(bep.getBaseProductId() + bep.getProductId());
             if (exchangeProduct != null) {
                 exchangeProduct.setActive(bep.isActive());
-            } else if (bep.isActive()) {
+            } else {
                 exchangeProduct = new ExchangeProduct();
                 exchangeProduct.setExchange(exchange);
                 exchangeProduct.setProduct(getOrCreateProductReference(products, bep.getProductId()));
@@ -83,6 +83,13 @@ public class ExchangeProductServiceImpl implements ExchangeProductService {
                 exchangeProduct.setActive(bep.isActive());
                 exchangeProducts.add(exchangeProduct);
             }
+            exchangeProduct.setTickSize(bep.getTickSize());
+            exchangeProduct.setMinPrice(bep.getMinPrice());
+            exchangeProduct.setMaxPrice(bep.getMaxPrice());
+            exchangeProduct.setMinQty(bep.getMinQty());
+            exchangeProduct.setMaxQty(bep.getMaxQty());
+            exchangeProduct.setQtySize(bep.getQtySize());
+            exchangeProduct.setMinTotal(bep.getMinTotal());
         });
 
         exchangeProductRepository.saveAll(exchangeProducts);

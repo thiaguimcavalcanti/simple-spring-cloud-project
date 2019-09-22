@@ -16,21 +16,19 @@ import com.bot.exchanges.commons.repository.OrderHistoryRepository;
 import com.bot.exchanges.commons.repository.StrategyRepository;
 import com.bot.exchanges.commons.repository.StrategyRuleRepository;
 import com.bot.exchanges.commons.service.OrderHistoryService;
-import org.apache.commons.collections4.CollectionUtils;
+import com.bot.exchanges.commons.utils.OrderUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ta4j.core.num.Num;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.bot.commons.enums.OrderStatusEnum.CANCELED;
@@ -39,13 +37,13 @@ import static com.bot.commons.enums.OrderStatusEnum.NEW;
 import static com.bot.commons.enums.OrderStatusEnum.READY_TO_START;
 import static com.bot.commons.enums.OrderTypeEnum.BUY;
 import static com.bot.commons.enums.OrderTypeEnum.SELL;
+import static com.bot.commons.utils.CommonConstants.MIN_PRICE;
 import static java.util.stream.Collectors.toMap;
 
 @Service
 public class OrderHistoryServiceImpl implements OrderHistoryService {
 
     private static final Logger LOG = LogManager.getLogger(OrderHistoryServiceImpl.class.getName());
-    public static final Num MIN_VALUE = CustomBigDecimal.valueOf("0.00000001");
 
     private final OrderHistoryRepository orderHistoryRepository;
     private StrategyRepository strategyRepository;
@@ -65,10 +63,10 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
 
     private Optional<OrderHistory> save(ExchangeProduct exchangeProduct, UserExchange userExchange,
                                         OrderTypeEnum orderTypeEnum, ZonedDateTime originalTime,
-                                        CustomBigDecimal originalPrice, CustomBigDecimal total,
-                                        CustomBigDecimal profit) {
+                                        CustomBigDecimal originalPrice, CustomBigDecimal quantity,
+                                        CustomBigDecimal total, CustomBigDecimal profit) {
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setQuantity(total.dividedBy(originalPrice));
+        orderHistory.setQuantity(quantity);
         orderHistory.setOriginalDate(originalTime);
         orderHistory.setDate(originalTime);
         orderHistory.setOriginalPrice(originalPrice);
@@ -97,11 +95,12 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
 
             boolean closed = latestOrderHistory != null ? OrderStatusEnum.isClosed(latestOrderHistory.getStatus()) : false;
             if (buySatisfied && (latestOrderHistory == null || (SELL.equals(latestOrderHistory.getType()) && closed))) {
-                return save(exchangeProduct, userExchange, BUY, originalTime, originalPrice, total,null);
+                return save(exchangeProduct, userExchange, BUY, originalTime, originalPrice, total.dividedBy(originalPrice),
+                        total,null);
             } else if (sellSatisfied && (latestOrderHistory != null && BUY.equals(latestOrderHistory.getType()) && closed)) {
-                CustomBigDecimal profit = originalPrice.minus(latestOrderHistory.getPrice())
-                        .dividedBy(latestOrderHistory.getPrice()).multipliedBy(CustomBigDecimal.valueOf(100));
-                return save(exchangeProduct, userExchange, SELL, originalTime, originalPrice, total, profit);
+                CustomBigDecimal profit = OrderUtils.calculateProfit(latestOrderHistory.getPrice(), originalPrice);
+                return save(exchangeProduct, userExchange, SELL, originalTime, originalPrice, latestOrderHistory.getQuantity(),
+                        originalPrice.multipliedBy(latestOrderHistory.getQuantity()), profit);
             } else {
                 LOG.warn("New order try - ExchangeProductId: " + exchangeProduct.getId() +  ", Buy Satisfied: " +
                         buySatisfied + ", Sell Satisfied: " + sellSatisfied);
@@ -147,15 +146,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                 }
 
                 if (canExecuteOrder) {
-                    TickerDTO tickerDTO = exchangesApiFacade.getTicker(exchangeEnum, orderHistory.getExchangeProduct());
-
-                    if (BUY.equals(orderHistory.getType())) {
-                        orderHistory.setPrice(tickerDTO.getBid().plus(MIN_VALUE));
-                    } else {
-                        orderHistory.setPrice(tickerDTO.getBid().minus(MIN_VALUE));
-                    }
-                    Num quantity = orderHistory.getTotal().dividedBy(orderHistory.getPrice());
-                    orderHistory.setQuantity(CustomBigDecimal.valueOf(quantity.intValue() + 1));
+                    prepareOrderToExecute(exchangeEnum, orderHistory);
 
                     OrderDTO orderDTO = exchangesApiFacade.createNewOrder(orderHistory);
 
@@ -168,13 +159,29 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                         }
                     } else {
                         ExchangeProduct exchangeProduct = orderHistory.getExchangeProduct();
-                        throw new AppException("ERROR TO CREATE A NEW ORDER: " + +exchangeProduct.getExchangeId() +
+                        throw new AppException("ERROR TO CREATE A NEW ORDER: " + + exchangeProduct.getExchangeId() +
                                 " - " + exchangeProduct.getBaseProductId() + exchangeProduct.getProductId());
                     }
                 }
             } catch (AppException e) {
                 LOG.error(e);
             }
+        }
+    }
+
+    private void prepareOrderToExecute(ExchangeEnum exchangeEnum, OrderHistory orderHistory) {
+        ExchangeProduct exchangeProduct = orderHistory.getExchangeProduct();
+        TickerDTO tickerDTO = exchangesApiFacade.getTicker(exchangeEnum, exchangeProduct);
+
+        if (BUY.equals(orderHistory.getType())) {
+            CustomBigDecimal price = tickerDTO.getBid().plus(MIN_PRICE);
+            orderHistory.setPrice(OrderUtils.calculateValue(price, exchangeProduct.getTickSize()));
+            CustomBigDecimal quantity = orderHistory.getTotal().dividedBy(orderHistory.getPrice());
+            quantity = OrderUtils.calculateValue(quantity, exchangeProduct.getQtySize());
+            orderHistory.setQuantity(OrderUtils.verifyMinQty(quantity, exchangeProduct.getMinQty()));
+        } else {
+            CustomBigDecimal price = tickerDTO.getAsk().minus(MIN_PRICE);
+            orderHistory.setPrice(OrderUtils.calculateValue(price, exchangeProduct.getTickSize()));
         }
     }
 
