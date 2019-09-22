@@ -121,8 +121,11 @@ public class BinanceApiFacade implements ExchangeApiFacade {
 
     @Override
     public OrderDTO cancelOrder(String userId, ExchangeProduct exchangeProduct, String orderId) {
-        return binanceAccountClient.cancelOrder(userId, getSymbol(exchangeProduct), orderId, 50000,
-                System.currentTimeMillis());
+        /*return binanceAccountClient.cancelOrder(userId, getSymbol(exchangeProduct), orderId, 50000,
+                System.currentTimeMillis());*/
+        OrderDTO newOrderTest = new OrderDTO();
+        newOrderTest.setStatus(OrderStatusEnum.CANCELED);
+        return newOrderTest;
     }
 
     private String getSymbol(ExchangeProduct exchangeProduct) {
