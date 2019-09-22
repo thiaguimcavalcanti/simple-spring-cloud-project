@@ -24,6 +24,6 @@ public class CustomBigDecimalDeserializer extends StdDeserializer<CustomBigDecim
         ObjectCodec oc = jp.getCodec();
         JsonNode root = oc.readTree(jp);
         String value = root.asText();
-        return value != null ? (CustomBigDecimal) CustomBigDecimal.valueOf(value) : null;
+        return value != null ? CustomBigDecimal.valueOf(value) : null;
     }
 }

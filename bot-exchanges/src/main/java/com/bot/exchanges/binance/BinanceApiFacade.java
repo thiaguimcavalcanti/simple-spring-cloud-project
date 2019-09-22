@@ -112,9 +112,9 @@ public class BinanceApiFacade implements ExchangeApiFacade {
                 getSymbol(orderHistory.getExchangeProduct()), orderHistory.getType(), LIMIT_MAKER,
                 orderHistory.getQuantity(), orderHistory.getPrice(), 50000, System.currentTimeMillis());
         newOrderTest.setId(((int)(Math.random() * 20 + 1)) + "");
-        newOrderTest.setStatus(OrderStatusEnum.NEW);
-        newOrderTest.setPrice((CustomBigDecimal) orderHistory.getPrice());
-        newOrderTest.setQuantity((CustomBigDecimal) orderHistory.getQuantity());
+        newOrderTest.setStatus(OrderStatusEnum.FILLED);
+        newOrderTest.setPrice(orderHistory.getPrice());
+        newOrderTest.setQuantity(orderHistory.getQuantity());
         newOrderTest.setDate(orderHistory.getDate());
         return newOrderTest;
     }

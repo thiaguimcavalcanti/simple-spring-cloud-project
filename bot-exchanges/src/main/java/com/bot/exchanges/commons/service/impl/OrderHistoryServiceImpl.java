@@ -68,7 +68,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                                         CustomBigDecimal originalPrice, CustomBigDecimal total,
                                         CustomBigDecimal profit) {
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setQuantity((CustomBigDecimal) total.dividedBy(originalPrice));
+        orderHistory.setQuantity(total.dividedBy(originalPrice));
         orderHistory.setOriginalDate(originalTime);
         orderHistory.setDate(originalTime);
         orderHistory.setOriginalPrice(originalPrice);
@@ -99,7 +99,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
             if (buySatisfied && (latestOrderHistory == null || (SELL.equals(latestOrderHistory.getType()) && closed))) {
                 return save(exchangeProduct, userExchange, BUY, originalTime, originalPrice, total,null);
             } else if (sellSatisfied && (latestOrderHistory != null && BUY.equals(latestOrderHistory.getType()) && closed)) {
-                CustomBigDecimal profit = (CustomBigDecimal) originalPrice.minus(latestOrderHistory.getPrice())
+                CustomBigDecimal profit = originalPrice.minus(latestOrderHistory.getPrice())
                         .dividedBy(latestOrderHistory.getPrice()).multipliedBy(CustomBigDecimal.valueOf(100));
                 return save(exchangeProduct, userExchange, SELL, originalTime, originalPrice, total, profit);
             } else {

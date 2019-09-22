@@ -42,7 +42,7 @@ exchanges:
     websocket:
       url: wss://stream.binance.com:9443
     schedules:
-      active: false
+      active: true
   bittrex:
     schedules:
       active: false

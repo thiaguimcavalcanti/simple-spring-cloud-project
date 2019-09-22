@@ -85,8 +85,7 @@ public class StrategyAnalysisServiceImpl implements StrategyAnalysisService {
             // Create new open order to start the trade
             Optional<OrderHistory> orderHistory = orderHistoryService.save(buySatisfied, sellSatisfied,
                     strategy.getExchangeProduct(), strategy.getUserExchange(), currentBar.getEndTime(),
-                    (CustomBigDecimal) currentBar.getClosePrice(),
-                    (CustomBigDecimal) CustomBigDecimal.valueOf("0.00100000"));
+                    (CustomBigDecimal) currentBar.getClosePrice(), CustomBigDecimal.valueOf("10.00000000"));
 
             /*orderHistory.ifPresent(oh -> {
                 orderHistoryService.confirmBuySellExecutedWithSuccess(oh);
