@@ -19,7 +19,7 @@ import java.util.function.Function;
 @JsonSerialize(using = CustomBigDecimalSerializer.class)
 public class CustomBigDecimal implements Num {
 
-	private static final int DEFAULT_PRECISION = 32;
+	private static final int DEFAULT_PRECISION = 8;
 
 	private final MathContext mathContext;
 
