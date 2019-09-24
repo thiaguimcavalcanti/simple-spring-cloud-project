@@ -50,6 +50,8 @@ public class BackTesting extends AbstractLongIDEntity {
     @Type(type =  CUSTOMBIGDECIMAL_DATA_TYPE)
     private CustomBigDecimal profit = CustomBigDecimal.valueOf(0);
 
+    // MACD
+
     @Column(name = "MacdCrossedUpEma")
     private Boolean macdCrossedUpEma;
 
@@ -61,6 +63,20 @@ public class BackTesting extends AbstractLongIDEntity {
 
     @Column(name = "MacdOverEma")
     private Boolean macdOverEma;
+
+    @Column(name = "MacdDifferenceWidening")
+    private Boolean macdDifferenceWidening;
+
+    @Column(name = "MacdAngleWidening")
+    private Boolean macdAngleWidening;
+
+    @Column(name = "MacdRising")
+    private Boolean macdRising;
+
+    @Column(name = "MacdFalling")
+    private Boolean macdFalling;
+
+    // RSI
 
     @Column(name = "RsiCrossedDown30")
     private Boolean rsiCrossedDown30;
@@ -76,4 +92,45 @@ public class BackTesting extends AbstractLongIDEntity {
 
     @Column(name = "RsiBetween3070")
     private Boolean rsiBetween3070;
+
+    @Column(name = "RsiDifferenceWidening")
+    private Boolean rsiDifferenceWidening;
+
+    @Column(name = "RsiAngleWidening")
+    private Boolean rsiAngleWidening;
+
+    @Column(name = "RsiRising")
+    private Boolean rsiRising;
+
+    @Column(name = "RsiFalling")
+    private Boolean rsiFalling;
+
+    // CCI
+
+    @Column(name = "CciCrossedDownMinus100")
+    private Boolean cciCrossedDownMinus100;
+
+    @Column(name = "CciCrossedUp100")
+    private Boolean cciCrossedUp100;
+
+    @Column(name = "CciUnderMinus100")
+    private Boolean cciUnderMinus100;
+
+    @Column(name = "CciOver100")
+    private Boolean cciOver100;
+
+    @Column(name = "CciBetweenMinus100And100")
+    private Boolean cciBetweenMinus100And100;
+
+    @Column(name = "CciDifferenceWidening")
+    private Boolean cciDifferenceWidening;
+
+    @Column(name = "CciAngleWidening")
+    private Boolean cciAngleWidening;
+
+    @Column(name = "CciRising")
+    private Boolean cciRising;
+
+    @Column(name = "CciFalling")
+    private Boolean cciFalling;
 }
